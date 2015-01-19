@@ -1,0 +1,16 @@
+/* 
+    Document   : ownModifications
+    Created on : 31.10.2014, 12:37:53
+    Author     : bs42cavo
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.dimmed { 
+    color: #999;
+}
+
+.dimmed h3 {
+    color: #999;
+}
+

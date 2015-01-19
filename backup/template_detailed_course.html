@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="../../report/moodleanalyst/js/pure.js"></script>
+	</head>
+	
+	<body>
+		<div class="template">
+			<div class="panel">
+				<div class="panel-heading" id="kopf">
+					<h3 class="panel-title"></h3>
+				</div>
+				<div class="panel-body">
+					<div class="well">
+						<div id="fullname"></div>
+					
+						<div class="row">
+							<div class="col-md-12">
+								<div id="personen"></div>
+        						<div class="col-md-4"><div id="lehrende"></div></div>
+        						<div class="col-md-4"><div id="assistenz"></div></div>
+        						<div class="col-md-4"><div id="tutoren"></div></div>
+							</div>
+						</div>
+						
+						<div id="teilnehmer"></div>
+					
+						<div class="row">
+							<div class="col-md-12">
+        						<div id="module"></div>
+							</div>
+						</div>
+							
+						<div class="row">
+							<div class="col-md-12">
+								<div id="einschreibemethoden"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<script>
+			$
+				.ajax({
+					url : "../../report/moodleanalyst/rest/router.php/course/id/#ID#",
+					context : document.body
+				})
+				.done(
+						function(res) {
+							directive = {
+								'.panel-title' : function(a) {
+									//console.log(a.context);
+									a = a.context;
+									var semesterID = a.semesterID;
+									var semester = a.semester;
+									var fbID = a.fbID;
+									var fb = a.fb;
+									var courseID = a.id;
+									var shortname = a.shortname;
+									var imgLink = "<img width='30px' src='../../report/moodleanalyst/pix/"
+										if (a.visible == 1) {
+											imgLink = imgLink + "show.png";
+										} else {
+											imgLink = imgLink + "hide.png";
+										}
+									imgLink = imgLink + "' />";
+									var semesterLink = "<a href='../../course/index.php?categoryid="
+											+ semesterID
+											+ "'>"
+											+ semester
+											+ "</a>";
+									var fbLink = "<a href='../../course/index.php?categoryid="
+											+ fbID + "'>" + fb + "</a>";
+									var courseLink = "<a href='../../course/view.php?id="
+											+ courseID
+											+ "'>"
+											+ shortname
+											+ " (#" + courseID + ")</a>";
+									return imgLink + " " + semesterLink + " / " + fbLink
+											+ " / " + courseLink;
+								},
+								'#kopf@style' : function (a) {
+									a = a.context;
+									if(a.idnumber === "") {
+										return "background-color: #F5A300;";
+									}
+									else {
+										return "background-color: #99A604;";
+									}
+								},
+								'#fullname' : function(a) {
+									a = a.context;
+                                                                        console.log(a);
+                                                                        var string = "<h3><a href='../../course/view.php?id="
+									+ a.id + "'>"
+									+ a.fullname
+									+ "</a></h3>"
+									+ "<br />";
+									if(a.visible == 0) {
+                                                                            string = '<div class="dimmed">' + string + '</div>';
+                                                                        } 
+									return string; 
+								},
+								
+								'#personen' : function (a) {
+									a = a.context;
+									
+									return "<h4><a href='../../enrol/users.php?id="
+											+ a.id
+											+ "'>"
+											+ "Personen:</a></h4>";
+								},
+								
+								'#lehrende' : function (a) {
+									a = a.context;
+									var lehrende = a.Lehrende;
+									var LehrendeArray = new Array();
+									var Lehrende = "";
+									for (key in lehrende) {
+										Lehrende = Lehrende + "<a href= '../../user/profile.php?id=" + lehrende[key].userid + "'>- "
+												+ lehrende[key].firstname + " " + lehrende[key].lastname + "</a><br />";
+										LehrendeArray.push(lehrende[key].lastname);
+									}
+									var anzahlLehrende = LehrendeArray.length;
+									
+									return "<h5><b><a href='../../enrol/users.php?id="
+											+ a.id
+											+ "&role=3&submitbutton=Filter'>Lehrende ("
+											+ anzahlLehrende
+											+ "):</a></b></h5>"
+											+ Lehrende
+											+ "<br />";
+								},
+								
+								'#assistenz' : function (a) {
+									a = a.context;
+									var assistenz = a.Assistenz;
+									var AssistenzArray = new Array();
+									var Assistenz = "";
+									for (key in assistenz) {
+										Assistenz = Assistenz + "<a href= '../../user/profile.php?id=" + assistenz[key].userid + "'>- "
+												+ assistenz[key].firstname + " " + assistenz[key].lastname + "</a><br />";
+										AssistenzArray.push(assistenz[key].lastname);
+									}
+									var anzahlAssistenz = AssistenzArray.length;
+									
+									return "<h5><b><a href='../../enrol/users.php?id="
+											+ a.id
+											+ "&role=9&submitbutton=Filter'>Assistenten ("
+											+ anzahlAssistenz
+											+ "):</a></b></h5>"
+											+ Assistenz
+											+ "<br />";
+								},
+								
+								'#tutoren' : function (a) {
+									a = a.context;
+									var tutoren = a.Tutoren;
+									var TutorenArray = new Array();
+									var Tutoren = "";
+									for (key in tutoren) {
+										Tutoren = Tutoren
+												+ "<a href= '../../user/profile.php?id=" + tutoren[key].userid + "'>- "
+												+ tutoren[key].firstname + " " + tutoren[key].lastname + "</a><br />";
+										TutorenArray.push(tutoren[key].lastname);
+									}
+									var anzahlTutoren = TutorenArray.length;
+									
+									return "<h5><b><a href='../../enrol/users.php?id="
+											+ a.id
+											+ "&role=4&submitbutton=Filter'>Tutoren ("
+											+ anzahlTutoren
+											+ "):</a></b></h5>"
+											+ Tutoren
+											+ "<br />";
+								},
+								
+								'#teilnehmer' : function (a) {
+									a = a.context;
+									var studenten = a.Studierende;
+									var StudentenArray = new Array();
+									for (key in studenten) {
+										StudentenArray.push(studenten[key].lastname);
+									}
+									var anzahlStudenten = StudentenArray.length;
+									
+									return "<h5><b><a href='../../enrol/users.php?id="
+											+ a.id
+											+ "&role=5&submitbutton=Filter'>Teilnehmeranzahl (Studenten): "
+											+ anzahlStudenten
+											+ "</a></b></h5>"
+											+ "<br />";
+								},
+								
+								'#module' : function (a) {
+									a = a.context;
+									var module = a.Module;
+									var Module = "";
+									
+									for (key in module) {
+										Module = Module
+												+ "<div class='col-md-3'>"
+												+ module[key].name
+												+ ": "
+												+ module[key].anzahl
+												+ "<br />"
+												+ "</div>";
+									}
+									
+									return "<h4>Module:</h4>"
+											+ Module;
+								},
+								
+								'#einschreibemethoden' : function (a) {
+									a = a.context;
+									var methoden = a.Einschreibemethoden;
+									var Methoden = "";
+									var imgLink = "<img width='20px' src='../../report/moodleanalyst/pix/";
+									var temp = "";
+									var selfPassword = "";
+									var enrolments = a.UserEnrolments;
+									var Enrolments = "";
+									
+									for (key in methoden) {
+										if (methoden[key].status == 0) {
+											temp = imgLink + "show.png";
+										}
+										else {
+											temp = imgLink + "hide.png";
+										}
+										temp = temp + "' /> ";
+										
+										if (methoden[key].password != "" && methoden[key].password != null) {
+											selfPassword = "; Passwort: " + methoden[key].password;
+										}
+										else {
+											selfPassword = "";
+										}
+										
+										if (enrolments[methoden[key].id]) {
+											Enrolments = enrolments[methoden[key].id].anzahl;
+										}
+										else {
+											Enrolments = "0";
+										}
+										
+										Methoden = Methoden
+													+ "<div class='col-md-4'>"
+													+ temp
+													+ methoden[key].enrol
+													+ selfPassword
+													+ "<br />"
+													+ "Nutzer: "
+													+ Enrolments
+													+ "</div>";
+									}
+									
+									return "<br />"
+											+ "<h4><a href='../../enrol/instances.php?id="
+											+ a.id
+											+ "'>Einschreibemethoden: </a></h4>"
+											+ Methoden;
+								},
+							};
+							var json = JSON.parse(res);
+							$('div.template')
+									.render(json.Records[0], directive);
+							//alert(res);
+						});
+		</script>
+	</body>
+</html>

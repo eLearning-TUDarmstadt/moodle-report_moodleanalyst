@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <base target="_self">
+        <script>
+            $( '#table_div_rueckmeldungen' ).html(loader);
+            var fields = { 
+		choice: { bezeichnung: 'Abstimmung', typ: 'number'},
+		feedback: { bezeichnung:'Feedback', typ:'number'},
+		hotquestion: { bezeichnung: 'Nachgefragt', typ: 'number'},
+		};
+            google.setOnLoadCallback(tabelle('rueckmeldungen', fields, '/Rueckmeldungen'));	
+        </script>
+    </head>
+    <body>
+        <div id="rueckmeldungen">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"></h3>
+                        <div class="row">
+                            <div class="col-md-6" id="semester_filter_div_rueckmeldungen"></div>
+                            <div class="col-md-6" id="fb_filter_div_rueckmeldungen"></div>
+                        </div>
+                    </div>
+                <div class="panel-body" id="table_div_rueckmeldungen"></div>
+            </div>
+        </div>
+    </body>
+</html>

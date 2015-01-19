@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <base target="_self">
+        <script>
+            $( '#table_div_koop' ).html(loader);
+            var fields = { 
+		wiki: { bezeichnung: 'Wikis', typ: 'number'},
+		data: { bezeichnung:'Datenbanken', typ:'number'},
+		glossary: { bezeichnung: 'Glossare', typ: 'number'},
+		workshop: { bezeichnung:'Workshops', typ:'number'},
+		};
+            google.setOnLoadCallback(tabelle('koop', fields, '/Kooperation'));	
+        </script>
+    </head>
+    <body>
+        <div id="koop">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"></h3>
+                        <div class="row">
+                            <div class="col-md-6" id="semester_filter_div_koop"></div>
+                            <div class="col-md-6" id="fb_filter_div_koop"></div>
+                        </div>
+                    </div>
+                <div class="panel-body" id="table_div_koop"></div>
+            </div>
+        </div>
+    </body>
+</html>

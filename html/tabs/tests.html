@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <base target="_self">
+        <script>
+            $( '#table_div_tests' ).html(loader);
+            var fields = { 
+		quiz: { bezeichnung: 'E-Tests', typ: 'number'},
+		assign: { bezeichnung:'Aufgaben', typ:'number'},
+		hotpot: { bezeichnung: 'Hotpot', typ: 'number'},
+		lesson: { bezeichnung:'Lektionen', typ:'number'},
+		games: { bezeichnung:'Spiele', typ:'number'},
+		};
+            google.setOnLoadCallback(tabelle('tests', fields, '/Tests'));	
+        </script>
+    </head>
+    <body>
+        <div id="tests">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"></h3>
+                        <div class="row">
+                            <div class="col-md-6" id="semester_filter_div_tests"></div>
+                            <div class="col-md-6" id="fb_filter_div_tests"></div>
+                        </div>
+                    </div>
+                <div class="panel-body" id="table_div_tests"></div>
+            </div>
+        </div>
+    </body>
+</html>
