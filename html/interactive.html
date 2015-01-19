@@ -193,6 +193,15 @@
                 });
                 
                 //
+                // Tab: One Activity
+                //
+                $("#tablink_angular").click(function() {
+                    $.get("/report/moodleanalyst/html/overview.tpl.html", function(inhalt) {
+                        $("#angular").html(inhalt);
+                    });
+                });
+                
+                //
                 // Bei Klick auf eine Zeile oeffnet sich automatisch der erste Tab ("Kurse"), ausser, wenn im Tab "Nutzer/innen" auf eine Zeile geklickt wird.
                 // In dem Fall bleibt das Tab aktiv.
                 // Die Tab ID des Nutzer Tabs muss angepasst werden, falls weitere Tabs dazu kommen (Momentan ist die Tab ID: 1)
@@ -253,6 +262,7 @@
                                 <li role="presentation"><a id="tablink_inaktiveNutzer" href="#tabs-11" role="tab" data-toggle="tab">Inaktive Nutzer</a></li>
                             </ul>
                         </li>
+                        <li role="presentation"><a id="tablink_angular" href="#tabs-14" role="tab" data-toggle="tab">Angular</a></li>
                     </ul>
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
@@ -297,6 +307,9 @@
             </div>
             <div role="tabpanel" class="tab-pane fade" id="tabs-13">
                 <div id="oneActivity"></div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="tabs-14">
+                <div id="angular"></div>
             </div>
         </div>
     </body>
