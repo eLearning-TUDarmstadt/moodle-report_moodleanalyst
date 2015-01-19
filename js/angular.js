@@ -4,3 +4,11 @@
  * and open the template in the editor.
  */
 
+var app = angular.module('overview', []);
+
+app.directive('overview', function() {
+    return {
+        restrict: 'E',
+        templateUrl: '/report/moodleanalyst/html/overview.tpl.html'
+    };
+});
