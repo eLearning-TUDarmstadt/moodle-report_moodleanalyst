@@ -6,9 +6,13 @@
 
 var app = angular.module('overview', []);
 
+app.controller('overview', function() {
+        this.nothing = 0;
+});
+
 app.directive('overview', function() {
     return {
         restrict: 'E',
-        templateUrl: '/report/moodleanalyst/html/overview.tpl.html'
+        templateUrl: '/overview.tpl.html'
     };
 });
