@@ -8,16 +8,24 @@
     <body>
         <div class="row">
             <div class="col-md-6" id="course">
-                <div id="courseInfo">
-                    <courseinfo></courseinfo>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"></h3>
+                    </div>
+                    <div class="panel-body">
+                        <courseinfo ng-show="courseid"></courseinfo>
+                        <coursesearch></coursesearch>
+                    </div>
                 </div>
-                <div id="courseSearch"></div>
             </div>
             <div class="col-md-6" id="user">
-                <div id="userInfo">
-                    <userinfo></userinfo>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"></h3>
+                    </div>
+                    <div class="panel-body">
+                    </div>
                 </div>
-                <div id="userSearch"></div>
             </div>
         </div>
     </body>
