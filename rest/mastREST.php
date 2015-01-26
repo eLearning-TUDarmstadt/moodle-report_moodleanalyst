@@ -8,7 +8,8 @@ require_once '../../../config.php';
 require_once '../../../course/lib.php';
 
 // GZIP Compression for output
-if(!ob_start("ob_gzhandler")) ob_start();
+if (!ob_start("ob_gzhandler"))
+    ob_start();
 require_capability('report/moodleanalyst:view', context_system::instance());
 
 \Slim\Slim::registerAutoloader();
@@ -55,7 +56,7 @@ function getPersonsInCourse($courseid) {
     // Preparing the return table
     $result = array();
     $result['cols'] = array();
-    $result['cols'][] = array('label' => 'ID', 'type' => 'number');
+    $result['cols'][] = array('label' => get_string('username'), 'type' => 'number');
     $result['cols'][] = array('label' => get_string('firstname'), 'type' => 'string');
     $result['cols'][] = array('label' => get_string('lastname'), 'type' => 'string');
     $result['cols'][] = array('label' => get_string('email'), 'type' => 'string');
@@ -81,12 +82,141 @@ function getPersonsInCourse($courseid) {
 
 function user($userid) {
     require_once '../../../user/lib.php';
+    require_once '../../../lib/coursecatlib.php';
     $user = user_get_users_by_id(array($userid));
     $user = $user[$userid];
+
+    $courses = enrol_get_all_users_courses($userid);
+
+    $courses_enrolled = array();
+    $courses_enrolled['cols'] = array();
+    $courses_enrolled['cols'][] = array('label' => 'ID', 'type' => 'number');
+    $courses_enrolled['cols'][] = array('label' => get_string('grandparentcategory', 'report_moodleanalyst'), 'type' => 'string');
+    $courses_enrolled['cols'][] = array('label' => get_string('parentcategory', 'report_moodleanalyst'), 'type' => 'string');
+    $courses_enrolled['cols'][] = array('label' => get_string('course', 'report_moodleanalyst'), 'type' => 'string');
+    $courses_enrolled['cols'][] = array('label' => get_string('roles'), 'type' => 'string');
+    $courses_enrolled['rows'] = array();
+
+    foreach ($courses as $courseid => $course) {
+        $categoryid = $course->category;
+        $category = coursecat::get($categoryid);
+        $course->categoryname = $category->get_formatted_name();
+        $parents = $category->get_parents();
+        if (!empty($parents)) {
+            $parent = $parents[0];
+            $course->parentcategory = $parent;
+            $parentcategory = coursecat::get($parent);
+            $course->parentcategoryname = $parentcategory->get_formatted_name();
+        } else {
+            $course->parentcategory = null;
+            $course->parentcategoryname = null;
+        }
+
+        // Get roles
+        $context = context_course::instance($courseid);
+        $course->roles = get_user_roles($context, false);
+        $roles = "";
+        foreach ($course->roles as $roleid => $role) {
+            $roles .= role_get_name($role) . ", ";
+        }
+        
+        $courses_enrolled['rows'][] = [
+            'c' => array(
+                ['v' => $course->id],
+                array('v' => $course->parentcategoryname),
+                array('v' => $course->categoryname),
+                array('v' => $course->fullname),
+                array('v' => $roles)
+            )
+        ];
+        
+    }
+    /*
+     * Possible fields:    
+     * 
+     * [id] => 20831
+    [auth] => cas
+    [confirmed] => 1
+    [policyagreed] => 1
+    [deleted] => 0
+    [suspended] => 0
+    [mnethostid] => 1
+    [username] => 
+    [password] => not cached
+    [idnumber] => 
+    [firstname] => 
+    [lastname] => 
+    [email] => 
+    [emailstop] => 0
+    [icq] => 
+    [skype] => 
+    [yahoo] => 
+    [aim] => 
+    [msn] => 
+    [phone1] => 
+    [phone2] => 
+    [institution] => 
+    [department] => 
+    [address] => 
+    [city] => 
+    [country] => 
+    [lang] => en
+    [theme] => 
+    [timezone] => 99
+    [firstaccess] => 1377083840
+    [lastaccess] => 1418644723
+    [lastlogin] => 1418634762
+    [currentlogin] => 1418644723
+    [lastip] => 
+    [secret] => 
+    [picture] => 0
+    [url] => 
+    [description] => 
+    [descriptionformat] => 1
+    [mailformat] => 1
+    [maildigest] => 0
+    [maildisplay] => 2
+    [autosubscribe] => 1
+    [trackforums] => 0
+    [timecreated] => 1377083840
+    [timemodified] => 1392029898
+    [trustbitmask] => 0
+    [imagealt] => 
+    [lastnamephonetic] => 
+    [firstnamephonetic] => 
+    [middlename] => 
+    [alternatename] => 
+    [calendartype] => gregorian
+     */
     
-    //$courses = enrol_get_all_users_courses($userid);
-    //printArray($user);
-    echo json_encode($user);
+    $ret = array();
+    $ret['id']['string'] = get_string('username');
+    $ret['id']['v'] = $user->id;
+    $ret['auth']['string'] = get_string('authentication');
+    $ret['auth']['v'] = $user->auth;
+    $ret['username']['string'] = get_string('username');
+    $ret['username']['v'] = $user->username;
+    $ret['idnumber']['string'] = get_string('idnumber');
+    $ret['idnumber']['v'] = $user->idnumber;
+    $ret['firstname']['string'] = get_string('firstname');
+    $ret['firstname']['v'] = $user->firstname;
+    $ret['lastname']['string'] = get_string('lastname');
+    $ret['lastname']['v'] = $user->lastname;
+    $ret['email']['string'] = get_string('email');
+    $ret['email']['v'] = $user->email;
+    $ret['firstaccess']['string'] = get_string('firstaccess');
+    $ret['firstaccess']['v'] = $user->firstaccess;
+    $ret['lastaccess']['string'] = get_string('lastaccess');
+    $ret['lastaccess']['v'] = $user->lastaccess;
+    $ret['lastlogin']['string'] = get_string('lastlogin');
+    $ret['lastlogin']['v'] = $user->lastlogin;
+    $ret['lastip']['string'] = get_string('lastip');
+    $ret['lastip']['v'] = $user->lastip;
+    
+  
+    $ret['courses'] = $courses_enrolled;
+    //printArray($ret);
+    echo json_encode($ret);
 }
 
 function course($courseid) {
@@ -141,9 +271,9 @@ function allUsers() {
     $result['cols'] = array();
     $result['cols'][] = array('label' => 'ID', 'type' => 'number');
     $result['cols'][] = array('label' => get_string('username'), 'type' => 'string');
-    $result['cols'][] = array('label' => get_string('email'), 'type' => 'string');
     $result['cols'][] = array('label' => get_string('firstname'), 'type' => 'string');
     $result['cols'][] = array('label' => get_string('lastname'), 'type' => 'string');
+    $result['cols'][] = array('label' => get_string('email'), 'type' => 'string');
     $result['cols'][] = array('label' => get_string('fullname'), 'type' => 'string');
     $result['rows'] = array();
 
@@ -152,11 +282,11 @@ function allUsers() {
             'c' => array(
                 ['v' => $user->id],
                 array('v' => $user->username),
-                array('v' => $user->email),
                 array('v' => $user->firstname),
                 array('v' => $user->lastname),
+                array('v' => $user->email),
                 array('v' => $user->firstname . ' ' . $user->lastname)
-                )
+            )
         ];
     }
     //printArray($result);
