@@ -32,7 +32,7 @@ function getActivitiesInCourse($courseid) {
     $table['rows'] = array();
 
     $activities = get_array_of_activities($courseid);
-    echo "<pre>" . print_r($activities, true) . "</pre>";
+    //echo "<pre>" . print_r($activities, true) . "</pre>";
 
     foreach ($activities as $modid => $activity) {
         $section = $activity->section;
