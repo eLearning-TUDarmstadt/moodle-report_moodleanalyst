@@ -83,7 +83,15 @@ function user($userid) {
     $user = user_get_users_by_id(array($userid));
     $user = $user[$userid];
     
-    //$courses = enrol_get_all_users_courses($userid);
+    $courses = enrol_get_all_users_courses($userid);
+    
+    $table = array();
+    
+    foreach ($courses as $courseid => $course) {
+        
+    }
+    
+    $user->courses = $table;
     //printArray($user);
     echo json_encode($user);
 }
