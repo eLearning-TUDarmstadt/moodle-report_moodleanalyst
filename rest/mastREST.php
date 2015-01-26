@@ -7,6 +7,8 @@ require 'Slim/Slim.php';
 require_once '../../../config.php';
 require_once '../../../course/lib.php';
 
+// GZIP Compression for output
+if(!ob_start("ob_gzhandler")) ob_start();
 require_capability('report/moodleanalyst:view', context_system::instance());
 
 \Slim\Slim::registerAutoloader();
@@ -15,6 +17,7 @@ $app = new \Slim\Slim ();
 
 $app->map('/allCourses', 'allCourses')->via('GET');
 $app->map('/allUsers', 'allUsers')->via('GET');
+$app->map('/user/:id', 'user')->via('GET');
 $app->map('/course/:id', 'course')->via('GET');
 $app->map('/course/getPersons/:id', 'getPersonsInCourse')->via('GET');
 $app->map('/course/getActivities/:id', 'getActivitiesInCourse')->via('GET');
@@ -73,6 +76,16 @@ function getPersonsInCourse($courseid) {
 
     echo json_encode($result);
     //printArray($result);
+}
+
+function user($userid) {
+    require_once '../../../user/lib.php';
+    $user = user_get_users_by_id(array($userid));
+    $user = $user[$userid];
+    
+    //$courses = enrol_get_all_users_courses($userid);
+    //printArray($user);
+    echo json_encode($user);
 }
 
 function course($courseid) {
