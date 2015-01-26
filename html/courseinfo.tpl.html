@@ -20,35 +20,52 @@
                     <div class="col-md-4">{{item.string}}</div>
                     <div class="col-md-8">{{item.v}}</div>
                 </div>
-                <div class="row">
-                    <div id="dashboardUsersInCourse">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"></h3>
-                                <div id="usersInCourse_name_filter_div"></div>
-                                <div class="row">
-                                    <div class="col-md-6" id="usersInCourse_role_filter_div"></div>
+            </div>
+            
+            <div class="tab" ng-controller="UserInCourseTabController as UserInCourseTab">
+                <ul class="nav nav-pills">
+                    <li ng-class="{ active: UserInCourseTab.isSet(1) }">
+                        <a href ng-click="UserInCourseTab.setTab(1)">Users in Course</a>
+                    </li>
+                    <li ng-class="{ active: UserInCourseTab.isSet(2) }">
+                        <a href ng-click="UserInCourseTab.setTab(2)">Activities in Course</a>
+                    </li>
+                </ul>
+                
+                <div ng-show="UserInCourseTab.isSet(1)">
+                    <blockquote>
+                        <div id="dashboardUsersInCourse">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title"></h3>
+                                    <div id="usersInCourse_name_filter_div"></div>
+                                    <div class="row">
+                                        <div class="col-md-6" id="usersInCourse_role_filter_div"></div>
+                                    </div>
                                 </div>
+                                <div class="panel-body" id="usersInCourse_table_div"></div>
                             </div>
-                            <div class="panel-body" id="usersInCourse_table_div"></div>
                         </div>
-                    </div>
+                    </blockquote>
                 </div>
-                <div class="row">
-                    <div id="dashboardActivitiesInCourse">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"></h3>
-                                <div id="activitiesInCourse_name_filter_div"></div>
-                                <div class="row">
-                                    <div class="col-md-4" id="activities_sectionnr_filter_div"></div>
-                                    <div class="col-md-4" id="activities_section_filter_div"></div>
-                                    <div class="col-md-4" id="activities_type_filter_div"></div>
+                
+                <div ng-show="UserInCourseTab.isSet(2)">
+                    <blockquote>
+                        <div id="dashboardActivitiesInCourse">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title"></h3>
+                                    <div id="activitiesInCourse_name_filter_div"></div>
+                                    <div class="row">
+                                        <div class="col-md-4" id="activities_sectionnr_filter_div"></div>
+                                        <div class="col-md-4" id="activities_section_filter_div"></div>
+                                        <div class="col-md-4" id="activities_type_filter_div"></div>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="panel-body" id="activitiesInCourse_table_div"></div>
                         </div>
-                        <div class="panel-body" id="activitiesInCourse_table_div"></div>
-                    </div>
+                    </blockquote>
                 </div>
             </div>
         </div>

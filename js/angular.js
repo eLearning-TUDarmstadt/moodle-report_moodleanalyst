@@ -13,6 +13,18 @@ app.directive('overview', function () {
     };
 });
 
+app.controller('UserInCourseTabController', function() {
+   this.tab = 1;
+   
+   this.setTab = function(newValue) {
+       this.tab = newValue;
+   };
+   
+   this.isSet = function(tabName) {
+       return this.tab === tabName;
+   };
+});
+
 app.directive('coursesearch', function () {
     return {
         restrict: 'E',
@@ -78,8 +90,11 @@ app.directive('userinfo', function () {
             '$http', '$scope', function ($http, $scope) {
                 $scope.didSelectAUser = function (userid) {
                     $http.get('/report/moodleanalyst/rest/mastREST.php/user/' + userid)
+                    
                     .success(function (data) {
                         $scope.user = data;
+                console.log(data);
+                /*
                             $http.get('/report/moodleanalyst/rest/mastREST.php/user/getPersons/' + userid)
                                     .success(function (result) {
                                             usersInCourseDashboard(result, $scope);
@@ -88,6 +103,7 @@ app.directive('userinfo', function () {
                                     .success(function (result) {
                                             activitiesInCourseDashboard(result, $scope);
                                     });
+                                    */
                     });
                 }
             }],
@@ -362,9 +378,6 @@ var userSearchDashboard = function (result, $scope) {
             showRowNumber: false,
             page: 'enable',
             pageSize: 25,
-            allowHtml: true,
-            sortColumn: 0,
-            sortAscending: true
         },
         view: {
             columns: [1, 2, 3, 4]
