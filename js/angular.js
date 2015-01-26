@@ -59,12 +59,12 @@ var activitiesInCourseDashboard = function (result, $scope) {
     // Create a dashboard
     var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardActivitiesInCourse'));
 
-    // Create a search box to search for the users lastname.
+    // Create a search box to search for the activity name.
     var nameFilter = new google.visualization.ControlWrapper({
         controlType: 'StringFilter',
         containerId: 'activitiesInCourse_name_filter',
         options: {
-            filterColumnIndex: 2,
+            filterColumnIndex: 3,
             matchType: 'any',
             ui: {
                 //label: 'Kurs suchen:'
@@ -77,7 +77,7 @@ var activitiesInCourseDashboard = function (result, $scope) {
         'controlType': 'CategoryFilter',
         'containerId': 'activities_sectionnr_filter',
         options: {
-            filterColumnIndex: 4,
+            filterColumnIndex: 0,
             ui: {
                 label: '',
                 allowTyping: false
@@ -90,7 +90,7 @@ var activitiesInCourseDashboard = function (result, $scope) {
         'controlType': 'CategoryFilter',
         'containerId': 'activities_section_filter',
         options: {
-            filterColumnIndex: 4,
+            filterColumnIndex: 1,
             ui: {
                 label: '',
                 allowTyping: false
@@ -103,7 +103,7 @@ var activitiesInCourseDashboard = function (result, $scope) {
         'controlType': 'CategoryFilter',
         'containerId': 'activities_type_filter',
         options: {
-            filterColumnIndex: 4,
+            filterColumnIndex: 2,
             ui: {
                 label: '',
                 allowTyping: false

@@ -14,6 +14,7 @@ require_capability('report/moodleanalyst:view', context_system::instance());
 $app = new \Slim\Slim ();
 
 $app->map('/allCourses', 'allCourses')->via('GET');
+$app->map('/allUsers', 'allUsers')->via('GET');
 $app->map('/course/:id', 'course')->via('GET');
 $app->map('/course/getPersons/:id', 'getPersonsInCourse')->via('GET');
 $app->map('/course/getActivities/:id', 'getActivitiesInCourse')->via('GET');
@@ -28,7 +29,7 @@ function getActivitiesInCourse($courseid) {
     $table['cols'][] = array('label' => get_string('sectionname'), 'type' => 'string');
     $table['cols'][] = array('label' => get_string('activity'), 'type' => 'string');
     $table['cols'][] = array('label' => get_string('name'), 'type' => 'string');
-    
+
     $table['rows'] = array();
 
     $activities = get_array_of_activities($courseid);
@@ -37,14 +38,14 @@ function getActivitiesInCourse($courseid) {
     foreach ($activities as $modid => $activity) {
         $section = $activity->section;
         $sectionname = get_section_name($courseid, $activity->section);
-        $icon = '';//"<img src='" . $OUTPUT->pix_url('icon', 'mod_'.$activity->mod) . "'>";
-        $activity = $icon . get_string('pluginname', $activity->mod);
-        //ERROR IN NEXT LINE
+        $icon = ''; //"<img src='" . $OUTPUT->pix_url('icon', 'mod_'.$activity->mod) . "'>";
+        $activityType = $icon . get_string('pluginname', $activity->mod);
+
         $activityname = $activity->name;
-        $table['rows'][] = ['c' => array(array('v' => $section),array('v' => $sectionname), array('v' => $aktivitaet), array('v' => $activityname))];
+        $table['rows'][] = ['c' => array(array('v' => $section), array('v' => $sectionname), array('v' => $activityType), array('v' => $activityname))];
     }
-    //echo "<pre>" . print_r($table, true) . "</pre>";
-    return $table;
+
+    echo json_encode($table);
 }
 
 function getPersonsInCourse($courseid) {
@@ -57,7 +58,7 @@ function getPersonsInCourse($courseid) {
     $result['cols'][] = array('label' => get_string('email'), 'type' => 'string');
     $result['cols'][] = array('label' => get_string('role'), 'type' => 'string');
     $result['rows'] = array();
-    
+
     $context = context_course::instance($courseid);
     $usedRoles = get_roles_used_in_context($context);
     //printArray($usedRoles);
@@ -69,7 +70,7 @@ function getPersonsInCourse($courseid) {
             }
         }
     }
-    
+
     echo json_encode($result);
     //printArray($result);
 }
@@ -88,6 +89,60 @@ function course($courseid) {
     $data['idnumber']['v'] = $course->idnumber;
     $result = array();
     $result['data'] = $data;
+    //printArray($result);
+    echo json_encode($result);
+}
+
+function allUsers() {
+    /*
+     * @param bool $get If false then only a count of the records is returned
+     * @param string $search A simple string to search for
+     * @param bool $confirmed A switch to allow/disallow unconfirmed users
+     * @param array $exceptions A list of IDs to ignore, eg 2,4,5,8,9,10
+     * @param string $sort A SQL snippet for the sorting criteria to use
+     * @param string $firstinitial Users whose first name starts with $firstinitial
+     * @param string $lastinitial Users whose last name starts with $lastinitial
+     * @param string $page The page or records to return
+     * @param string $recordsperpage The number of records to return per page
+     * @param string $fields A comma separated list of fields to be returned from the chosen table.
+     * @return array|int|bool  {@link $USER} records unless get is false in which case the integer count of the records found is returned.
+     *                        False is returned if an error is encountered.
+     */
+    $get = true;
+    $search = '';
+    $confirmed = false;
+    $exceptions = null;
+    $sort = 'lastname ASC';
+    $firstinitial = '';
+    $lastinitial = '';
+    $page = '';
+    $recordsperpage = '100000000';
+    $fields = 'id, username, firstname, lastname, email';
+    $users = get_users($get, $search, $confirmed, $exceptions, $sort, $firstinitial, $lastinitial, $page, $recordsperpage, $fields);
+
+    // Preparing the return table
+    $result = array();
+    $result['cols'] = array();
+    $result['cols'][] = array('label' => 'ID', 'type' => 'number');
+    $result['cols'][] = array('label' => get_string('username'), 'type' => 'string');
+    $result['cols'][] = array('label' => get_string('email'), 'type' => 'string');
+    $result['cols'][] = array('label' => get_string('firstname'), 'type' => 'string');
+    $result['cols'][] = array('label' => get_string('lastname'), 'type' => 'string');
+    $result['cols'][] = array('label' => get_string('fullname'), 'type' => 'string');
+    $result['rows'] = array();
+
+    foreach ($users as $userid => $user) {
+        $result['rows'][] = [
+            'c' => array(
+                ['v' => $user->id],
+                array('v' => $user->username),
+                array('v' => $user->email),
+                array('v' => $user->firstname),
+                array('v' => $user->lastname),
+                array('v' => $user->firstname . ' ' . $user->lastname)
+                )
+        ];
+    }
     //printArray($result);
     echo json_encode($result);
 }
