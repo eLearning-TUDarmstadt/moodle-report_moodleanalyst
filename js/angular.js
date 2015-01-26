@@ -66,9 +66,35 @@ app.directive('courseinfo', function () {
                     });
                 }
             }],
-        controllerAs: 'ctrl'
+        controllerAs: 'courseInfoCtrl'
     }
 });
+
+app.directive('userinfo', function () {
+    return {
+        restrict: 'E',
+        templateUrl: '/report/moodleanalyst/html/userinfo.tpl.html',
+        controller: [
+            '$http', '$scope', function ($http, $scope) {
+                $scope.didSelectAUser = function (userid) {
+                    $http.get('/report/moodleanalyst/rest/mastREST.php/user/' + userid)
+                    .success(function (data) {
+                        $scope.user = data;
+                            $http.get('/report/moodleanalyst/rest/mastREST.php/user/getPersons/' + userid)
+                                    .success(function (result) {
+                                            usersInCourseDashboard(result, $scope);
+                                    });
+                            $http.get('/report/moodleanalyst/rest/mastREST.php/user/getActivities/' + userid)
+                                    .success(function (result) {
+                                            activitiesInCourseDashboard(result, $scope);
+                                    });
+                    });
+                }
+            }],
+        controllerAs: 'userInfoCtrl'
+    }
+});
+
 var activitiesInCourseDashboard = function (result, $scope) {
     var data = new google.visualization.DataTable(result);
 
@@ -167,12 +193,12 @@ var usersInCourseDashboard = function (result, $scope) {
     // Create a dashboard
     var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardUsersInCourse'));
 
-    // Create a search box to search for the users lastname.
+    // Create a search box to search for the users name.
     var nameFilter = new google.visualization.ControlWrapper({
         controlType: 'StringFilter',
         containerId: 'usersInCourse_name_filter_div',
         options: {
-            filterColumnIndex: 2,
+            filterColumnIndex: 5,
             matchType: 'any',
             ui: {
                 //label: 'Kurs suchen:'
@@ -187,7 +213,7 @@ var usersInCourseDashboard = function (result, $scope) {
         options: {
             filterColumnIndex: 4,
             ui: {
-                //caption: 'Nach Semester filtern',
+                //caption: 'Nach Rolle filtern',
                 label: '',
                 allowTyping: false
             }
@@ -204,8 +230,11 @@ var usersInCourseDashboard = function (result, $scope) {
             page: 'enable',
             pageSize: 25,
             allowHtml: true,
-            sortColumn: 0,
-            sortAscending: false
+            sortColumn: 2,
+            sortAscending: true
+        },
+        view: {
+            columns: [0, 1, 2, 3, 4]
         }
     });
 
@@ -335,7 +364,7 @@ var userSearchDashboard = function (result, $scope) {
             pageSize: 25,
             allowHtml: true,
             sortColumn: 0,
-            sortAscending: false
+            sortAscending: true
         },
         view: {
             columns: [1, 2, 3, 4]
@@ -349,14 +378,15 @@ var userSearchDashboard = function (result, $scope) {
     dashboard.draw(data);
 
     // Define what to do when selecting a table row.
-    /*function selectHandler() {
+    function selectHandler() {
         var selection = table.getChart().getSelection();
-        $scope.courseid = table.getDataTable().getFormattedValue(selection[0].row, 0);
-        $scope.didSelectACourse($scope.courseid);
+        $scope.userid = table.getDataTable().getFormattedValue(selection[0].row, 0);
+        //console.log($scope.userid);
+        $scope.didSelectAUser($scope.userid);
     };
     
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
-    */
+    
 };
