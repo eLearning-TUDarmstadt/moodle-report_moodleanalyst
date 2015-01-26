@@ -1,16 +1,56 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
-</html>
+<div id="userInfo">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h2 class="panel-title">{{user.data.fullname.v}}
+                <button type="button" class="btn btn-default" aria-label="Left Align">
+                    <span class="glyphicon glyphicon-pencil" aria-hidden="false"></span>
+                </button>
+                <button type="button" class="btn btn-default" aria-label="Left Align">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </button>
+            </h2>
+        </div>
+        <div class="panel-body">
+            <div class="table">
+                <div class="row" ng-repeat="item in course.data">
+                    <div class="col-md-4">{{item.string}}</div>
+                    <div class="col-md-8">{{item.v}}</div>
+                </div>
+                <div class="row">
+                    <div id="dashboardEnrolledInCourse">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"></h3>
+                                <div id="enrolledInCourse_name_filter"></div>
+                                <div class="row">
+                                    <div class="col-md-4" id="enrolledInCourse_grandparentCategory_filter"></div>
+                                    <div class="col-md-4" id="enrolledInCourse_parentCategory_filter"></div>
+                                    <div class="col-md-4" id="enrolledInCourse_role_filter"></div>
+                                </div>
+                            </div>
+                            <div class="panel-body" id="enrolledInCourse_table"></div>
+                        </div>
+                    </div>
+                </div>
+                <!--
+                <div class="row">
+                    <div id="dashboardActivitiesInCourse">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"></h3>
+                                <div id="activitiesInCourse_name_filter"></div>
+                                <div class="row">
+                                    <div class="col-md-4" id="activities_sectionnr_filter"></div>
+                                    <div class="col-md-4" id="activities_section_filter"></div>
+                                    <div class="col-md-4" id="activities_type_filter"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body" id="activities_table"></div>
+                    </div>
+                </div>
+                -->
+            </div>
+        </div>
+    </div>
+</div>

@@ -29,6 +29,22 @@ app.directive('coursesearch', function () {
     }
 });
 
+app.directive('usersearch', function () {
+    return {
+        restrict: 'E',
+        templateUrl: '/report/moodleanalyst/html/usersearch.tpl.html',
+        controller: [
+            '$http', '$scope', function ($http, $scope) {
+                $scope.courseid = false;
+                $http.get('/report/moodleanalyst/rest/mastREST.php/allUsers')
+                        .success(function (result) {
+                            userSearchDashboard(result, $scope);
+                        });
+            }],
+        controllerAs: 'userSearchCtrl'
+    }
+});
+
 app.directive('courseinfo', function () {
     return {
         restrict: 'E',
@@ -62,7 +78,7 @@ var activitiesInCourseDashboard = function (result, $scope) {
     // Create a search box to search for the activity name.
     var nameFilter = new google.visualization.ControlWrapper({
         controlType: 'StringFilter',
-        containerId: 'activitiesInCourse_name_filter',
+        containerId: 'activitiesInCourse_name_filter_div',
         options: {
             filterColumnIndex: 3,
             matchType: 'any',
@@ -75,7 +91,7 @@ var activitiesInCourseDashboard = function (result, $scope) {
     // Create a category picker to filter section nr.
     var sectionnrCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
-        'containerId': 'activities_sectionnr_filter',
+        'containerId': 'activities_sectionnr_filter_div',
         options: {
             filterColumnIndex: 0,
             ui: {
@@ -88,7 +104,7 @@ var activitiesInCourseDashboard = function (result, $scope) {
     // Create a category picker to filter section name.
     var sectionCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
-        'containerId': 'activities_section_filter',
+        'containerId': 'activities_section_filter_div',
         options: {
             filterColumnIndex: 1,
             ui: {
@@ -101,7 +117,7 @@ var activitiesInCourseDashboard = function (result, $scope) {
     // Create a category picker to filter section name.
     var typeCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
-        'containerId': 'activities_type_filter',
+        'containerId': 'activities_type_filter_div',
         options: {
             filterColumnIndex: 2,
             ui: {
@@ -115,7 +131,7 @@ var activitiesInCourseDashboard = function (result, $scope) {
     // Create the table to display.
     var table = new google.visualization.ChartWrapper({
         chartType: 'Table',
-        containerId: 'activitiesInCourse_table',
+        containerId: 'activitiesInCourse_table_div',
         options: {
             showRowNumber: false,
             page: 'enable',
@@ -154,7 +170,7 @@ var usersInCourseDashboard = function (result, $scope) {
     // Create a search box to search for the users lastname.
     var nameFilter = new google.visualization.ControlWrapper({
         controlType: 'StringFilter',
-        containerId: 'usersInCourse_name_filter',
+        containerId: 'usersInCourse_name_filter_div',
         options: {
             filterColumnIndex: 2,
             matchType: 'any',
@@ -167,7 +183,7 @@ var usersInCourseDashboard = function (result, $scope) {
     // Create a category picker to filter role.
     var roleCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
-        'containerId': 'usersInCourse_role_filter',
+        'containerId': 'usersInCourse_role_filter_div',
         options: {
             filterColumnIndex: 4,
             ui: {
@@ -182,7 +198,7 @@ var usersInCourseDashboard = function (result, $scope) {
     // Create the table to display.
     var table = new google.visualization.ChartWrapper({
         chartType: 'Table',
-        containerId: 'usersInCourse_table',
+        containerId: 'usersInCourse_table_div',
         options: {
             showRowNumber: false,
             page: 'enable',
@@ -220,7 +236,7 @@ var courseSearchDashboard = function (result, $scope) {
     // Create a search box to search for the course name.
     var nameFilter = new google.visualization.ControlWrapper({
         controlType: 'StringFilter',
-        containerId: 'courses_name_filter',
+        containerId: 'courses_name_filter_div',
         options: {
             filterColumnIndex: 3,
             matchType: 'any',
@@ -233,7 +249,7 @@ var courseSearchDashboard = function (result, $scope) {
     // Create a category picker to filter by grand parent category.
     var grandparentCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
-        'containerId': 'courses_grandparentcategory_filter',
+        'containerId': 'courses_grandparentcategory_filter_div',
         options: {
             filterColumnIndex: 1,
             ui: {
@@ -247,7 +263,7 @@ var courseSearchDashboard = function (result, $scope) {
     // Create a category picker to filter by Fachbereich.
     var parentCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
-        'containerId': 'courses_parentcategory_filter',
+        'containerId': 'courses_parentcategory_filter_div',
         options: {
             filterColumnIndex: 2,
             ui: {
@@ -261,7 +277,7 @@ var courseSearchDashboard = function (result, $scope) {
     // Create the table to display.
     var table = new google.visualization.ChartWrapper({
         chartType: 'Table',
-        containerId: 'courses_table',
+        containerId: 'courses_table_div',
         options: {
             showRowNumber: false,
             page: 'enable',
@@ -288,4 +304,59 @@ var courseSearchDashboard = function (result, $scope) {
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
+};
+
+var userSearchDashboard = function (result, $scope) {
+    var data = new google.visualization.DataTable(result);
+
+    // Create a dashboard
+    var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardUserSearch'));
+
+    // Create a search box to search for the user name.
+    var userNameFilter = new google.visualization.ControlWrapper({
+        controlType: 'StringFilter',
+        containerId: 'user_name_filter_div',
+        options: {
+            filterColumnIndex: 5,
+            matchType: 'any',
+            ui: {
+                //label: 'Nutzer suchen:'
+            }
+        }
+    });
+
+    // Create the table to display.
+    var table = new google.visualization.ChartWrapper({
+        chartType: 'Table',
+        containerId: 'user_table_div',
+        options: {
+            showRowNumber: false,
+            page: 'enable',
+            pageSize: 25,
+            allowHtml: true,
+            sortColumn: 0,
+            sortAscending: false
+        },
+        view: {
+            columns: [1, 2, 3, 4]
+        }
+    });
+
+    // Establish dependencies.
+    dashboard.bind([userNameFilter], [table]);
+
+    // Draw the dashboard.
+    dashboard.draw(data);
+
+    // Define what to do when selecting a table row.
+    /*function selectHandler() {
+        var selection = table.getChart().getSelection();
+        $scope.courseid = table.getDataTable().getFormattedValue(selection[0].row, 0);
+        $scope.didSelectACourse($scope.courseid);
+    };
+    
+
+    // Setup listener to listen for clicks on table rows and process the selectHandler.
+    google.visualization.events.addListener(table, 'select', selectHandler);
+    */
 };

@@ -1,7 +1,7 @@
 <div id="courseInfo">
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h2 class="panel-title">{{course.data.fullname.v}}
+            <h2 class="panel-title"><a href="/course/view.php?id={{course.data.id.v}}">{{course.data.fullname.v}}</a>
                 <button type="button" class="btn btn-default" aria-label="Left Align">
                     <span class="glyphicon glyphicon-pencil" aria-hidden="false"></span>
                 </button>
@@ -25,12 +25,12 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h3 class="panel-title"></h3>
-                                <div id="usersInCourse_name_filter"></div>
+                                <div id="usersInCourse_name_filter_div"></div>
                                 <div class="row">
-                                    <div class="col-md-6" id="usersInCourse_role_filter"></div>
+                                    <div class="col-md-6" id="usersInCourse_role_filter_div"></div>
                                 </div>
                             </div>
-                            <div class="panel-body" id="usersInCourse_table"></div>
+                            <div class="panel-body" id="usersInCourse_table_div"></div>
                         </div>
                     </div>
                 </div>
@@ -39,19 +39,18 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h3 class="panel-title"></h3>
-                                <div id="activitiesInCourse_name_filter"></div>
+                                <div id="activitiesInCourse_name_filter_div"></div>
                                 <div class="row">
-                                    <div class="col-md-4" id="activities_sectionnr_filter"></div>
-                                    <div class="col-md-4" id="activities_section_filter"></div>
-                                    <div class="col-md-4" id="activities_type_filter"></div>
+                                    <div class="col-md-4" id="activities_sectionnr_filter_div"></div>
+                                    <div class="col-md-4" id="activities_section_filter_div"></div>
+                                    <div class="col-md-4" id="activities_type_filter_div"></div>
                                 </div>
                             </div>
                         </div>
-                        <div class="panel-body" id="activities_table"></div>
+                        <div class="panel-body" id="activitiesInCourse_table_div"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>
