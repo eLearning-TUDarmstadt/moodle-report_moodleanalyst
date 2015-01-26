@@ -79,6 +79,8 @@ function course($courseid) {
     $course = get_course($courseid);
 
     $data = array();
+    $data['id']['string'] = get_string('course');
+    $data['id']['v'] = $courseid;
     $data['fullname']['string'] = get_string('fullnamecourse');
     $data['fullname']['v'] = $course->fullname;
     $data['shortname']['string'] = get_string('shortnamecourse');
