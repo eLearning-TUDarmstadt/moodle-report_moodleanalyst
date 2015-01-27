@@ -13,8 +13,18 @@ app.directive('overview', function () {
     };
 });
 
-app.controller('HeaderController', function() {
+/*
+function NavBarCtrl($scope) {
+    $scope.isCollapsed = true;
+};
+*/
+
+app.controller('NavbarController', function() {
     this.tab = 1;
+    
+    this.NavBarCtrl= function($scope) {
+        $scope.isCollapsed = true;
+    };
     
     this.setTab = function(newValue) {
         this.tab = newValue;
