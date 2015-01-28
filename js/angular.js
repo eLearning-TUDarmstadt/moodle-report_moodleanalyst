@@ -12,6 +12,17 @@ app.directive('overview', function () {
         templateUrl: '/report/moodleanalyst/html/overview.tpl.html',
         controller: [
             '$http', '$scope', function ($http, $scope) {
+                $http.get('/report/moodleanalyst/rest/mastREST.php/isUserLoggedIn')
+                        .success(function (result) {
+                            if(result) {
+                                console.log("LOGIN");
+                            }
+                            else {
+                                console.log('Kein LOGIN!');
+                            }
+                });
+                
+                
                 $scope.vocabulary = null;
                 $http.get('/report/moodleanalyst/rest/mastREST.php/vocabulary')
                         .success(function (result) {

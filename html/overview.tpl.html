@@ -1,34 +1,24 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Overview</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div class="row">
-            <div class="col-md-6" id="course">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h1 class="panel-title">{{vocabulary.course}}</h1>
-                    </div>
-                    <div class="panel-body">
-                        <courseinfo ng-show="courseid"></courseinfo>
-                        <coursesearch></coursesearch>
-                    </div>
-                </div>
+<div class="row">
+    <div class="col-md-6" id="course">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title"><h3>{{vocabulary.course}}</h3></div>
             </div>
-            <div class="col-md-6" id="user">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h1 class="panel-title">{{vocabulary.user}}</h1>
-                    </div>
-                    <div class="panel-body">
-                        <userinfo ng-show="userid"></userinfo>
-                        <usersearch></usersearch>
-                    </div>
-                </div>
+            <div class="panel-body">
+                <courseinfo ng-show="courseid"></courseinfo>
+                <coursesearch></coursesearch>
             </div>
         </div>
-    </body>
-</html>
+    </div>
+    <div class="col-md-6" id="user">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title"><h3>{{vocabulary.user}}</h3></div>
+            </div>
+            <div class="panel-body">
+                <userinfo ng-show="userid"></userinfo>
+                <usersearch></usersearch>
+            </div>
+        </div>
+    </div>
+</div>

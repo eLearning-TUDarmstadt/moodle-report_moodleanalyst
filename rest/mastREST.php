@@ -10,12 +10,15 @@ require_once '../../../course/lib.php';
 // GZIP Compression for output
 if (!ob_start("ob_gzhandler"))
     ob_start();
+
+//require_login();
 require_capability('report/moodleanalyst:view', context_system::instance());
 
 \Slim\Slim::registerAutoloader();
 
 $app = new \Slim\Slim ();
 
+$app->map('/isUserLoggedIn', 'isUserLoggedIn')->via('GET');
 $app->map('/allCourses', 'allCourses')->via('GET');
 $app->map('/allUsers', 'allUsers')->via('GET');
 $app->map('/user/:id', 'user')->via('GET');
@@ -26,6 +29,10 @@ $app->map('/course/:id/setVisibility/:visibility', 'setCourseVisibility')->via('
 $app->map('/vocabulary', 'getVocabulary')->via('GET');
 
 $app->run();
+
+function isUserLoggedIn() {
+    echo json_encode(true);
+}
 
 function setCourseVisibility($courseid, $visibility) {
     echo json_encode(course_change_visibility($courseid, $visibility));
@@ -208,7 +215,7 @@ function user($userid) {
     [alternatename] => 
     [calendartype] => gregorian
      */
-    
+    $date_format = "d.m.Y H:i:s";
     $ret = array();
     $ret['id']['string'] = get_string('username');
     $ret['id']['v'] = $user->id;
@@ -225,11 +232,11 @@ function user($userid) {
     $ret['email']['string'] = get_string('email');
     $ret['email']['v'] = $user->email;
     $ret['firstaccess']['string'] = get_string('firstaccess');
-    $ret['firstaccess']['v'] = $user->firstaccess;
+    $ret['firstaccess']['v'] = date($date_format, $user->firstaccess);
     $ret['lastaccess']['string'] = get_string('lastaccess');
-    $ret['lastaccess']['v'] = $user->lastaccess;
+    $ret['lastaccess']['v'] = date($date_format, $user->lastaccess);
     $ret['lastlogin']['string'] = get_string('lastlogin');
-    $ret['lastlogin']['v'] = $user->lastlogin;
+    $ret['lastlogin']['v'] = date($date_format, $user->lastlogin);
     $ret['lastip']['string'] = get_string('lastip');
     $ret['lastip']['v'] = $user->lastip;
     
