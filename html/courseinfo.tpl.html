@@ -2,12 +2,16 @@
     <div class="panel panel-primary">
         <div class="panel-heading">
             <h2 class="panel-title"><a href="/course/view.php?id={{course.data.id.v}}">{{course.data.fullname.v}}</a>
+                <a href="/course/edit.php?id={{course.data.id.v}}" target="_blanc">
                 <button type="button" class="btn btn-default" aria-label="Left Align">
                     <span class="glyphicon glyphicon-pencil" aria-hidden="false"></span>
                 </button>
-                <button type="button" class="btn btn-default" aria-label="Left Align">
-                    <span class="glyphicon glyphicon-remove"></span>
-                </button>
+                </a>
+                <a href="/course/delete.php?id={{course.data.id.v}}" target="_blanc">
+                    <button type="button" class="btn btn-default" aria-label="Left Align">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </a>
                 <button type="button" class="btn btn-default" aria-label="Left Align">
                     <span class="glyphicon glyphicon-eye-open" ng-show="course.data.visible.v"></span>
                     <span class="glyphicon-eye-close" ng-hide="course.data.visible.v"></span>
@@ -15,14 +19,16 @@
             </h2>
         </div>
         <div class="panel-body">
+            <loader ng-show="loadingCourse"></loader>
             <div class="table">
                 <div class="row" ng-repeat="item in course.data">
                     <div class="col-md-4">{{item.string}}</div>
                     <div class="col-md-8">{{item.v}}</div>
                 </div>
             </div>
-            
-            <div class="tab" ng-controller="UserInCourseTabController as UserInCourseTab">
+
+            <div class="tab" ng-controller="UserInCourseTabController
+                    as UserInCourseTab">
                 <ul class="nav nav-pills">
                     <li ng-class="{ active: UserInCourseTab.isSet(1) }">
                         <a href ng-click="UserInCourseTab.setTab(1)">Users in Course</a>
@@ -31,7 +37,7 @@
                         <a href ng-click="UserInCourseTab.setTab(2)">Activities in Course</a>
                     </li>
                 </ul>
-                
+
                 <div ng-show="UserInCourseTab.isSet(1)">
                     <blockquote>
                         <div id="dashboardUsersInCourse">
@@ -48,7 +54,7 @@
                         </div>
                     </blockquote>
                 </div>
-                
+
                 <div ng-show="UserInCourseTab.isSet(2)">
                     <blockquote>
                         <div id="dashboardActivitiesInCourse">

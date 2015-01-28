@@ -13,28 +13,35 @@ app.directive('overview', function () {
     };
 });
 
-app.controller('HeaderController', function() {
+app.controller('HeaderController', function () {
     this.tab = 1;
-    
-    this.setTab = function(newValue) {
+
+    this.setTab = function (newValue) {
         this.tab = newValue;
     };
-    
-    this.isSet = function(tabName) {
+
+    this.isSet = function (tabName) {
         return this.tab === tabName;
     };
 });
 
-app.controller('UserInCourseTabController', function() {
-   this.tab = 1;
-   
-   this.setTab = function(newValue) {
-       this.tab = newValue;
-   };
-   
-   this.isSet = function(tabName) {
-       return this.tab === tabName;
-   };
+app.controller('UserInCourseTabController', function () {
+    this.tab = 1;
+
+    this.setTab = function (newValue) {
+        this.tab = newValue;
+    };
+
+    this.isSet = function (tabName) {
+        return this.tab === tabName;
+    };
+});
+
+app.directive('loader', function () {
+    return {
+        restrict: 'E',
+        template: '<img style="display: block; margin-left: auto; margin-right: auto;" src="/report/moodleanalyst/pix/ajax-loader.gif">'
+    };
 });
 
 app.directive('coursesearch', function () {
@@ -44,8 +51,10 @@ app.directive('coursesearch', function () {
         controller: [
             '$http', '$scope', function ($http, $scope) {
                 $scope.courseid = false;
+                $scope.gotAllCourses = false;
                 $http.get('/report/moodleanalyst/rest/mastREST.php/allCourses')
                         .success(function (result) {
+                            $scope.gotAllCourses = true;
                             courseSearchDashboard(result, $scope);
                         });
             }],
@@ -60,8 +69,10 @@ app.directive('usersearch', function () {
         controller: [
             '$http', '$scope', function ($http, $scope) {
                 $scope.courseid = false;
+                $scope.gotAllUsers = false;
                 $http.get('/report/moodleanalyst/rest/mastREST.php/allUsers')
                         .success(function (result) {
+                            $scope.gotAllUsers = true;
                             userSearchDashboard(result, $scope);
                         });
             }],
@@ -77,17 +88,18 @@ app.directive('courseinfo', function () {
             '$http', '$scope', function ($http, $scope) {
                 $scope.didSelectACourse = function (courseid) {
                     $http.get('/report/moodleanalyst/rest/mastREST.php/course/' + courseid)
-                    .success(function (data) {
-                        $scope.course = data;
-                            $http.get('/report/moodleanalyst/rest/mastREST.php/course/getPersons/' + courseid)
-                                    .success(function (result) {
+                            .success(function (data) {
+                                $scope.loadingCourse = false;
+                                $scope.course = data;
+                                $http.get('/report/moodleanalyst/rest/mastREST.php/course/getPersons/' + courseid)
+                                        .success(function (result) {
                                             usersInCourseDashboard(result, $scope);
-                                    });
-                            $http.get('/report/moodleanalyst/rest/mastREST.php/course/getActivities/' + courseid)
-                                    .success(function (result) {
+                                        });
+                                $http.get('/report/moodleanalyst/rest/mastREST.php/course/getActivities/' + courseid)
+                                        .success(function (result) {
                                             activitiesInCourseDashboard(result, $scope);
-                                    });
-                    });
+                                        });
+                            });
                 }
             }],
         controllerAs: 'courseInfoCtrl'
@@ -102,21 +114,21 @@ app.directive('userinfo', function () {
             '$http', '$scope', function ($http, $scope) {
                 $scope.didSelectAUser = function (userid) {
                     $http.get('/report/moodleanalyst/rest/mastREST.php/user/' + userid)
-                    
-                    .success(function (data) {
-                        $scope.user = data;
-                console.log(data);
-                /*
-                            $http.get('/report/moodleanalyst/rest/mastREST.php/user/getPersons/' + userid)
-                                    .success(function (result) {
-                                            usersInCourseDashboard(result, $scope);
-                                    });
-                            $http.get('/report/moodleanalyst/rest/mastREST.php/user/getActivities/' + userid)
-                                    .success(function (result) {
-                                            activitiesInCourseDashboard(result, $scope);
-                                    });
-                                    */
-                    });
+                            .success(function (data) {
+                                $scope.loadingUser = false;
+                                $scope.user = data;
+                                console.log(data);
+                                /*
+                                 $http.get('/report/moodleanalyst/rest/mastREST.php/user/getPersons/' + userid)
+                                 .success(function (result) {
+                                 usersInCourseDashboard(result, $scope);
+                                 });
+                                 $http.get('/report/moodleanalyst/rest/mastREST.php/user/getActivities/' + userid)
+                                 .success(function (result) {
+                                 activitiesInCourseDashboard(result, $scope);
+                                 });
+                                 */
+                            });
                 }
             }],
         controllerAs: 'userInfoCtrl'
@@ -154,7 +166,7 @@ var activitiesInCourseDashboard = function (result, $scope) {
             }
         }
     });
-    
+
     // Create a category picker to filter section name.
     var sectionCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
@@ -167,7 +179,7 @@ var activitiesInCourseDashboard = function (result, $scope) {
             }
         }
     });
-    
+
     // Create a category picker to filter section name.
     var typeCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
@@ -224,7 +236,7 @@ var usersInCourseDashboard = function (result, $scope) {
         controlType: 'StringFilter',
         containerId: 'usersInCourse_name_filter_div',
         options: {
-            filterColumnIndex: 5,
+            filterColumnIndex: 4,
             matchType: 'any',
             ui: {
                 //label: 'Kurs suchen:'
@@ -237,7 +249,7 @@ var usersInCourseDashboard = function (result, $scope) {
         'controlType': 'CategoryFilter',
         'containerId': 'usersInCourse_role_filter_div',
         options: {
-            filterColumnIndex: 4,
+            filterColumnIndex: 3,
             ui: {
                 //caption: 'Nach Rolle filtern',
                 label: '',
@@ -260,7 +272,8 @@ var usersInCourseDashboard = function (result, $scope) {
             sortAscending: true
         },
         view: {
-            columns: [0, 1, 2, 3, 4]
+            //removed 4 (=full name)
+            columns: [0, 1, 2, 3]
         }
     });
 
@@ -272,6 +285,8 @@ var usersInCourseDashboard = function (result, $scope) {
 
     // Define what to do when selecting a table row.
     function selectHandler() {
+        $scope.loadingUser = true;
+        $scope.user = null;
         var selection = table.getChart().getSelection();
         $scope.userid = table.getDataTable().getFormattedValue(selection[0].row, 0);
         $scope.didSelectAUser($scope.userid);
@@ -351,6 +366,8 @@ var courseSearchDashboard = function (result, $scope) {
     // Define what to do when selecting a table row.
     function selectHandler() {
         var selection = table.getChart().getSelection();
+        $scope.loadingCourse = true;
+        $scope.course = null;
         $scope.courseid = table.getDataTable().getFormattedValue(selection[0].row, 0);
         $scope.didSelectACourse($scope.courseid);
     }
@@ -400,14 +417,17 @@ var userSearchDashboard = function (result, $scope) {
 
     // Define what to do when selecting a table row.
     function selectHandler() {
+        $scope.loadingUser = true;
+        $scope.user = null;
         var selection = table.getChart().getSelection();
         $scope.userid = table.getDataTable().getFormattedValue(selection[0].row, 0);
         //console.log($scope.userid);
         $scope.didSelectAUser($scope.userid);
-    };
-    
+    }
+    ;
+
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
-    
+
 };
