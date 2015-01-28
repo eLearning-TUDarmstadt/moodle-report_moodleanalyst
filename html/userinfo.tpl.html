@@ -1,14 +1,20 @@
 <div id="userInfo">
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h2 class="panel-title">{{user.firstname.v}} {{user.lastname.v}}
-                <button type="button" class="btn btn-default" aria-label="Left Align">
-                    <span class="glyphicon glyphicon-pencil" aria-hidden="false"></span>
-                </button>
-                <button type="button" class="btn btn-default" aria-label="Left Align">
-                    <span class="glyphicon glyphicon-remove"></span>
-                </button>
-            </h2>
+            <div class="row panel-title">
+                <div class="col-md-10">
+                    <h2 class="panel-title">{{user.firstname.v}} {{user.lastname.v}}</h2>
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-default" aria-label="Left Align">
+                        <span class="glyphicon glyphicon-pencil" aria-hidden="false"></span>
+                    </button>
+                    <button type="button" class="btn btn-default" aria-label="Left Align">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </div>
+            </div>
+
         </div>
         <div class="panel-body">
             <div class="table">

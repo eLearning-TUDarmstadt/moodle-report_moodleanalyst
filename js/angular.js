@@ -13,18 +13,8 @@ app.directive('overview', function () {
     };
 });
 
-/*
-function NavBarCtrl($scope) {
-    $scope.isCollapsed = true;
-};
-*/
-
-app.controller('NavbarController', function() {
+app.controller('HeaderController', function() {
     this.tab = 1;
-    
-    this.NavBarCtrl= function($scope) {
-        $scope.isCollapsed = true;
-    };
     
     this.setTab = function(newValue) {
         this.tab = newValue;
@@ -223,8 +213,6 @@ var activitiesInCourseDashboard = function (result, $scope) {
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
 };
-
-
 var usersInCourseDashboard = function (result, $scope) {
     var data = new google.visualization.DataTable(result);
 
@@ -285,15 +273,14 @@ var usersInCourseDashboard = function (result, $scope) {
     // Define what to do when selecting a table row.
     function selectHandler() {
         var selection = table.getChart().getSelection();
-        $scope.courseid = table.getDataTable().getFormattedValue(selection[0].row, 0);
-        $scope.didSelectACourse($scope.courseid);
+        $scope.userid = table.getDataTable().getFormattedValue(selection[0].row, 0);
+        $scope.didSelectAUser($scope.userid);
     }
     ;
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
 };
-
 var courseSearchDashboard = function (result, $scope) {
     var data = new google.visualization.DataTable(result);
 
@@ -372,7 +359,6 @@ var courseSearchDashboard = function (result, $scope) {
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
 };
-
 var userSearchDashboard = function (result, $scope) {
     var data = new google.visualization.DataTable(result);
 
