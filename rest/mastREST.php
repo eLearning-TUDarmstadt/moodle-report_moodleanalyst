@@ -22,8 +22,19 @@ $app->map('/user/:id', 'user')->via('GET');
 $app->map('/course/:id', 'course')->via('GET');
 $app->map('/course/getPersons/:id', 'getPersonsInCourse')->via('GET');
 $app->map('/course/getActivities/:id', 'getActivitiesInCourse')->via('GET');
+$app->map('/vocabulary', 'getVocabulary')->via('GET');
+
 
 $app->run();
+
+function getVocabulary() {
+    $result = array();
+    $result['course'] = get_string('course');
+    $result['user'] = get_string('user');
+    
+    
+    echo json_encode($result);
+}
 
 function getActivitiesInCourse($courseid) {
     global $OUTPUT;

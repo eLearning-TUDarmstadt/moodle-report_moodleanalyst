@@ -9,7 +9,15 @@ var app = angular.module('overview', []);
 app.directive('overview', function () {
     return {
         restrict: 'E',
-        templateUrl: '/report/moodleanalyst/html/overview.tpl.html'
+        templateUrl: '/report/moodleanalyst/html/overview.tpl.html',
+        controller: [
+            '$http', '$scope', function ($http, $scope) {
+                $scope.vocabulary = null;
+                $http.get('/report/moodleanalyst/rest/mastREST.php/vocabulary')
+                        .success(function (result) {
+                            $scope.vocabulary = result;
+                        });
+            }],
     };
 });
 
