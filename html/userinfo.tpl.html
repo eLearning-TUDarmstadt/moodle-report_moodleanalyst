@@ -2,16 +2,12 @@
     <div class="panel panel-primary">
         <div class="panel-heading">
             <div class="row panel-title">
-                <div class="col-md-10">
-                    <h2 class="panel-title">{{user.firstname.v}} {{user.lastname.v}}</h2>
-                </div>
-                <div class="col-md-2">
-                    <button type="button" class="btn btn-default" aria-label="Left Align">
-                        <span class="glyphicon glyphicon-pencil" aria-hidden="false"></span>
-                    </button>
-                    <button type="button" class="btn btn-default" aria-label="Left Align">
-                        <span class="glyphicon glyphicon-remove"></span>
-                    </button>
+                <div class="panel-title">{{user.firstname.v}} {{user.lastname.v}} 
+                    <a href="/user/editadvanced.php?id={{user.id.v}}" target="_blanc">
+                        <button type="button" class="btn btn-default" aria-label="Left Align">
+                            <span class="glyphicon glyphicon-pencil" aria-hidden="false"></span>
+                        </button>
+                    </a>
                 </div>
             </div>
 

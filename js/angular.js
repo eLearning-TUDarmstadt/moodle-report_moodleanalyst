@@ -108,7 +108,15 @@ app.directive('courseinfo', function () {
                                             activitiesInCourseDashboard(result, $scope);
                                         });
                             });
-                }
+                };
+                $scope.changeVisibility = function (courseid, visibility) {
+                    $scope.loadingCourse = true;
+                    $scope.course = null;
+                    $http.get('/report/moodleanalyst/rest/mastREST.php/course/' + courseid + '/setVisibility/' + visibility)
+                            .success(function () {
+                                            $scope.didSelectACourse(courseid);
+                            });
+                };
             }],
         controllerAs: 'courseInfoCtrl'
     }
@@ -259,8 +267,8 @@ var usersInCourseDashboard = function (result, $scope) {
         options: {
             filterColumnIndex: 3,
             ui: {
-                //caption: 'Nach Rolle filtern',
-                label: '',
+                caption: $scope.vocabulary.role,
+                //label: '',
                 allowTyping: false
             }
         }
@@ -318,7 +326,7 @@ var courseSearchDashboard = function (result, $scope) {
             filterColumnIndex: 3,
             matchType: 'any',
             ui: {
-                //label: 'Kurs suchen:'
+                label: $scope.vocabulary.course
             }
         }
     });
@@ -330,8 +338,8 @@ var courseSearchDashboard = function (result, $scope) {
         options: {
             filterColumnIndex: 1,
             ui: {
-                //caption: 'Nach Semester filtern',
-                label: '',
+                caption: $scope.vocabulary.grandparentcategory,
+                //label: $scope.vocabulary.category,
                 allowTyping: false
             }
         }
@@ -344,8 +352,8 @@ var courseSearchDashboard = function (result, $scope) {
         options: {
             filterColumnIndex: 2,
             ui: {
-                //caption: 'Nach Fachbereich filtern',
-                label: '',
+                caption: $scope.vocabulary.parentcategory,
+                //label: '',
                 allowTyping: false
             }
         }

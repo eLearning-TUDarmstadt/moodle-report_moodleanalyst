@@ -22,15 +22,23 @@ $app->map('/user/:id', 'user')->via('GET');
 $app->map('/course/:id', 'course')->via('GET');
 $app->map('/course/getPersons/:id', 'getPersonsInCourse')->via('GET');
 $app->map('/course/getActivities/:id', 'getActivitiesInCourse')->via('GET');
+$app->map('/course/:id/setVisibility/:visibility', 'setCourseVisibility')->via('GET');
 $app->map('/vocabulary', 'getVocabulary')->via('GET');
 
-
 $app->run();
+
+function setCourseVisibility($courseid, $visibility) {
+    echo json_encode(course_change_visibility($courseid, $visibility));
+}
 
 function getVocabulary() {
     $result = array();
     $result['course'] = get_string('course');
     $result['user'] = get_string('user');
+    $result['category'] = get_string('category');
+    $result['role'] = get_string('role');
+    $result['parentcategory'] = get_string('parentcategory', 'report_moodleanalyst');
+    $result['grandparentcategory'] = get_string('grandparentcategory', 'report_moodleanalyst');
     
     
     echo json_encode($result);

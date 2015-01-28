@@ -1,22 +1,30 @@
 <div id="courseInfo">
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h2 class="panel-title"><a href="/course/view.php?id={{course.data.id.v}}">{{course.data.fullname.v}}</a>
-                <a href="/course/edit.php?id={{course.data.id.v}}" target="_blanc">
-                <button type="button" class="btn btn-default" aria-label="Left Align">
-                    <span class="glyphicon glyphicon-pencil" aria-hidden="false"></span>
-                </button>
-                </a>
-                <a href="/course/delete.php?id={{course.data.id.v}}" target="_blanc">
-                    <button type="button" class="btn btn-default" aria-label="Left Align">
-                        <span class="glyphicon glyphicon-remove"></span>
+            <div class="panel-title"><a href="/course/view.php?id={{course.data.id.v}}">{{course.data.fullname.v}}</a>
+                <div class="btn-group btn-group-xs" role="toolbar" ng-show="course.data">
+                    <a href="/course/edit.php?id={{course.data.id.v}}" target="_blanc">
+                        <button type="button" class="btn btn-default" aria-label="Left Align">
+                            <span class="glyphicon glyphicon-pencil" aria-hidden="false"></span>
+                        </button>
+                    </a>
+                    <a href="/course/delete.php?id={{course.data.id.v}}" target="_blanc">
+                        <button type="button" class="btn btn-default" aria-label="Left Align">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </a>
+                    <a>
+                    <button type="button" class="btn btn-default" aria-label="Left Align" ng-show="course.data.visible.v == 1" ng-click="changeVisibility(course.data.id.v, 0);">
+                        <span class="glyphicon glyphicon-eye-open"></span>
                     </button>
-                </a>
-                <button type="button" class="btn btn-default" aria-label="Left Align">
-                    <span class="glyphicon glyphicon-eye-open" ng-show="course.data.visible.v"></span>
-                    <span class="glyphicon-eye-close" ng-hide="course.data.visible.v"></span>
-                </button>
-            </h2>
+                    </a>
+                    <a>
+                    <button type="button" class="btn btn-default" aria-label="Left Align" ng-show="course.data.visible.v == 0" ng-click="changeVisibility(course.data.id.v, 1);">
+                        <span class="glyphicon glyphicon-eye-close"></span>
+                    </button>
+                    </a>
+                </div>
+            </div>
         </div>
         <div class="panel-body">
             <loader ng-show="loadingCourse"></loader>
@@ -28,7 +36,7 @@
             </div>
 
             <div class="tab" ng-controller="UserInCourseTabController
-                    as UserInCourseTab">
+                        as UserInCourseTab">
                 <ul class="nav nav-pills">
                     <li ng-class="{ active: UserInCourseTab.isSet(1) }">
                         <a href ng-click="UserInCourseTab.setTab(1)">Users in Course</a>
