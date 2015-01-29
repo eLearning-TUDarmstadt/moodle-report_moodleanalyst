@@ -246,8 +246,8 @@ var activitiesInCourseDashboard = function (result, $scope) {
         var selection = table.getChart().getSelection();
         $scope.courseid = table.getDataTable().getFormattedValue(selection[0].row, 0);
         $scope.didSelectACourse($scope.courseid);
-    }
-    ;
+        $("html, body").animate({scrollTop: 0}, 800);
+    };
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
@@ -317,8 +317,8 @@ var usersInCourseDashboard = function (result, $scope) {
         var selection = table.getChart().getSelection();
         $scope.userid = table.getDataTable().getFormattedValue(selection[0].row, 0);
         $scope.didSelectAUser($scope.userid);
-    }
-    ;
+        $("html, body").animate({scrollTop: 0}, 800);
+    };
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
@@ -397,8 +397,9 @@ var courseSearchDashboard = function (result, $scope) {
         $scope.course = null;
         $scope.courseid = table.getDataTable().getFormattedValue(selection[0].row, 0);
         $scope.didSelectACourse($scope.courseid);
-    }
-    ;
+        //window.scrollTo(0,0);
+        $("html, body").animate({scrollTop: 0}, 800);
+    };
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
@@ -450,8 +451,8 @@ var userSearchDashboard = function (result, $scope) {
         $scope.userid = table.getDataTable().getFormattedValue(selection[0].row, 0);
         //console.log($scope.userid);
         $scope.didSelectAUser($scope.userid);
-    }
-    ;
+        $("html, body").animate({scrollTop: 0}, 800);
+    };
 
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
