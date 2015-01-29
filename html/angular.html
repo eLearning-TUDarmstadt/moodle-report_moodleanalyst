@@ -9,24 +9,55 @@
         <link rel="shortcut icon" href="/report/moodleanalyst/pix/favicon.ico" type="image/x-icon" />
         
         <!-- Include Bootstrap -->
-        <link rel="stylesheet" href="/report/moodleanalyst/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/report/moodleanalyst/css/bootstrap.min.css" />
         
         <!-- Include AngularJS -->
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.9/angular.min.js"></script>
         <script src="/report/moodleanalyst/js/angular.js"></script>
         
-        <!-- Include CSS theme -->
-        <link rel="stylesheet" href="/report/moodleanalyst/css/jquery-ui.min.css" />
-
         <!-- Include jQuery -->
+        <link rel="stylesheet" href="/report/moodleanalyst/css/jquery-ui.min.css" />
         <script src="/report/moodleanalyst/js/jquery-1.11.2.js"></script>
+        
+        <script src="/report/moodleanalyst/js/bootstrap.min.js"></script>
         
         <!-- Include Google Visualization API -->
         <script type="text/javascript" src='https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["table","corechart","controls"]}]}'></script>
     </head>
     <body ng-app="overview">
+        <!--
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header navbar-right">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/report/moodleanalyst/html/angular.html">
+                        <span><img alt="Brand" src="/report/moodleanalyst/pix/favicon.ico"> &nbsp; Moodle Analyst Support Tool</span>
+                    </a>
+                </div>
 
-    <overview></overview>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" role="tabpanel">
+                    <ul class="nav navbar-nav" role="tablist" id="myTabList">
+                        <li role="presentation"><a id="tablink_kurse" href="#tabs-1" role="tab" data-toggle="tab">Kurse</a></li>
+                        <li role="presentation"><a id="tablink_User" href="#tabs-2" role="tab" data-toggle="tab">Nutzer</a></li>
+                        <li role="presentation"><a id="tablink_schnittstelle" href="#tabs-9" role="tab" data-toggle="tab">Schnittstelle</a></li>
+                        <li role="presentation" class="active"><a id="tablink_angular" href="#tabs-14" role="tab" data-toggle="tab">Angular</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="tab-content well" id="tabs">
+            <div role="tabpanel" class="tab-pane fade" id="tabs-14">
+                <overview></overview>
+            </div>
+        </div>
+        -->
+        
+        <overview></overview>
 
     </body>
 </html>
