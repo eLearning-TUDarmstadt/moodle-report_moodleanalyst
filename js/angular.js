@@ -44,7 +44,7 @@ app.controller('HeaderController', function () {
     };
 });
 
-app.controller('UserInCourseTabController', function () {
+app.controller('CourseDetailTabController', function () {
     this.tab = 1;
 
     this.setTab = function (newValue) {

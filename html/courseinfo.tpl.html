@@ -1,32 +1,37 @@
 <div id="courseInfo">
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <div class="panel-title">
-                <a href="/course/view.php?id={{course.data.id.v}}">{{course.data.fullname.v}}</a>
-                <div class="btn-group btn-group-xs" role="toolbar" ng-show="course.data">
-                    <a href="/course/edit.php?id={{course.data.id.v}}" target="_blanc">
-                        <button type="button" class="btn btn-default" aria-label="Left Align">
-                            <span class="glyphicon glyphicon-pencil" aria-hidden="false"></span>
-                        </button>
-                    </a>
-                    <a href="/course/delete.php?id={{course.data.id.v}}" target="_blanc">
-                        <button type="button" class="btn btn-default" aria-label="Left Align">
-                            <span class="glyphicon glyphicon-remove"></span>
-                        </button>
-                    </a>
-                    <a>
-                    <button type="button" class="btn btn-default" aria-label="Left Align" ng-show="course.data.visible.v == 1" ng-click="changeVisibility(course.data.id.v, 0);">
-                        <span class="glyphicon glyphicon-eye-open"></span>
-                    </button>
-                    </a>
-                    <a>
-                    <button type="button" class="btn btn-default" aria-label="Left Align" ng-show="course.data.visible.v == 0" ng-click="changeVisibility(course.data.id.v, 1);">
-                        <span class="glyphicon glyphicon-eye-close"></span>
-                    </button>
-                    </a>
+            <div class="panel-title row">
+                <div class="col-md-9">
+                    <a href="/course/view.php?id={{course.data.id.v}}" target="_blank" style="color: #000000">{{course.data.fullname.v}}</a>
                 </div>
-            </div>
-        </div>
+                <div class="col-md-3">
+                    <div class="btn-group btn-group-xs pull-right" role="toolbar" ng-show="course.data">
+                        <a href="/course/edit.php?id={{course.data.id.v}}" target="_blank">
+                            <button type="button" class="btn btn-default" aria-label="Edit Course">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </a>
+                        <a href="/course/delete.php?id={{course.data.id.v}}" target="_blank">
+                            <button type="button" class="btn btn-default" aria-label="Delete Course">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </a>
+                        <a>
+                        <button type="button" class="btn btn-default" aria-label="Hide Course from Students" ng-show="course.data.visible.v == 1" ng-click="changeVisibility(course.data.id.v, 0);">
+                            <span class="glyphicon glyphicon-eye-open"></span>
+                        </button>
+                        </a>
+                        <a>
+                        <button type="button" class="btn btn-default" aria-label="Make Course visible to Students" ng-show="course.data.visible.v == 0" ng-click="changeVisibility(course.data.id.v, 1);">
+                            <span class="glyphicon glyphicon-eye-close"></span>
+                        </button>
+                        </a>
+                    </div>
+                </div>
+            </div>  <!-- panel-title -->
+        </div>  <!-- panel-heading -->
+        
         <div class="panel-body">
             <loader ng-show="loadingCourse"></loader>
             <div class="table">
@@ -36,18 +41,17 @@
                 </div>
             </div>
 
-            <div class="tab" ng-controller="UserInCourseTabController
-                        as UserInCourseTab">
+            <div class="tab" ng-controller="CourseDetailTabController as CourseDetailTab">
                 <ul class="nav nav-pills">
-                    <li ng-class="{ active: UserInCourseTab.isSet(1) }">
-                        <a href ng-click="UserInCourseTab.setTab(1)">Users in Course</a>
+                    <li ng-class="{ active: CourseDetailTab.isSet(1) }">
+                        <a href ng-click="CourseDetailTab.setTab(1)">Users in Course</a>
                     </li>
-                    <li ng-class="{ active: UserInCourseTab.isSet(2) }">
-                        <a href ng-click="UserInCourseTab.setTab(2)">Activities in Course</a>
+                    <li ng-class="{ active: CourseDetailTab.isSet(2) }">
+                        <a href ng-click="CourseDetailTab.setTab(2)">Activities in Course</a>
                     </li>
                 </ul>
 
-                <div ng-show="UserInCourseTab.isSet(1)">
+                <div ng-show="CourseDetailTab.isSet(1)">
                     <blockquote>
                         <div id="dashboardUsersInCourse">
                             <div class="panel panel-default">
@@ -64,7 +68,7 @@
                     </blockquote>
                 </div>
 
-                <div ng-show="UserInCourseTab.isSet(2)">
+                <div ng-show="CourseDetailTab.isSet(2)">
                     <blockquote>
                         <div id="dashboardActivitiesInCourse">
                             <div class="panel panel-default">
@@ -82,7 +86,7 @@
                         </div>
                     </blockquote>
                 </div>
-            </div>
-        </div>
-    </div>
+            </div>  <!-- tab -->
+        </div>  <!-- panel-body -->
+    </div>  <!-- panel-primary -->
 </div>

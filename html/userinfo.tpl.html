@@ -1,19 +1,27 @@
 <div id="userInfo">
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <div class="row panel-title">
-                <a href="/user/profile.php?id={{user.id.v}}" target="_blanc">{{user.firstname.v}} {{user.lastname.v}}</a>
-                    <a href="/user/editadvanced.php?id={{user.id.v}}" target="_blanc">
-                        <button type="button" class="btn btn-default" aria-label="Left Align">
-                            <span class="glyphicon glyphicon-pencil" aria-hidden="false"></span>
+            <div class="panel-title row">
+                <div class="col-md-9">
+                    <a href="/user/profile.php?id={{user.id.v}}" target="_blank" style="color: #000000">{{user.firstname.v}} {{user.lastname.v}}</a>
+                </div>
+                <div class="col-md-3">
+                    <a href="/user/editadvanced.php?id={{user.id.v}}" target="_blank">
+                        <button type="button" class="btn btn-default pull-right" aria-label="Edit User">
+                            <span class="glyphicon glyphicon-pencil"></span>
                         </button>
                     </a>
-            </div>
-
-        </div>
+                </div>
+            </div>  <!-- panel-title -->
+        </div>  <!-- panel-heading -->
+        
         <div class="panel-body">
             <loader ng-show="loadingUser"></loader>
             <div class="table">
+                <div class="row">
+                    <div class="col-md-4">{{user.id.string}}</div>
+                    <div class="col-md-8">{{user.id.v}}</div>
+                </div>
                 <div class="row">
                     <div class="col-md-4">{{user.firstname.string}}</div>
                     <div class="col-md-8">{{user.firstname.v}}</div>
@@ -21,6 +29,10 @@
                 <div class="row">
                     <div class="col-md-4">{{user.lastname.string}}</div>
                     <div class="col-md-8">{{user.lastname.v}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">{{user.username.string}}</div>
+                    <div class="col-md-8">{{user.username.v}}</div>
                 </div>
                 <div class="row">
                     <div class="col-md-4">{{user.email.string}}</div>
@@ -43,12 +55,13 @@
                     <div class="col-md-4">{{user.lastaccess.string}}</div>
                     <div class="col-md-8">{{user.lastaccess.v}}</div>
                 </div>
-                
+                <!--
                 <div class="row" ng-repeat="user in user">
                     <div class="col-md-4">{{user.string}}</div>
                     <div class="col-md-8">{{user.v}}</div>
                 </div>
-            </div>
-        </div>
-    </div>
+                -->
+            </div>  <!-- table -->
+        </div>  <!-- panel-body -->
+    </div>  <!-- panel-primary -->
 </div>
