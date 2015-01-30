@@ -229,17 +229,6 @@ var activitiesInCourseDashboard = function (result, $scope) {
 
     // Draw the dashboard.
     dashboard.draw(data);
-
-    // Define what to do when selecting a table row.
-    function selectHandler() {
-        var selection = table.getChart().getSelection();
-        $scope.courseid = table.getDataTable().getFormattedValue(selection[0].row, 0);
-        $scope.didSelectACourse($scope.courseid);
-        $("html, body").animate({scrollTop: 0}, 800);
-    };
-
-    // Setup listener to listen for clicks on table rows and process the selectHandler.
-    google.visualization.events.addListener(table, 'select', selectHandler);
 };
 var usersInCourseDashboard = function (result, $scope) {
     var data = new google.visualization.DataTable(result);
