@@ -12,7 +12,7 @@
                 </div>
             </div>  <!-- panel-title -->
         </div>  <!-- panel-heading -->
-        
+
         <div class="panel-body">
             <loader ng-show="loadingUser"></loader>
             <div class="table">
@@ -58,6 +58,23 @@
                 <div class="row">
                     <div class="col-md-4">{{user.lang.string}}</div>
                     <div class="col-md-8">{{user.lang.v}}</div>
+                </div>
+                <p></p>
+                <div id="dashboardCoursesOfUser">
+                    <div class="panel panel-default">
+                        <div class="panel-heading panel-title">
+                            <h4>{{vocabulary.searchcourses}}</h4>    
+                        </div>
+                        <div class="panel-body">
+                            <div id="coursesOfUser_name_filter_div"></div>
+                            <div class="row">
+                                <div class="col-md-4" id="coursesOfUser_grandparentcategory_filter_div"></div>
+                                <div class="col-md-4" id="coursesOfUser_parentcategory_filter_div"></div>
+                                <div class="col-md-4" id="coursesOfUser_role_filter_div"></div>
+                            </div>
+                            <div id="coursesOfUser_table_div"
+                        </div>
+                    </div>
                 </div>
                 <!--
                 <div class="row" ng-repeat="user in user">

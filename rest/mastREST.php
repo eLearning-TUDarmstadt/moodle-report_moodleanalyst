@@ -46,7 +46,7 @@ function getVocabulary() {
     $result['role'] = get_string('role');
     $result['parentcategory'] = get_string('parentcategory', 'report_moodleanalyst');
     $result['grandparentcategory'] = get_string('grandparentcategory', 'report_moodleanalyst');
-    
+    $result['searchcourses'] = get_string('searchcourses');
     
     echo json_encode($result);
 }

@@ -144,6 +144,7 @@ app.directive('userinfo', function () {
                             .success(function (data) {
                                 $scope.loadingUser = false;
                                 $scope.user = data;
+                                coursesOfUserDashboard(data.courses, $scope);
                             });
                 }
             }],
@@ -436,4 +437,104 @@ var userSearchDashboard = function (result, $scope) {
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
 
+};
+var coursesOfUserDashboard = function (result, $scope) {
+    console.log(result);
+    var data = new google.visualization.DataTable(result);
+
+    // Create a dashboard
+    var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardCoursesOfUser'));
+
+    // Create a search box to search for the users name.
+    var nameFilter = new google.visualization.ControlWrapper({
+        controlType: 'StringFilter',
+        containerId: 'coursesOfUser_name_filter_div',
+        options: {
+            filterColumnIndex: 3,
+            matchType: 'any',
+            ui: {
+                label: $scope.vocabulary.name
+            }
+        }
+    });
+
+    // Create a category picker to filter grand parent category.
+    var grandparentCategoryPicker = new google.visualization.ControlWrapper({
+        'controlType': 'CategoryFilter',
+        'containerId': 'coursesOfUser_grandparentcategory_filter_div',
+        options: {
+            filterColumnIndex: 1,
+            ui: {
+                caption: $scope.vocabulary.grandparentcategory,
+                label: '',
+                allowTyping: false
+            }
+        }
+    });
+    
+    // Create a category picker to filter parent category.
+    var parentCategoryPicker = new google.visualization.ControlWrapper({
+        'controlType': 'CategoryFilter',
+        'containerId': 'coursesOfUser_parentcategory_filter_div',
+        options: {
+            filterColumnIndex: 2,
+            ui: {
+                caption: $scope.vocabulary.parentcategory,
+                label: '',
+                allowTyping: false
+            }
+        }
+    });
+    
+    // Create a category picker to filter role
+    var roleCategoryPicker = new google.visualization.ControlWrapper({
+        'controlType': 'CategoryFilter',
+        'containerId': 'coursesOfUser_role_filter_div',
+        options: {
+            filterColumnIndex: 4,
+            ui: {
+                caption: $scope.vocabulary.role,
+                label: '',
+                allowTyping: false
+            }
+        }
+    });
+
+
+    // Create the table to display.
+    var table = new google.visualization.ChartWrapper({
+        chartType: 'Table',
+        containerId: 'coursesOfUser_table_div',
+        options: {
+            showRowNumber: false,
+            page: 'enable',
+            pageSize: 25,
+            allowHtml: true,
+            sortColumn: 2,
+            sortAscending: true
+        },/*
+        view: {
+            //removed 4 (=full name)
+            columns: [0, 1, 2, 3]
+        }*/
+    });
+
+    // Establish dependencies.
+    dashboard.bind([nameFilter, grandparentCategoryPicker, parentCategoryPicker, roleCategoryPicker], [table]);
+
+    // Draw the dashboard.
+    dashboard.draw(data);
+
+    // Define what to do when selecting a table row.
+    function selectHandler() {
+        $scope.loadingCourse = true;
+        $scope.ucourse = null;
+        var selection = table.getChart().getSelection();
+        $scope.courseid = table.getDataTable().getFormattedValue(selection[0].row, 0);
+        $scope.didSelectACourse($scope.courseid);
+        $("html, body").animate({scrollTop: 0}, 800);
+    };
+
+    // Setup listener to listen for clicks on table rows and process the selectHandler.
+    google.visualization.events.addListener(table, 'select', selectHandler);
 };
