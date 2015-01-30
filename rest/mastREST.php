@@ -215,7 +215,6 @@ function user($userid) {
     [alternatename] => 
     [calendartype] => gregorian
      */
-    $date_format = "d.m.Y H:i:s";
     $ret = array();
     $ret['id']['string'] = "ID";
     $ret['id']['v'] = $user->id;
@@ -232,11 +231,11 @@ function user($userid) {
     $ret['email']['string'] = get_string('email');
     $ret['email']['v'] = $user->email;
     $ret['firstaccess']['string'] = get_string('firstaccess');
-    $ret['firstaccess']['v'] = date($date_format, $user->firstaccess);
+    $ret['firstaccess']['v'] = userdate($user->firstaccess);
     $ret['lastaccess']['string'] = get_string('lastaccess');
-    $ret['lastaccess']['v'] = date($date_format, $user->lastaccess);
+    $ret['lastaccess']['v'] = userdate($user->lastaccess);
     $ret['lastlogin']['string'] = get_string('lastlogin');
-    $ret['lastlogin']['v'] = date($date_format, $user->lastlogin);
+    $ret['lastlogin']['v'] = userdate($user->lastlogin);
     $ret['lastip']['string'] = get_string('lastip');
     $ret['lastip']['v'] = $user->lastip;
     $ret['lang']['string'] = get_string('language');
