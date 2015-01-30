@@ -217,7 +217,7 @@ function user($userid) {
      */
     $date_format = "d.m.Y H:i:s";
     $ret = array();
-    $ret['id']['string'] = get_string('username');
+    $ret['id']['string'] = "ID";
     $ret['id']['v'] = $user->id;
     $ret['auth']['string'] = get_string('authentication');
     $ret['auth']['v'] = $user->auth;
@@ -239,6 +239,9 @@ function user($userid) {
     $ret['lastlogin']['v'] = date($date_format, $user->lastlogin);
     $ret['lastip']['string'] = get_string('lastip');
     $ret['lastip']['v'] = $user->lastip;
+    $ret['lang']['string'] = get_string('language');
+    $ret['lang']['v'] = $user->lang;
+    
     
   
     $ret['courses'] = $courses_enrolled;

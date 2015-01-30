@@ -144,17 +144,6 @@ app.directive('userinfo', function () {
                             .success(function (data) {
                                 $scope.loadingUser = false;
                                 $scope.user = data;
-                                console.log(data);
-                                /*
-                                 $http.get('/report/moodleanalyst/rest/mastREST.php/user/getPersons/' + userid)
-                                 .success(function (result) {
-                                 usersInCourseDashboard(result, $scope);
-                                 });
-                                 $http.get('/report/moodleanalyst/rest/mastREST.php/user/getActivities/' + userid)
-                                 .success(function (result) {
-                                 activitiesInCourseDashboard(result, $scope);
-                                 });
-                                 */
                             });
                 }
             }],

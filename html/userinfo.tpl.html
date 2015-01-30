@@ -2,10 +2,8 @@
     <div class="panel panel-primary">
         <div class="panel-heading">
             <div class="panel-title row">
-                <div class="col-md-9">
+                <div class="col-md-12">
                     <a href="/user/profile.php?id={{user.id.v}}" target="_blank" style="color: #000000">{{user.firstname.v}} {{user.lastname.v}}</a>
-                </div>
-                <div class="col-md-3">
                     <a href="/user/editadvanced.php?id={{user.id.v}}" target="_blank">
                         <button type="button" class="btn btn-default pull-right" aria-label="Edit User">
                             <span class="glyphicon glyphicon-pencil"></span>
@@ -56,6 +54,10 @@
                 <div class="row">
                     <div class="col-md-4">{{user.auth.string}}</div>
                     <div class="col-md-8">{{user.auth.v}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">{{user.lang.string}}</div>
+                    <div class="col-md-8">{{user.lang.v}}</div>
                 </div>
                 <!--
                 <div class="row" ng-repeat="user in user">
