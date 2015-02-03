@@ -24,6 +24,10 @@
         
         <!-- Include Google Visualization API -->
         <script type="text/javascript" src='https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["table","corechart","controls"]}]}'></script>
+        
+        <script src='/report/moodleanalyst/js/tabelle.js'></script>
+        <script src='/report/moodleanalyst/js/displayDate.js'></script>
+        <script src='/report/moodleanalyst/js/schnittstelle.js'></script>
     </head>
     
     <body ng-app="overview" style="padding-top:40px">
@@ -44,10 +48,11 @@
                         </div>
                         <div id="navbar_sc" class="collapse navbar-collapse" role="tabpanel">
                             <ul class="nav navbar-nav" role="tablist" id="myTabList">
-                                <li role="presentation"><a id="tablink_kurse" href="#tabs-1" role="tab" data-toggle="tab">oh yea!</a></li>
-                                <li role="presentation"><a id="tablink_User" href="#tabs-2" role="tab" data-toggle="tab">anything goes</a></li>
-                                <li role="presentation"><a id="tablink_schnittstelle" href="#tabs-9" role="tab" data-toggle="tab">dummy</a></li>
-                                <li role="presentation" class="active"><a id="tablink_angular" href="#tabs-22" role="tab" data-toggle="tab">Angular</a></li>
+                                <li role="presentation" class="active"><a id="tablink_home" href="#tabs-1" role="tab" data-toggle="tab">Home</a></li>
+                                <li role="presentation"><a id="tablink_schnittstelle" href="#tabs-2" role="tab" data-toggle="tab">Schnittstelle</a></li>
+                                <li role="presentation"><a id="tablink_yea" href="#tabs-3" role="tab" data-toggle="tab">oh yea!</a></li>
+                                <li role="presentation"><a id="tablink_anything" href="#tabs-4" role="tab" data-toggle="tab">anything goes</a></li>
+                                <li role="presentation"><a id="tablink_dummy" href="#tabs-5" role="tab" data-toggle="tab">dummy</a></li>
                             </ul>
                         </div>
                             
@@ -55,9 +60,12 @@
                         
                 </div>
                 
-                <div class="tab-content well" id="tabs">
-                    <div role="tabpanel" class="tab-pane fade active in" id="tabs-22">
+                <div class="tab-content well container-fluid" id="tabs">
+                    <div role="tabpanel" class="tab-pane fade active in" id="tabs-1">
                         <overview></overview>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="tabs-2">
+                        <div ng-include="'tabs/schnittstelle.html'"></div>
                     </div>
                 </div>
                 <!--
