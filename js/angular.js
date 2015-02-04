@@ -13,12 +13,7 @@ app.directive('overview', function () {
         controller: [
             '$http', '$scope', function ($http, $scope) {
                 $http.get('/report/moodleanalyst/rest/mastREST.php/isUserLoggedIn')
-                        .success(function (result) {
-                            if(result) {
-                                console.log("LOGIN");
-                            }
-                            else {
-                                console.log('Kein LOGIN!');
+                        .error(function (data, status, headers, config) {
                             }
                 });
                 

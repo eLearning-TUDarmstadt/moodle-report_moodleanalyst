@@ -51,7 +51,8 @@ function getVocabulary() {
     $result['enrol'] = get_string('enrol', 'enrol');
     $result['default'] = get_string('default');
     $result['student'] = get_string('defaultcoursestudent');
-
+    $result['participants'] = get_string('participants');
+    $result['enrolledusers'] = get_string('enrolledusers','enrol');
     echo json_encode($result);
 }
 
@@ -283,9 +284,21 @@ function course($courseid) {
     $context = context_course::instance($courseid);
     $data['roles']['string'] = get_string('roles');
     $data['roles']['v'] = role_get_names($context);
-
+    $data['personsInCourse'] = count_enrolled_users($context);
+    $usedRoles = get_roles_used_in_context($context);
+    //printArray($usedRoles);
+    foreach ($usedRoles as $roleid => $role) {
+        $count = count_role_users($roleid, $context);
+        if ($count != 0) {
+            $data['rolesInCourse'][$roleid]['id'] = $roleid;
+            $data['rolesInCourse'][$roleid]['name'] = $role->name;
+            $data['rolesInCourse'][$roleid]['number'] = $count;
+            $data['rolesInCourse'][$roleid]['sortorder'] = $role->sortorder;
+        }
+    }
     $result = array();
     $result['data'] = $data;
+    //printArray($result);
     echo json_encode($result);
 }
 

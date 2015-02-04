@@ -4,7 +4,7 @@
             <div class="panel-title row">
                 <div class="col-md-12">
                     <a href="/course/view.php?id={{course.data.id.v}}" target="_blank" style="color: #000000">{{course.data.fullname.v}}</a>
-                    
+
                     <div class="btn-group btn-group-xs pull-right" role="toolbar" ng-show="course.data">
                         <a href="/course/edit.php?id={{course.data.id.v}}" target="_blank">
                             <button type="button" class="btn btn-default" aria-label="Edit Course">
@@ -17,20 +17,20 @@
                             </button>
                         </a>
                         <a>
-                        <button type="button" class="btn btn-default" aria-label="Hide Course from Students" ng-show="course.data.visible.v == 1" ng-click="changeVisibility(course.data.id.v, 0);">
-                            <span class="glyphicon glyphicon-eye-open"></span>
-                        </button>
+                            <button type="button" class="btn btn-default" aria-label="Hide Course from Students" ng-show="course.data.visible.v == 1" ng-click="changeVisibility(course.data.id.v, 0);">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                            </button>
                         </a>
                         <a>
-                        <button type="button" class="btn btn-default" aria-label="Make Course visible to Students" ng-show="course.data.visible.v == 0" ng-click="changeVisibility(course.data.id.v, 1);">
-                            <span class="glyphicon glyphicon-eye-close"></span>
-                        </button>
+                            <button type="button" class="btn btn-default" aria-label="Make Course visible to Students" ng-show="course.data.visible.v == 0" ng-click="changeVisibility(course.data.id.v, 1);">
+                                <span class="glyphicon glyphicon-eye-close"></span>
+                            </button>
                         </a>
                     </div>
                 </div>
             </div>  <!-- panel-title -->
         </div>  <!-- panel-heading -->
-        
+
         <div class="panel-body">
             <loader ng-show="loadingCourse"></loader>
             <div class="table">
@@ -54,6 +54,19 @@
                     <div class="col-md-4">{{course.data.visible.string}}</div>
                     <div class="col-md-8">{{course.data.visible.v}}</div>
                 </div>
+                <p></p>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-title">{{vocabulary.enrolledusers}}: {{course.data.personsInCourse}}</div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row" ng-repeat="role in course.data.rolesInCourse| orderBy:role.sortorder">
+                            <div class="col-md-4">{{role.name}}</div>
+                            <div class="col-md-8">{{role.number}}</div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- 
                 <div class="row" ng-repeat="item in course.data">
                     <div class="col-md-4">{{item.string}}</div>
@@ -62,7 +75,8 @@
                 -->
             </div>
 
-            <div class="tab" ng-controller="CourseDetailTabController as CourseDetailTab">
+            <div class="tab" ng-controller="CourseDetailTabController
+                        as CourseDetailTab">
                 <ul class="nav nav-pills">
                     <li ng-class="{ active: CourseDetailTab.isSet(1) }">
                         <a href ng-click="CourseDetailTab.setTab(1)">Users in Course</a>

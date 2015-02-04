@@ -16,17 +16,21 @@
         <div class="panel-body">
             <loader ng-show="loadingUser"></loader>
             <div class="table">
-                <div class="row panel panel-default panel-body" ng-show="course.data.id.v">
-                    <div class="col-md-4">
-                        <button ng-click="addUserToCourse(user.id.v, course.data.id.v, selectedRole);" type="button" class="btn btn-default" aria-label="">
-                            <span class="glyphicon glyphicon-arrow-left"></span> {{vocabulary.enrol}}
-                        </button>
-                    </div>
-                    <div class="col-md-8">
-                        <label>{{vocabulary.role}} ({{vocabulary.default}}: {{vocabulary.student}}):</label>
-                        <select ng-model="selectedRole">
-                            <option ng-repeat="role in course.data.roles.v" value="{{role.id}}">{{role.name}}</option>
-                        </select>
+                <div class="row panel-body" ng-show="course.data.id.v">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="col-md-4">
+                                <button ng-click="addUserToCourse(user.id.v, course.data.id.v, selectedRole);" type="button" class="btn btn-default" aria-label="">
+                                    <span class="glyphicon glyphicon-arrow-left"></span> {{vocabulary.enrol}}
+                                </button>
+                            </div>
+                            <div class="col-md-8">
+                                <label>{{vocabulary.role}} ({{vocabulary.default}}: {{vocabulary.student}}):</label>
+                                <select ng-model="selectedRole">
+                                    <option ng-repeat="role in course.data.roles.v" value="{{role.id}}">{{role.name}}</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <p></p>
