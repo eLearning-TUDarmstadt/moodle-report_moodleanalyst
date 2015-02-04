@@ -25,6 +25,7 @@ $app->map('/user/:id', 'user')->via('GET');
 $app->map('/course/:id', 'course')->via('GET');
 $app->map('/course/getPersons/:id', 'getPersonsInCourse')->via('GET');
 $app->map('/course/getActivities/:id', 'getActivitiesInCourse')->via('GET');
+//$app->map('/course/getEnrolmentMethods/:id', 'getCourseEnrolmentMethods')->via('GET');
 $app->map('/course/:id/setVisibility/:visibility', 'setCourseVisibility')->via('GET');
 $app->map('/vocabulary', 'getVocabulary')->via('GET');
 $app->map('/addUser/:userid/ToCourse/:courseid/withRole/:roleid', 'enrolUserToCourse')->via('GET');
@@ -52,15 +53,42 @@ function getVocabulary() {
     $result['default'] = get_string('default');
     $result['student'] = get_string('defaultcoursestudent');
     $result['participants'] = get_string('participants');
-    $result['enrolledusers'] = get_string('enrolledusers','enrol');
+    $result['enrolledusers'] = get_string('enrolledusers', 'enrol');
+    $result['enrolmentmethods'] = get_string('enrolmentinstances', 'enrol');
     $result['list'] = get_string('list');
     $result['activity'] = get_string('activity');
     $result['activities'] = get_string('activities');
     $result['name'] = get_string('name');
     $result['section'] = get_string('section');
-    
-    
+    $result['password'] = get_string('password');
+
+
     echo json_encode($result);
+}
+
+function getCourseEnrolmentMethods($courseid) {
+    global $DB;
+    $instances = enrol_get_instances($courseid, false);
+    $result = array();
+
+    foreach ($instances as $instanceid => $instance) {
+        $enrol = enrol_get_plugin($instance->enrol);
+
+        $array['id'] = $instance->id;
+        $array['enrol'] = $instance->enrol;
+        if (!enrol_is_enabled($instance->enrol) or $instance->status != ENROL_INSTANCE_ENABLED) {
+            $array['visible'] = 0;
+        } else {
+            $array['visible'] = 1;
+        }
+        $array['sortorder'] = $instance->name;
+        $array['password'] = $instance->password;
+        $array['name'] = $enrol->get_instance_name($instance);
+        $array['number'] = $DB->count_records('user_enrolments', array('enrolid' => $instance->id));
+        $result[$instanceid] = $array;
+    }
+    //echo json_encode($result);
+    return $result;
 }
 
 function getActivitiesInCourse($courseid) {
@@ -293,6 +321,8 @@ function course($courseid) {
     $data['roles']['string'] = get_string('roles');
     $data['roles']['v'] = role_get_names($context);
     $data['personsInCourse'] = count_enrolled_users($context);
+    $data['enrolmentmethods'] = getCourseEnrolmentMethods($courseid);
+    
     $usedRoles = get_roles_used_in_context($context);
     //printArray($usedRoles);
     foreach ($usedRoles as $roleid => $role) {
