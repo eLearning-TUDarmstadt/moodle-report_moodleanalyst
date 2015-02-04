@@ -33,7 +33,7 @@
 
         <div class="panel-body">
             <loader ng-show="loadingCourse"></loader>
-            <div class="table">
+            <div class="table" ng-hide="loadingCourse">
                 <div class="row">
                     <div class="col-md-4">{{course.data.id.string}}</div>
                     <div class="col-md-8">{{course.data.id.v}}</div>
@@ -55,7 +55,7 @@
                     <div class="col-md-8">{{course.data.visible.v}}</div>
                 </div>
                 <p></p>
-                <div class="panel panel-default">
+                <div class="panel panel-default" ng-hide="loadingCourse">
                     <div class="panel-heading">
                         <div class="panel-title">{{vocabulary.enrolledusers}}: {{course.data.personsInCourse}}</div>
                     </div>
@@ -76,13 +76,13 @@
             </div>
 
             <div class="tab" ng-controller="CourseDetailTabController
-                        as CourseDetailTab">
+                        as CourseDetailTab" ng-hide="loadingCourse">
                 <ul class="nav nav-pills">
                     <li ng-class="{ active: CourseDetailTab.isSet(1) }">
-                        <a href ng-click="CourseDetailTab.setTab(1)">Users in Course</a>
+                        <a href ng-click="CourseDetailTab.setTab(1)">{{vocabulary.enrolledusers}} - {{vocabulary.list}}</a>
                     </li>
                     <li ng-class="{ active: CourseDetailTab.isSet(2) }">
-                        <a href ng-click="CourseDetailTab.setTab(2)">Activities in Course</a>
+                        <a href ng-click="CourseDetailTab.setTab(2)">{{vocabulary.activities}}</a>
                     </li>
                 </ul>
 
@@ -111,9 +111,9 @@
                                     <h3 class="panel-title"></h3>
                                     <div id="activitiesInCourse_name_filter_div"></div>
                                     <div class="row">
-                                        <div class="col-md-4" id="activities_sectionnr_filter_div"></div>
-                                        <div class="col-md-4" id="activities_section_filter_div"></div>
-                                        <div class="col-md-4" id="activities_type_filter_div"></div>
+                                        <!-- <div class="col-md-4" id="activities_sectionnr_filter_div"></div> -->
+                                        <div class="col-md-6" id="activities_section_filter_div"></div>
+                                        <div class="col-md-6" id="activities_type_filter_div"></div>
                                     </div>
                                 </div>
                             </div>

@@ -53,6 +53,13 @@ function getVocabulary() {
     $result['student'] = get_string('defaultcoursestudent');
     $result['participants'] = get_string('participants');
     $result['enrolledusers'] = get_string('enrolledusers','enrol');
+    $result['list'] = get_string('list');
+    $result['activity'] = get_string('activity');
+    $result['activities'] = get_string('activities');
+    $result['name'] = get_string('name');
+    $result['section'] = get_string('section');
+    
+    
     echo json_encode($result);
 }
 
@@ -60,7 +67,7 @@ function getActivitiesInCourse($courseid) {
     global $OUTPUT;
     $table = array();
     $table['cols'] = array();
-    $table['cols'][] = array('label' => get_string('section'), 'type' => 'number');
+    //$table['cols'][] = array('label' => get_string('section'), 'type' => 'number');
     $table['cols'][] = array('label' => get_string('sectionname'), 'type' => 'string');
     $table['cols'][] = array('label' => get_string('activity'), 'type' => 'string');
     $table['cols'][] = array('label' => get_string('name'), 'type' => 'string');
@@ -77,7 +84,8 @@ function getActivitiesInCourse($courseid) {
         $activityType = $icon . get_string('pluginname', $activity->mod);
 
         $activityname = $activity->name;
-        $table['rows'][] = ['c' => array(array('v' => $section), array('v' => $sectionname), array('v' => $activityType), array('v' => $activityname))];
+        //$table['rows'][] = ['c' => array('v' => $sectionname), array('v' => $activityType), array('v' => $activityname)];
+        $table['rows'][] = ['c' => array(['v' => $sectionname], array('v' => $activityType), array('v' => $activityname))];
     }
 
     echo json_encode($table);

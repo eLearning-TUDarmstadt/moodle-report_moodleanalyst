@@ -155,11 +155,12 @@ app.directive('courseinfo', function () {
                                 $http.get('/report/moodleanalyst/rest/mastREST.php/course/getPersons/' + courseid)
                                         .success(function (result) {
                                             usersInCourseDashboard(result, $scope);
+                                            $http.get('/report/moodleanalyst/rest/mastREST.php/course/getActivities/' + courseid)
+                                                    .success(function (result) {
+                                                        activitiesInCourseDashboard(result, $scope);
+                                                    });
                                         });
-                                $http.get('/report/moodleanalyst/rest/mastREST.php/course/getActivities/' + courseid)
-                                        .success(function (result) {
-                                            activitiesInCourseDashboard(result, $scope);
-                                        });
+
                             });
                 };
                 $scope.changeVisibility = function (courseid, visibility) {
@@ -220,14 +221,15 @@ var activitiesInCourseDashboard = function (result, $scope) {
         controlType: 'StringFilter',
         containerId: 'activitiesInCourse_name_filter_div',
         options: {
-            filterColumnIndex: 3,
+            filterColumnIndex: 2,
             matchType: 'any',
             ui: {
-                //label: 'Kurs suchen:'
+                label: $scope.vocabulary.name
             }
         }
     });
-
+    
+    /*
     // Create a category picker to filter section nr.
     var sectionnrCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
@@ -240,15 +242,17 @@ var activitiesInCourseDashboard = function (result, $scope) {
             }
         }
     });
+    */
 
     // Create a category picker to filter section name.
     var sectionCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
         'containerId': 'activities_section_filter_div',
         options: {
-            filterColumnIndex: 1,
+            filterColumnIndex: 0,
             ui: {
                 label: '',
+                caption: $scope.vocabulary.section,
                 allowTyping: false
             }
         }
@@ -259,9 +263,10 @@ var activitiesInCourseDashboard = function (result, $scope) {
         'controlType': 'CategoryFilter',
         'containerId': 'activities_type_filter_div',
         options: {
-            filterColumnIndex: 2,
+            filterColumnIndex: 1,
             ui: {
                 label: '',
+                caption: $scope.vocabulary.activity,
                 allowTyping: false
             }
         }
@@ -283,7 +288,7 @@ var activitiesInCourseDashboard = function (result, $scope) {
     });
 
     // Establish dependencies.
-    dashboard.bind([nameFilter, sectionnrCategoryPicker, sectionCategoryPicker, typeCategoryPicker], [table]);
+    dashboard.bind([nameFilter, sectionCategoryPicker, typeCategoryPicker], [table]);
 
     // Draw the dashboard.
     dashboard.draw(data);
