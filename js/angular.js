@@ -6,18 +6,65 @@
 
 var app = angular.module('overview', []);
 
+// BEGIN MODAL
+
+app.directive('modal', function () {
+    return {
+        template: '<div class="modal fade">' +
+                '<div class="modal-dialog">' +
+                '<div class="modal-content">' +
+                '<div class="modal-header">' +
+                '<h4 class="modal-title">{{ title }}</h4>' +
+                '</div>' +
+                '<div class="modal-body" ng-transclude></div>' +
+                '</div>' +
+                '</div>' +
+                '</div>',
+        restrict: 'E',
+        transclude: true,
+        replace: true,
+        scope: true,
+        link: function postLink(scope, element, attrs) {
+            scope.title = attrs.title;
+
+            scope.$watch(attrs.visible, function (value) {
+                if (value == true)
+                    $(element).modal('show');
+                else
+                    $(element).modal('hide');
+            });
+
+            $(element).on('shown.bs.modal', function () {
+                scope.$apply(function () {
+                    scope.$parent[attrs.visible] = true;
+                });
+            });
+
+            $(element).on('hidden.bs.modal', function () {
+                scope.$apply(function () {
+                    scope.$parent[attrs.visible] = false;
+                });
+            });
+        }
+    };
+});
+
+// END MODAL
+
 app.directive('overview', function () {
     return {
         restrict: 'E',
         templateUrl: '/report/moodleanalyst/html/overview.tpl.html',
         controller: [
             '$http', '$scope', function ($http, $scope) {
+                $scope.showModal = false;
+                $scope.toggleModal = function () {
+                    $scope.showModal = !$scope.showModal;
+                };
                 $http.get('/report/moodleanalyst/rest/mastREST.php/isUserLoggedIn')
                         .error(function (data, status, headers, config) {
-                            }
-                });
-                
-                
+                            $scope.toggleModal();
+                        });
                 $scope.vocabulary = null;
                 $http.get('/report/moodleanalyst/rest/mastREST.php/vocabulary')
                         .success(function (result) {
@@ -120,7 +167,7 @@ app.directive('courseinfo', function () {
                     $scope.course = null;
                     $http.get('/report/moodleanalyst/rest/mastREST.php/course/' + courseid + '/setVisibility/' + visibility)
                             .success(function () {
-                                            $scope.didSelectACourse(courseid);
+                                $scope.didSelectACourse(courseid);
                             });
                 };
             }],
@@ -144,8 +191,8 @@ app.directive('userinfo', function () {
                                 coursesOfUserDashboard(data.courses, $scope);
                             });
                 };
-                
-                $scope.addUserToCourse = function(userid, courseid, roleid) {
+
+                $scope.addUserToCourse = function (userid, courseid, roleid) {
                     $scope.loadingCourse = true;
                     $scope.loadingUser = true;
                     $scope.user = null;
@@ -156,7 +203,7 @@ app.directive('userinfo', function () {
                                 $scope.didSelectAUser(userid);
                             });
                 };
-                
+
             }],
         controllerAs: 'userInfoCtrl'
     }
@@ -307,7 +354,8 @@ var usersInCourseDashboard = function (result, $scope) {
         $scope.userid = table.getDataTable().getFormattedValue(selection[0].row, 0);
         $scope.didSelectAUser($scope.userid);
         $("html, body").animate({scrollTop: 0}, 800);
-    };
+    }
+    ;
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
@@ -388,7 +436,8 @@ var courseSearchDashboard = function (result, $scope) {
         $scope.didSelectACourse($scope.courseid);
         //window.scrollTo(0,0);
         $("html, body").animate({scrollTop: 0}, 800);
-    };
+    }
+    ;
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
@@ -441,7 +490,8 @@ var userSearchDashboard = function (result, $scope) {
         //console.log($scope.userid);
         $scope.didSelectAUser($scope.userid);
         $("html, body").animate({scrollTop: 0}, 800);
-    };
+    }
+    ;
 
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
@@ -481,7 +531,7 @@ var coursesOfUserDashboard = function (result, $scope) {
             }
         }
     });
-    
+
     // Create a category picker to filter parent category.
     var parentCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
@@ -495,7 +545,7 @@ var coursesOfUserDashboard = function (result, $scope) {
             }
         }
     });
-    
+
     // Create a category picker to filter role
     var roleCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
@@ -522,11 +572,11 @@ var coursesOfUserDashboard = function (result, $scope) {
             allowHtml: true,
             sortColumn: 2,
             sortAscending: true
-        },/*
-        view: {
-            //removed 4 (=full name)
-            columns: [0, 1, 2, 3]
-        }*/
+        }, /*
+         view: {
+         //removed 4 (=full name)
+         columns: [0, 1, 2, 3]
+         }*/
     });
 
     // Establish dependencies.
@@ -543,7 +593,8 @@ var coursesOfUserDashboard = function (result, $scope) {
         $scope.courseid = table.getDataTable().getFormattedValue(selection[0].row, 0);
         $scope.didSelectACourse($scope.courseid);
         $("html, body").animate({scrollTop: 0}, 800);
-    };
+    }
+    ;
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
