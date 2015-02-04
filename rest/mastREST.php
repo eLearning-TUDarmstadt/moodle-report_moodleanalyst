@@ -27,6 +27,7 @@ $app->map('/course/getPersons/:id', 'getPersonsInCourse')->via('GET');
 $app->map('/course/getActivities/:id', 'getActivitiesInCourse')->via('GET');
 $app->map('/course/:id/setVisibility/:visibility', 'setCourseVisibility')->via('GET');
 $app->map('/vocabulary', 'getVocabulary')->via('GET');
+$app->map('/addUser/:userid/ToCourse/:courseid/withRole/:roleid', 'enrolUserToCourse')->via('GET');
 
 $app->run();
 
@@ -47,7 +48,8 @@ function getVocabulary() {
     $result['parentcategory'] = get_string('parentcategory', 'report_moodleanalyst');
     $result['grandparentcategory'] = get_string('grandparentcategory', 'report_moodleanalyst');
     $result['searchcourses'] = get_string('searchcourses');
-    
+    $result['enrol'] = get_string('enrol', 'enrol');
+
     echo json_encode($result);
 }
 
@@ -107,6 +109,21 @@ function getPersonsInCourse($courseid) {
     //printArray($result);
 }
 
+function enrolUserToCourse($userid, $courseid, $roleid) {
+    global $DB, $CFG;
+    require_once '../../../enrol/manual/externallib.php';
+
+    if (!isset($roleid) || !is_numeric($roleid) || $roleid < 0) {
+        echo "Invalid role: $role. Add as student.";
+        $roleid = $DB->get_record('role', array('shortname' => 'student'), $fields = 'id', IGNORE_MISSING);
+        $roleid = $roleid->id;
+    }
+
+    $enrolment = array('courseid' => $courseid, 'userid' => $userid, 'roleid' => $roleid);
+    $enrolments[] = $enrolment;
+    enrol_manual_external::enrol_users($enrolments);
+}
+
 function user($userid) {
     require_once '../../../user/lib.php';
     require_once '../../../lib/coursecatlib.php';
@@ -146,7 +163,7 @@ function user($userid) {
         foreach ($course->roles as $roleid => $role) {
             $roles .= role_get_name($role) . ", ";
         }
-        
+
         $courses_enrolled['rows'][] = [
             'c' => array(
                 ['v' => $course->id],
@@ -156,65 +173,65 @@ function user($userid) {
                 array('v' => $roles)
             )
         ];
-        
     }
     /*
      * Possible fields:    
      * 
      * [id] => 20831
-    [auth] => cas
-    [confirmed] => 1
-    [policyagreed] => 1
-    [deleted] => 0
-    [suspended] => 0
-    [mnethostid] => 1
-    [username] => 
-    [password] => not cached
-    [idnumber] => 
-    [firstname] => 
-    [lastname] => 
-    [email] => 
-    [emailstop] => 0
-    [icq] => 
-    [skype] => 
-    [yahoo] => 
-    [aim] => 
-    [msn] => 
-    [phone1] => 
-    [phone2] => 
-    [institution] => 
-    [department] => 
-    [address] => 
-    [city] => 
-    [country] => 
-    [lang] => en
-    [theme] => 
-    [timezone] => 99
-    [firstaccess] => 1377083840
-    [lastaccess] => 1418644723
-    [lastlogin] => 1418634762
-    [currentlogin] => 1418644723
-    [lastip] => 
-    [secret] => 
-    [picture] => 0
-    [url] => 
-    [description] => 
-    [descriptionformat] => 1
-    [mailformat] => 1
-    [maildigest] => 0
-    [maildisplay] => 2
-    [autosubscribe] => 1
-    [trackforums] => 0
-    [timecreated] => 1377083840
-    [timemodified] => 1392029898
-    [trustbitmask] => 0
-    [imagealt] => 
-    [lastnamephonetic] => 
-    [firstnamephonetic] => 
-    [middlename] => 
-    [alternatename] => 
-    [calendartype] => gregorian
+      [auth] => cas
+      [confirmed] => 1
+      [policyagreed] => 1
+      [deleted] => 0
+      [suspended] => 0
+      [mnethostid] => 1
+      [username] =>
+      [password] => not cached
+      [idnumber] =>
+      [firstname] =>
+      [lastname] =>
+      [email] =>
+      [emailstop] => 0
+      [icq] =>
+      [skype] =>
+      [yahoo] =>
+      [aim] =>
+      [msn] =>
+      [phone1] =>
+      [phone2] =>
+      [institution] =>
+      [department] =>
+      [address] =>
+      [city] =>
+      [country] =>
+      [lang] => en
+      [theme] =>
+      [timezone] => 99
+      [firstaccess] => 1377083840
+      [lastaccess] => 1418644723
+      [lastlogin] => 1418634762
+      [currentlogin] => 1418644723
+      [lastip] =>
+      [secret] =>
+      [picture] => 0
+      [url] =>
+      [description] =>
+      [descriptionformat] => 1
+      [mailformat] => 1
+      [maildigest] => 0
+      [maildisplay] => 2
+      [autosubscribe] => 1
+      [trackforums] => 0
+      [timecreated] => 1377083840
+      [timemodified] => 1392029898
+      [trustbitmask] => 0
+      [imagealt] =>
+      [lastnamephonetic] =>
+      [firstnamephonetic] =>
+      [middlename] =>
+      [alternatename] =>
+      [calendartype] => gregorian
      */
+
     $ret = array();
     $ret['id']['string'] = "ID";
     $ret['id']['v'] = $user->id;
@@ -240,9 +257,7 @@ function user($userid) {
     $ret['lastip']['v'] = $user->lastip;
     $ret['lang']['string'] = get_string('language');
     $ret['lang']['v'] = $user->lang;
-    
-    
-  
+
     $ret['courses'] = $courses_enrolled;
     //printArray($ret);
     echo json_encode($ret);
@@ -262,9 +277,13 @@ function course($courseid) {
     $data['visible']['v'] = $course->visible;
     $data['idnumber']['string'] = get_string('idnumber');
     $data['idnumber']['v'] = $course->idnumber;
+
+    $context = context_course::instance($courseid);
+    $data['roles']['string'] = get_string('roles');
+    $data['roles']['v'] = role_get_names($context);
+
     $result = array();
     $result['data'] = $data;
-    //printArray($result);
     echo json_encode($result);
 }
 

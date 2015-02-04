@@ -17,6 +17,17 @@
             <loader ng-show="loadingUser"></loader>
             <div class="table">
                 <div class="row">
+                    <div class="col-md-12" ng-show="course.data.id.v">
+                        <button ng-click="addUserToCourse(user.id.v, course.data.id.v, selectedRole);" type="button" class="btn btn-default" aria-label="">
+                            <span class="glyphicon glyphicon-arrow-left"></span> {{vocabulary.enrol}}
+                        </button>
+                        <select ng-model="selectedRole">
+                            <option ng-repeat="role in course.data.roles.v" value="{{role.id}}">{{role.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <p></p>
+                <div class="row">
                     <div class="col-md-4">{{user.id.string}}</div>
                     <div class="col-md-8">{{user.id.v}}</div>
                 </div>

@@ -34,10 +34,32 @@
         <div class="panel-body">
             <loader ng-show="loadingCourse"></loader>
             <div class="table">
+                <div class="row">
+                    <div class="col-md-4">{{course.data.id.string}}</div>
+                    <div class="col-md-8">{{course.data.id.v}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">{{course.data.shortname.string}}</div>
+                    <div class="col-md-8">{{course.data.shortname.v}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">{{course.data.fullname.string}}</div>
+                    <div class="col-md-8">{{course.data.full.v}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">{{course.data.idnumber.string}}</div>
+                    <div class="col-md-8">{{course.data.idnumber.v}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">{{course.data.visible.string}}</div>
+                    <div class="col-md-8">{{course.data.visible.v}}</div>
+                </div>
+                <!-- 
                 <div class="row" ng-repeat="item in course.data">
                     <div class="col-md-4">{{item.string}}</div>
                     <div class="col-md-8">{{item.v}}</div>
                 </div>
+                -->
             </div>
 
             <div class="tab" ng-controller="CourseDetailTabController as CourseDetailTab">

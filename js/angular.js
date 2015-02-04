@@ -43,7 +43,6 @@ app.controller('HeaderController', function () {
         return this.tab === tabName;
     };
 });
-
 app.controller('CourseDetailTabController', function () {
     this.tab = 1;
 
@@ -108,6 +107,7 @@ app.directive('courseinfo', function () {
                 $scope.didSelectACourse = function (courseid) {
                     $http.get('/report/moodleanalyst/rest/mastREST.php/course/' + courseid)
                             .success(function (data) {
+                                //console.log(data);
                                 $scope.loadingCourse = false;
                                 $scope.course = data;
                                 $http.get('/report/moodleanalyst/rest/mastREST.php/course/getPersons/' + courseid)
@@ -140,13 +140,28 @@ app.directive('userinfo', function () {
         controller: [
             '$http', '$scope', function ($http, $scope) {
                 $scope.didSelectAUser = function (userid) {
+                    $scope.selectedUser = null;
                     $http.get('/report/moodleanalyst/rest/mastREST.php/user/' + userid)
                             .success(function (data) {
+                                console.log(data);
                                 $scope.loadingUser = false;
                                 $scope.user = data;
                                 coursesOfUserDashboard(data.courses, $scope);
                             });
-                }
+                };
+                
+                $scope.addUserToCourse = function(userid, courseid, roleid) {
+                    $scope.loadingCourse = true;
+                    $scope.loadingUser = true;
+                    $scope.user = null;
+                    $scope.course = null;
+                    $http.get('/report/moodleanalyst/rest/mastREST.php/addUser/' + userid + '/ToCourse/' + courseid + '/withRole/' + roleid)
+                            .success(function (data) {
+                                $scope.didSelectACourse(courseid);
+                                $scope.didSelectAUser(userid);
+                            });
+                };
+                
             }],
         controllerAs: 'userInfoCtrl'
     }
