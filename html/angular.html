@@ -8,26 +8,14 @@
         <!-- Favicon -->
         <link rel="shortcut icon" href="/report/moodleanalyst/pix/favicon.ico" type="image/x-icon" />
         
-        <!-- Include Bootstrap CSS-->
+        <!-- Bootstrap core CSS-->
         <link rel="stylesheet" href="/report/moodleanalyst/css/bootstrap.min.css" />
         
-        <!-- Include AngularJS -->
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.9/angular.min.js"></script>
-        <script src="/report/moodleanalyst/js/angular.js"></script>
-        
-        <!-- Include jQuery -->
+        <!-- jQuery core CSS -->
         <link rel="stylesheet" href="/report/moodleanalyst/css/jquery-ui.min.css" />
-        <script src="/report/moodleanalyst/js/jquery-1.11.2.js"></script>
         
-        <!-- Include Bootstrap -->
-        <script src="/report/moodleanalyst/js/bootstrap.min.js"></script>
-        
-        <!-- Include Google Visualization API -->
+        <!-- Google Visualization API -->
         <script type="text/javascript" src='https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["table","corechart","controls"]}]}'></script>
-        
-        <script src='/report/moodleanalyst/js/tabelle.js'></script>
-        <script src='/report/moodleanalyst/js/displayDate.js'></script>
-        <script src='/report/moodleanalyst/js/schnittstelle.js'></script>
     </head>
     
     <body ng-app="overview" style="padding-top:40px">
@@ -55,30 +43,46 @@
                                 <li role="presentation"><a id="tablink_dummy" href="#tabs-5" role="tab" data-toggle="tab">dummy</a></li>
                             </ul>
                         </div>
-                            
-                    </div>
-                        
-                </div>
+                    </div> <!-- container-fluid -->
+                </div> <!-- navbar -->
                 
                 <div class="tab-content well container-fluid" id="tabs">
                     <div role="tabpanel" class="tab-pane fade active in" id="tabs-1">
                         <overview></overview>
                     </div>
+                    <!--
                     <div role="tabpanel" class="tab-pane fade" id="tabs-2">
                         <div ng-include="'tabs/schnittstelle.html'"></div>
                     </div>
-                </div>
+                    -->
+                </div> <!-- tab-content -->
                 <!--
                 <div id="maincontent" class="container-fluid">
                         <overview></overview>
                 </div>
                 -->
-            </div>
-                
+            </div> <!-- row bg -->
         </div> <!-- wrapper -->
         
         <!--
         <footer class="footer footer2"></footer>
         -->
+        
+        
+        <!-- JavaScript -->
+        <!-- ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        
+        <!-- Include AngularJS -->
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.9/angular.min.js"></script>
+        
+        <!-- Include custom JS -->
+        <script src="/report/moodleanalyst/js/angular.js"></script>
+        
+        <!-- jQuery core JS -->
+        <script src="/report/moodleanalyst/js/jquery-1.11.2.js"></script>
+        
+        <!-- Bootstrap core JS -->
+        <script src="/report/moodleanalyst/js/bootstrap.min.js"></script>
     </body>
 </html>

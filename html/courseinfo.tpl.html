@@ -26,8 +26,8 @@
                                 <span class="glyphicon glyphicon-eye-close"></span>
                             </button>
                         </a>
-                    </div>
-                </div>
+                    </div> <!-- btn-group -->
+                </div> <!-- col-md-12 -->
             </div>  <!-- panel-title -->
         </div>  <!-- panel-heading -->
 
@@ -74,10 +74,10 @@
                 </div>
                 -->
             </div>
-
-            <div class="tab" ng-controller="CourseDetailTabController
+            
+            <div class="tab panel panel-default" ng-controller="CourseDetailTabController
                         as CourseDetailTab" ng-hide="loadingCourse">
-                <ul class="nav nav-pills">
+                <ul class="nav nav-pills panel-heading">
                     <li ng-class="{ active: CourseDetailTab.isSet(1) }">
                         <a href ng-click="CourseDetailTab.setTab(1)">{{vocabulary.enrolledusers}}</a>
                     </li>
@@ -88,9 +88,8 @@
                         <a href ng-click="CourseDetailTab.setTab(3)">{{vocabulary.enrolmentmethods}}</a>
                     </li>
                 </ul>
-
-                <div ng-show="CourseDetailTab.isSet(1)">
-                    <blockquote>
+                <div class="panel-body">
+                    <div ng-show="CourseDetailTab.isSet(1)">
                         <div id="dashboardUsersInCourse">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
@@ -103,11 +102,9 @@
                                 <div class="panel-body" id="usersInCourse_table_div"></div>
                             </div>
                         </div>
-                    </blockquote>
-                </div>
+                    </div>
 
-                <div ng-show="CourseDetailTab.isSet(2)">
-                    <blockquote>
+                    <div ng-show="CourseDetailTab.isSet(2)">
                         <div id="dashboardActivitiesInCourse">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
@@ -122,29 +119,29 @@
                             </div>
                             <div class="panel-body" id="activitiesInCourse_table_div"></div>
                         </div>
-                    </blockquote>
-                </div>
-                <div ng-show="CourseDetailTab.isSet(3)">
-                    <div id="dashboardActivitiesInCourse">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">{{vocabulary.enrolmentmethods}}</h3>
-                            </div>
+                    </div>
+                    <div ng-show="CourseDetailTab.isSet(3)">
+                        <div id="dashboardEnrolmentMethods">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">{{vocabulary.enrolmentmethods}}</h3>
+                                </div>
 
-                            <div class="panel-body">
-                                <div ng-repeat="enrol in course.data.enrolmentmethods">
-                                    <div class="row">
-                                        <div class="col-md-6"><a href="/enrol/{{enrol.enrol}}/edit.php?courseid={{course.data.id.v}}&id={{enrol.id}}" target="_blanc">{{enrol.name}}</a></div>
-                                        <div class="col-md-3">{{vocabulary.user}}: {{enrol.number}}</div>
-                                        <div class="col-md-3"><div ng-show="enrol.password">{{vocabulary.password}}: {{enrol.password}}</div></div>
+                                <div class="panel-body">
+                                    <div ng-repeat="enrol in course.data.enrolmentmethods">
+                                        <div class="row">
+                                            <div class="col-md-6"><a href="/enrol/{{enrol.enrol}}/edit.php?courseid={{course.data.id.v}}&id={{enrol.id}}" target="_blank">{{enrol.name}}</a></div>
+                                            <div class="col-md-3">{{vocabulary.user}}: {{enrol.number}}</div>
+                                            <div class="col-md-3"><div ng-show="enrol.password">{{vocabulary.password}}: {{enrol.password}}</div></div>
+                                        </div>
+                                        <p></p>
                                     </div>
-                                    <p></p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>  <!-- tab -->
+                </div> <!-- panel-body -->
+            </div>  <!-- tab panel -->
         </div>  <!-- panel-body -->
     </div>  <!-- panel-primary -->
 </div>
