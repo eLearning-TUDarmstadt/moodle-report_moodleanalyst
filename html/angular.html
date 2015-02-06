@@ -27,7 +27,7 @@
                                 <span class="icon-bar"></span>
                             </button>
                             <a href="/report/moodleanalyst/html/angular.html" class="navbar-brand"> 
-                                <span><img alt="Brand" src="/report/moodleanalyst/pix/favicon.ico"> &nbsp; Moodle Analyst Support Tool</span>
+                                <span><img alt="Brand" src="/report/moodleanalyst/pix/favicon.ico">&nbsp;Moodle Analyst Support Tool</span>
                             </a>
                         </div>
                         <div id="navbar_sc" class="collapse navbar-collapse" role="tabpanel">
@@ -54,7 +54,10 @@
                                     </ul>
                                 </li>
                                 
-                                <li role="presentation"><a id="tablink_dummy" href="#tabs-8" role="tab" data-toggle="tab">dummy</a></li>
+                                <li role="presentation"><a id="tablink_dummy" href="#tabs-8" role="tab" data-toggle="tab">
+                                        <span class="glyphicon glyphicon-wrench"></span> dummy
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </div> <!-- container-fluid -->
@@ -77,22 +80,14 @@
                         <div ng-include="'emptycourses.tpl.html'"></div>
                     </div>
                 </div> <!-- tab-content -->
-                <!--
-                <div id="maincontent" class="container-fluid">
-                        <overview></overview>
-                </div>
-                -->
-                <footer class="footer">
-                    <div class="container">
-                        <p class="pull-right" id="backtotop"><a href="" target="_self">Back to top</a></p>
-                        <p><b><font color="#2E2E2E">All Rights reserved.</font></b></p>
+                
+                <footer class="navbar-inverse navbar-fixed-bottom">
+                    <div class="container-fluid">
+                        <p class="pull-right" id="backtotop"><a href="" target="_self" style="color:#A4A4A4;">Back to top</a></p>
+                        <p style="color:#A4A4A4;"><span class="glyphicon glyphicon-copyright-mark"></span> All Rights reserved.</p>
                     </div>
                 </footer>
         </div> <!-- wrapper -->
-        
-        <!--
-        <footer class="footer footer2"></footer>
-        -->
         
         
         <!-- JavaScript -->
@@ -111,6 +106,7 @@
         <!-- Bootstrap core JS -->
         <script src="/report/moodleanalyst/js/bootstrap.min.js"></script>
         
+        <!-- Custom JS -->
         <script type="text/javascript">
             $(document).ready(function() {
                 $('.navbar-nav a').click(function (e) {
