@@ -13,9 +13,6 @@
         
         <!-- jQuery core CSS -->
         <link rel="stylesheet" href="/report/moodleanalyst/css/jquery-ui.min.css" />
-        
-        <!-- Google Visualization API -->
-        <script type="text/javascript" src='https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["table","corechart","controls"]}]}'></script>
     </head>
     
     <body ng-app="overview" style="padding-top:40px">
@@ -24,20 +21,20 @@
                 <div style="padding-top:0px"  class="navbar navbar-inverse navbar-fixed-top">
                     <div class="container-fluid">
                         <div class="navbar-header navbar-right">
-                            <button data-toggle="collapse" data-target="#navbar_sc" class="navbar-toggle collapsed">
+                            <button type="button" data-toggle="collapse" data-target="#navbar_sc" class="navbar-toggle collapsed">
                                 <span class="sr-only">Toggle nav</span>
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </button>
-                            <a href="/report/moodleanalyst/html/angular.html" class="navbar-brand page-scroll"> 
+                            <a href="/report/moodleanalyst/html/angular.html" class="navbar-brand"> 
                                 <span><img alt="Brand" src="/report/moodleanalyst/pix/favicon.ico"> &nbsp; Moodle Analyst Support Tool</span>
                             </a>
                         </div>
                         <div id="navbar_sc" class="collapse navbar-collapse" role="tabpanel">
                             <ul class="nav navbar-nav" role="tablist" id="myTabList">
                                 <li role="presentation" class="active"><a id="tablink_home" href="#tabs-1" role="tab" data-toggle="tab">Home</a></li>
-                                <li role="presentation"><a id="tablink_schnittstelle" href="#tabs-2" role="tab" data-toggle="tab">Schnittstelle</a></li>
+                                <li role="presentation"><a id="tablink_createnewcourse" href="#tabs-2" role="tab" data-toggle="tab">Create new Course</a></li>
                                 <li role="presentation"><a id="tablink_yea" href="#tabs-3" role="tab" data-toggle="tab">oh yea!</a></li>
                                 <li role="presentation"><a id="tablink_anything" href="#tabs-4" role="tab" data-toggle="tab">anything goes</a></li>
                                 <li role="presentation"><a id="tablink_dummy" href="#tabs-5" role="tab" data-toggle="tab">dummy</a></li>
@@ -50,17 +47,18 @@
                     <div role="tabpanel" class="tab-pane fade active in" id="tabs-1">
                         <overview></overview>
                     </div>
-                    <!--
                     <div role="tabpanel" class="tab-pane fade" id="tabs-2">
-                        <div ng-include="'tabs/schnittstelle.html'"></div>
+                        <div ng-include="'createnewcourse.tpl.html'"></div>
                     </div>
-                    -->
                 </div> <!-- tab-content -->
                 <!--
                 <div id="maincontent" class="container-fluid">
                         <overview></overview>
                 </div>
                 -->
+                <div class="footer" align="center">
+                    <p><b><font color="#2E2E2E">All Rights reserved.</font></b></p>
+                </div>
             </div> <!-- row bg -->
         </div> <!-- wrapper -->
         
@@ -84,5 +82,21 @@
         
         <!-- Bootstrap core JS -->
         <script src="/report/moodleanalyst/js/bootstrap.min.js"></script>
+        
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('.navbar-nav a').click(function (e) {
+                    e.preventDefault();
+                });
+                
+                $('.navbar-brand').click(function (e) {
+                    e.preventDefault();
+                    $('#myTabList a[href="#tabs-1"]').tab('show');
+                });
+            });
+        </script>
+        
+        <!-- Google Visualization API -->
+        <script type="text/javascript" src='https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["table","corechart","controls"]}]}'></script>
     </body>
 </html>
