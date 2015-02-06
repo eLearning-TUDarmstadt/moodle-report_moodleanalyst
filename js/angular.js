@@ -74,17 +74,26 @@ app.directive('overview', function () {
     };
 });
 
-app.controller('HeaderController', function () {
-    this.tab = 1;
+app.controller('HeaderController', ['$scope', function ($scope) {
+        $scope.tab = 1;
 
-    this.setTab = function (newValue) {
-        this.tab = newValue;
-    };
+        // WIRD DIESER CODE NOCH GENUTZT?!
 
-    this.isSet = function (tabName) {
-        return this.tab === tabName;
-    };
-});
+        this.setTab = function (newValue) {
+            console.log("Hello this");
+            $scope.tab = newValue;
+        };
+
+        $scope.setTab = function (newValue) {
+
+            console.log("Hello scope");
+            $scope.tab = newValue;
+        };
+
+        this.isSet = function (tabName) {
+            return $scope.tab === tabName;
+        };
+    }]);
 app.controller('CourseDetailTabController', function () {
     this.tab = 1;
 
@@ -149,7 +158,7 @@ app.directive('courseinfo', function () {
                 $scope.didSelectACourse = function (courseid) {
                     $http.get('/report/moodleanalyst/rest/mastREST.php/course/' + courseid)
                             .success(function (data) {
-                                //console.log(data);
+                                console.log(data);
                                 $scope.loadingCourse = false;
                                 $scope.course = data;
                                 $http.get('/report/moodleanalyst/rest/mastREST.php/course/getPersons/' + courseid)
@@ -210,12 +219,100 @@ app.directive('userinfo', function () {
     }
 });
 
+app.directive('newcourseform', function () {
+    return {
+        restrict: 'E',
+        templateUrl: '/report/moodleanalyst/html/createnewcourse.tpl.html',
+        controller: [
+            '$http', '$scope', function ($http, $scope) {
+                $http.get('/report/moodleanalyst/rest/mastREST.php/course/new/options')
+                        .success(function (data) {
+                            $scope.password = "randompassword";
+                            //console.log(data);
+                            $scope.newcourse = data;
+                            $scope.allCategories = data.categories;
+                            //console.log($scope.allCategories);
+                        });
+                $scope.createNewCourse = function () {
+                    shortname = $scope.newcourse.shortname;
+                    fullname = $scope.newcourse.fullname;
+                    category = $scope.newcourse.category;
+                    password = "";
+                    if($scope.password == "randompassword") {
+                        console.log("RANDOM!");
+                        password = generatePassword();
+                    }
+                    if($scope.password == "userpassword") {
+                        console.log("userpassword");
+                        password = $scope.newcourse.userpassword;
+                    }
+                    params = {
+                        'shortname': shortname,
+                        'fullname': fullname,
+                        'category': category,
+                        'password': password
+                    };
+                    $http.post('/report/moodleanalyst/rest/mastREST.php/course/new', params)
+                            .success(function (data) {
+                                console.log(data);
+                                if (data.error) {
+                                    alert(data.error);
+                                }
+                                else {
+                                    $scope.loadingCourse = true;
+                                    $scope.course = null;
+                                    $scope.courseid = data.course;
+                                    $scope.didSelectACourse($scope.courseid);
+                                    $('#myTabList a:first').tab('show');
+                                }
+                            })
+                            .error(function (data) {
+                                alert("error occured");
+                            });
+                    /*
+                     $http.post('/report/moodleanalyst/rest/mastREST.php/course/new', {})
+                     .success = function (data, status, headers, config) {
+                     console.log(data);
+                     console.log(status);
+                     console.log(headers);
+                     console.log(config);
+                     
+                     console.log("POST-DATA: " + data);
+                     if (data.error) {
+                     alert(data.error);
+                     } else {
+                     $scope.loadingCourse = true;
+                     $scope.course = null;
+                     $scope.courseid = data.course;
+                     $scope.didSelectACourse($scope.courseid);
+                     }
+                     };
+                     
+                     .error = function (data, status) {
+                     alert("Error: " + status);
+                     };
+                     */
+                };
+                $scope.master = {};
+                $scope.update = function (user) {
+                    $scope.master = angular.copy(user);
+                };
+                $scope.reset = function (form) {
+                    if (form) {
+                        form.$setPristine();
+                        form.$setUntouched();
+                    }
+                    $scope.user = angular.copy($scope.master);
+                };
+                $scope.reset();
+            }],
+        controllerAs: 'newCourseCtrl'
+    }
+});
 var activitiesInCourseDashboard = function (result, $scope) {
     var data = new google.visualization.DataTable(result);
-
     // Create a dashboard
     var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardActivitiesInCourse'));
-
     // Create a search box to search for the activity name.
     var nameFilter = new google.visualization.ControlWrapper({
         controlType: 'StringFilter',
@@ -228,21 +325,20 @@ var activitiesInCourseDashboard = function (result, $scope) {
             }
         }
     });
-    
     /*
-    // Create a category picker to filter section nr.
-    var sectionnrCategoryPicker = new google.visualization.ControlWrapper({
-        'controlType': 'CategoryFilter',
-        'containerId': 'activities_sectionnr_filter_div',
-        options: {
-            filterColumnIndex: 0,
-            ui: {
-                label: '',
-                allowTyping: false
-            }
-        }
-    });
-    */
+     // Create a category picker to filter section nr.
+     var sectionnrCategoryPicker = new google.visualization.ControlWrapper({
+     'controlType': 'CategoryFilter',
+     'containerId': 'activities_sectionnr_filter_div',
+     options: {
+     filterColumnIndex: 0,
+     ui: {
+     label: '',
+     allowTyping: false
+     }
+     }
+     });
+     */
 
     // Create a category picker to filter section name.
     var sectionCategoryPicker = new google.visualization.ControlWrapper({
@@ -257,7 +353,6 @@ var activitiesInCourseDashboard = function (result, $scope) {
             }
         }
     });
-
     // Create a category picker to filter section name.
     var typeCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
@@ -271,8 +366,6 @@ var activitiesInCourseDashboard = function (result, $scope) {
             }
         }
     });
-
-
     // Create the table to display.
     var table = new google.visualization.ChartWrapper({
         chartType: 'Table',
@@ -286,19 +379,15 @@ var activitiesInCourseDashboard = function (result, $scope) {
             sortAscending: false
         }
     });
-
     // Establish dependencies.
     dashboard.bind([nameFilter, sectionCategoryPicker, typeCategoryPicker], [table]);
-
     // Draw the dashboard.
     dashboard.draw(data);
 };
 var usersInCourseDashboard = function (result, $scope) {
     var data = new google.visualization.DataTable(result);
-
     // Create a dashboard
     var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardUsersInCourse'));
-
     // Create a search box to search for the users name.
     var nameFilter = new google.visualization.ControlWrapper({
         controlType: 'StringFilter',
@@ -311,7 +400,6 @@ var usersInCourseDashboard = function (result, $scope) {
             }
         }
     });
-
     // Create a category picker to filter role.
     var roleCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
@@ -325,8 +413,6 @@ var usersInCourseDashboard = function (result, $scope) {
             }
         }
     });
-
-
     // Create the table to display.
     var table = new google.visualization.ChartWrapper({
         chartType: 'Table',
@@ -344,13 +430,10 @@ var usersInCourseDashboard = function (result, $scope) {
             columns: [0, 1, 2, 3]
         }
     });
-
     // Establish dependencies.
     dashboard.bind([nameFilter, roleCategoryPicker], [table]);
-
     // Draw the dashboard.
     dashboard.draw(data);
-
     // Define what to do when selecting a table row.
     function selectHandler() {
         $scope.loadingUser = true;
@@ -361,16 +444,13 @@ var usersInCourseDashboard = function (result, $scope) {
         $("html, body").animate({scrollTop: 0}, 800);
     }
     ;
-
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
 };
 var courseSearchDashboard = function (result, $scope) {
     var data = new google.visualization.DataTable(result);
-
     // Create a dashboard
     var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardCourseSearch'));
-
     // Create a search box to search for the course name.
     var nameFilter = new google.visualization.ControlWrapper({
         controlType: 'StringFilter',
@@ -383,7 +463,6 @@ var courseSearchDashboard = function (result, $scope) {
             }
         }
     });
-
     // Create a category picker to filter by grand parent category.
     var grandparentCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
@@ -397,7 +476,6 @@ var courseSearchDashboard = function (result, $scope) {
             }
         }
     });
-
     // Create a category picker to filter by Fachbereich.
     var parentCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
@@ -411,7 +489,6 @@ var courseSearchDashboard = function (result, $scope) {
             }
         }
     });
-
     // Create the table to display.
     var table = new google.visualization.ChartWrapper({
         chartType: 'Table',
@@ -425,13 +502,10 @@ var courseSearchDashboard = function (result, $scope) {
             sortAscending: false
         }
     });
-
     // Establish dependencies.
     dashboard.bind([nameFilter, grandparentCategoryPicker, parentCategoryPicker], [table]);
-
     // Draw the dashboard.
     dashboard.draw(data);
-
     // Define what to do when selecting a table row.
     function selectHandler() {
         var selection = table.getChart().getSelection();
@@ -443,16 +517,13 @@ var courseSearchDashboard = function (result, $scope) {
         $("html, body").animate({scrollTop: 0}, 800);
     }
     ;
-
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
 };
 var userSearchDashboard = function (result, $scope) {
     var data = new google.visualization.DataTable(result);
-
     // Create a dashboard
     var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardUserSearch'));
-
     // Create a search box to search for the user name.
     var userNameFilter = new google.visualization.ControlWrapper({
         controlType: 'StringFilter',
@@ -465,7 +536,6 @@ var userSearchDashboard = function (result, $scope) {
             }
         }
     });
-
     // Create the table to display.
     var table = new google.visualization.ChartWrapper({
         chartType: 'Table',
@@ -479,13 +549,10 @@ var userSearchDashboard = function (result, $scope) {
             columns: [1, 2, 3, 4]
         }
     });
-
     // Establish dependencies.
     dashboard.bind([userNameFilter], [table]);
-
     // Draw the dashboard.
     dashboard.draw(data);
-
     // Define what to do when selecting a table row.
     function selectHandler() {
         $scope.loadingUser = true;
@@ -497,19 +564,14 @@ var userSearchDashboard = function (result, $scope) {
         $("html, body").animate({scrollTop: 0}, 800);
     }
     ;
-
-
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
-
 };
 var coursesOfUserDashboard = function (result, $scope) {
     console.log(result);
     var data = new google.visualization.DataTable(result);
-
     // Create a dashboard
     var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardCoursesOfUser'));
-
     // Create a search box to search for the users name.
     var nameFilter = new google.visualization.ControlWrapper({
         controlType: 'StringFilter',
@@ -522,7 +584,6 @@ var coursesOfUserDashboard = function (result, $scope) {
             }
         }
     });
-
     // Create a category picker to filter grand parent category.
     var grandparentCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
@@ -536,7 +597,6 @@ var coursesOfUserDashboard = function (result, $scope) {
             }
         }
     });
-
     // Create a category picker to filter parent category.
     var parentCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
@@ -550,7 +610,6 @@ var coursesOfUserDashboard = function (result, $scope) {
             }
         }
     });
-
     // Create a category picker to filter role
     var roleCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
@@ -564,8 +623,6 @@ var coursesOfUserDashboard = function (result, $scope) {
             }
         }
     });
-
-
     // Create the table to display.
     var table = new google.visualization.ChartWrapper({
         chartType: 'Table',
@@ -583,13 +640,10 @@ var coursesOfUserDashboard = function (result, $scope) {
          columns: [0, 1, 2, 3]
          }*/
     });
-
     // Establish dependencies.
     dashboard.bind([nameFilter, grandparentCategoryPicker, parentCategoryPicker, roleCategoryPicker], [table]);
-
     // Draw the dashboard.
     dashboard.draw(data);
-
     // Define what to do when selecting a table row.
     function selectHandler() {
         $scope.loadingCourse = true;
@@ -600,7 +654,16 @@ var coursesOfUserDashboard = function (result, $scope) {
         $("html, body").animate({scrollTop: 0}, 800);
     }
     ;
-
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
 };
+
+function generatePassword() {
+    var length = 10,
+        charset = "abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        retVal = "";
+    for (var i = 0, n = charset.length; i < length; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * n));
+    }
+    return retVal;
+}

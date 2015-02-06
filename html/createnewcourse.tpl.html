@@ -1,16 +1,27 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
-</html>
+<h2>{{newcourse.vocabulary.newcourse}}</h2>
+<form name="form" novalidate>
+    <div class="row">
+        <div class="col-md-2">{{newcourse.vocabulary.shortname}}</div>
+        <div class="col-md-10"><input type="text" ng-model="newcourse.shortname" name="shortname" required="" /></div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">{{newcourse.vocabulary.fullname}}</div>
+        <div class="col-md-10"><input type="text" ng-model="newcourse.fullname" name="fullname" required="" /></div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">{{newcourse.vocabulary.category}}</div>
+        <div class="col-md-10">
+            <select ng-model="newcourse.category">
+                <option ng-repeat="category in allCategories" value="{{category.id}}">{{category.name}}</option>
+            </select>
+        </div>
+    </div>
+    <p></p>
+    <input type="radio" ng-model="password" value="nopassword" /> {{newcourse.vocabulary.nopassword}}<br />
+    <input type="radio" ng-model="password" value="userpassword" /> {{newcourse.vocabulary.password}}: <input type="text" ng-model="newcourse.userpassword" name="password" required="" /><br />
+    <input type="radio" ng-model="password" value="randompassword" /> Random {{newcourse.vocabulary.password}}<br />
+    <p></p>
+    <button type="button" class="btn btn-default" aria-label="newcourse.vocabulary.createnewcourse" ng-click="createNewCourse()">
+        <span class="glyphicon glyphicon-plus"></span> {{newcourse.vocabulary.createnewcourse}}
+    </button>
+</form>

@@ -25,6 +25,8 @@ $app->map('/user/:id', 'user')->via('GET');
 $app->map('/course/:id', 'course')->via('GET');
 $app->map('/course/getPersons/:id', 'getPersonsInCourse')->via('GET');
 $app->map('/course/getActivities/:id', 'getActivitiesInCourse')->via('GET');
+$app->map('/course/new/options', 'newCourseOptions')->via('GET');
+$app->map('/course/new', 'newCourse')->via('POST');
 //$app->map('/course/getEnrolmentMethods/:id', 'getCourseEnrolmentMethods')->via('GET');
 $app->map('/course/:id/setVisibility/:visibility', 'setCourseVisibility')->via('GET');
 $app->map('/vocabulary', 'getVocabulary')->via('GET');
@@ -38,6 +40,98 @@ function isUserLoggedIn() {
 
 function setCourseVisibility($courseid, $visibility) {
     echo json_encode(course_change_visibility($courseid, $visibility));
+}
+
+function newCourse() {
+    global $DB;
+    
+    $app = \Slim\Slim::getInstance();
+    
+    $data = new stdClass();
+    $content = json_decode($app->request->getBody());
+    if (!isset($content->shortname)) {
+        errorAndDie('shortname needs to be set!');
+    } else {
+        $data->shortname = $content->shortname;
+        if ($DB->record_exists('course', array('shortname' => $data->shortname))) {
+            errorAndDie('shortnametaken');
+        }
+    }
+
+    if (!isset($content->fullname)) {
+        errorAndDie('fullname needs to be set!');
+    } else {
+        $data->fullname = $content->fullname;
+    }
+
+    if (!isset($content->category)) {
+        errorAndDie('category needs to be set!');
+    } else {
+        $data->category = $content->category;
+    }
+    
+    if (!isset($content->password)) {
+        errorAndDie('password needs to be set!');
+    } 
+
+    if (!isset($content->visible)) {
+        //nothing here
+    } else {
+        $data->visible = $content->visible;
+    }
+    $course = create_course($data);
+    
+    
+    
+    // Changing password
+    $instances = enrol_get_instances($course->id, false);
+    $enrolinstance = new stdClass();
+    foreach ($instances as $instanceid => $instance) {
+        if($instance->enrol == 'self') {
+            $enrolinstance->id = $instanceid;
+            break;
+        }
+    }
+    $enrolinstance->password = $content->password;
+    $DB->update_record('enrol', $enrolinstance);
+    
+    echo json_encode(array('course' => $course->id, 'selfenrolinstance' => $enrolinstance->id));
+}
+
+function newCourseOptions() {
+    global $DB;
+    // collecting all categories, with path and id
+    // example: /grandparentcategoryname/parentcategoryname/categoryname
+    $categories = $DB->get_records('course_categories', array(), 'sortorder ASC', 'id, name, path');
+    foreach ($categories as $id => $category) {
+        $path = explode('/', $category->path);
+        $string = '';
+        foreach ($path as $key => $value) {
+            if ($value) {
+                $string .= ' // ' . $categories[$value]->name;
+            }
+        }
+        $result['categories'][$id]['id'] = $id;
+        $result['categories'][$id]['name'] = $string;
+    }
+    // end categories
+    $vocab = array();
+    $vocab['fullname'] = get_string('fullnamecourse');
+    $vocab['shortname'] = get_string('shortnamecourse');
+    $vocab['newcourse'] = get_string('newcourse');
+    $vocab['createnewcourse'] = get_string('createnewcourse');
+    $vocab['category'] = get_string('category');
+    $vocab['shortnametaken'] = get_string('shortnametaken');
+    $vocab['selfenrolment'] = get_string('pluginname', 'enrol_self');
+    $vocab['password'] = get_string('password', 'enrol_self');
+    $vocab['nopassword'] = get_string('nopassword', 'enrol_self');
+    
+    
+    $result['vocabulary'] = $vocab;
+    
+
+    //printArray($result);
+    echo json_encode($result);
 }
 
 function getVocabulary() {
@@ -61,6 +155,9 @@ function getVocabulary() {
     $result['name'] = get_string('name');
     $result['section'] = get_string('section');
     $result['password'] = get_string('password');
+    $result['sitehome'] = get_string('sitehome');
+    $result['newcourse'] = get_string('newcourse');
+    $result['statistics'] = get_string('statistics');
 
 
     echo json_encode($result);
@@ -322,7 +419,7 @@ function course($courseid) {
     $data['roles']['v'] = role_get_names($context);
     $data['personsInCourse'] = count_enrolled_users($context);
     $data['enrolmentmethods'] = getCourseEnrolmentMethods($courseid);
-    
+
     $usedRoles = get_roles_used_in_context($context);
     //printArray($usedRoles);
     foreach ($usedRoles as $roleid => $role) {
@@ -432,6 +529,11 @@ function allCourses() {
 
 function printArray($array) {
     echo "<pre>" . print_r($array, true) . "</pre>";
+}
+
+function errorAndDie($msg) {
+    echo json_encode(array('error' => $msg));
+    die();
 }
 ?>
 

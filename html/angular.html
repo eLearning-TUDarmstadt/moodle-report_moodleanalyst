@@ -11,6 +11,9 @@
         <!-- Bootstrap core CSS-->
         <link rel="stylesheet" href="/report/moodleanalyst/css/bootstrap.min.css" />
         
+        <!-- Bootstrap core CSS-->
+        <link rel="stylesheet" href="/report/moodleanalyst/css/ownModifications.css" />
+        
         <!-- jQuery core CSS -->
         <link rel="stylesheet" href="/report/moodleanalyst/css/jquery-ui.min.css" />
     </head>
@@ -34,18 +37,18 @@
                             <ul class="nav navbar-nav" role="tablist" id="myTabList">
                                 <li role="presentation" class="active">
                                     <a id="tablink_home" href="#tabs-1" role="tab" data-toggle="tab">
-                                        <span class="glyphicon glyphicon-home"></span> Home
+                                        <span class="glyphicon glyphicon-home"></span> {{vocabulary.sitehome}}
                                     </a>
                                 </li>
                                 <li role="presentation">
                                     <a id="tablink_createnewcourse" href="#tabs-2" role="tab" data-toggle="tab">
-                                        <span class="glyphicon glyphicon-plus"></span> Create new Course
+                                        <span class="glyphicon glyphicon-plus"></span> {{vocabulary.newcourse}}
                                     </a>
                                 </li>
                                 
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
-                                        <span class="glyphicon glyphicon-stats"></span> Statistics<b class="caret"></b>
+                                        <span class="glyphicon glyphicon-stats"></span> {{vocabulary.statistics}}<b class="caret"></b>
                                     </a>
                                     <ul class="dropdown-menu" role="menu">
                                         <li role="presentation"><a id="tablink_inactiveusers" href="#tabs-3" role="tab" data-toggle="tab">Inactive users</a></li>
