@@ -220,7 +220,8 @@ function getPersonsInCourse($courseid) {
     // Preparing the return table
     $result = array();
     $result['cols'] = array();
-    $result['cols'][] = array('label' => get_string('username'), 'type' => 'number');
+    $result['cols'][] = array('label' => 'ID', 'type' => 'number');
+    $result['cols'][] = array('label' => get_string('username'), 'type' => 'string');
     $result['cols'][] = array('label' => get_string('firstname'), 'type' => 'string');
     $result['cols'][] = array('label' => get_string('lastname'), 'type' => 'string');
     //$result['cols'][] = array('label' => get_string('email'), 'type' => 'string');
@@ -232,11 +233,11 @@ function getPersonsInCourse($courseid) {
     $usedRoles = get_roles_used_in_context($context);
     //printArray($usedRoles);
     foreach ($usedRoles as $roleid => $role) {
-        $roleUsers = get_role_users($roleid, $context, false, 'u.id, u.firstname, u.lastname, u.email', null, false);
+        $roleUsers = get_role_users($roleid, $context, false, 'u.id, u.username, u.firstname, u.lastname, u.email', null, false);
         if (!empty($roleUsers)) {
             foreach ($roleUsers as $userid => $user) {
                 // removed array('v' => $user->email),
-                $result['rows'][] = ['c' => array(['v' => $userid], array('v' => $user->firstname), array('v' => $user->lastname), array('v' => $role->name), array('v' => $user->firstname . ' ' . $user->lastname))];
+                $result['rows'][] = ['c' => array(['v' => $userid], array('v' => $user->username), array('v' => $user->firstname), array('v' => $user->lastname), array('v' => $role->name), array('v' => $user->firstname . ' ' . $user->lastname))];
             }
         }
     }

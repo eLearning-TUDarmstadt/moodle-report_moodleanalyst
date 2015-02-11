@@ -94,17 +94,21 @@ app.controller('HeaderController', ['$scope', function ($scope) {
             return $scope.tab === tabName;
         };
     }]);
-app.controller('CourseDetailTabController', function () {
+app.controller('CourseDetailTabController', ['$scope', function ($scope) {
     this.tab = 1;
 
     this.setTab = function (newValue) {
+        this.tab = newValue;
+    };
+    
+    $scope.setCourseDatailTab = function (newValue) {
         this.tab = newValue;
     };
 
     this.isSet = function (tabName) {
         return this.tab === tabName;
     };
-});
+}]);
 
 app.directive('loader', function () {
     return {
@@ -393,7 +397,7 @@ var usersInCourseDashboard = function (result, $scope) {
         controlType: 'StringFilter',
         containerId: 'usersInCourse_name_filter_div',
         options: {
-            filterColumnIndex: 4,
+            filterColumnIndex: 5,
             matchType: 'any',
             ui: {
                 //label: 'Kurs suchen:'
@@ -406,7 +410,7 @@ var usersInCourseDashboard = function (result, $scope) {
         'controlType': 'CategoryFilter',
         'containerId': 'usersInCourse_role_filter_div',
         options: {
-            filterColumnIndex: 3,
+            filterColumnIndex: 4,
             ui: {
                 caption: $scope.vocabulary.role,
                 //label: '',
@@ -433,8 +437,8 @@ var usersInCourseDashboard = function (result, $scope) {
             sortAscending: true
         },
         view: {
-            //removed 4 (=full name)
-            columns: [0, 1, 2, 3]
+            //removed 5 (=full name)
+            columns: [0, 1, 2, 3, 4]
         }
     });
     // Establish dependencies.
