@@ -44,9 +44,9 @@ function setCourseVisibility($courseid, $visibility) {
 
 function newCourse() {
     global $DB;
-    
+
     $app = \Slim\Slim::getInstance();
-    
+
     $data = new stdClass();
     $content = json_decode($app->request->getBody());
     if (!isset($content->shortname)) {
@@ -69,10 +69,10 @@ function newCourse() {
     } else {
         $data->category = $content->category;
     }
-    
+
     if (!isset($content->password)) {
         errorAndDie('password needs to be set!');
-    } 
+    }
 
     if (!isset($content->visible)) {
         //nothing here
@@ -80,21 +80,21 @@ function newCourse() {
         $data->visible = $content->visible;
     }
     $course = create_course($data);
-    
-    
-    
+
+
+
     // Changing password
     $instances = enrol_get_instances($course->id, false);
     $enrolinstance = new stdClass();
     foreach ($instances as $instanceid => $instance) {
-        if($instance->enrol == 'self') {
+        if ($instance->enrol == 'self') {
             $enrolinstance->id = $instanceid;
             break;
         }
     }
     $enrolinstance->password = $content->password;
     $DB->update_record('enrol', $enrolinstance);
-    
+
     echo json_encode(array('course' => $course->id, 'selfenrolinstance' => $enrolinstance->id));
 }
 
@@ -125,10 +125,10 @@ function newCourseOptions() {
     $vocab['selfenrolment'] = get_string('pluginname', 'enrol_self');
     $vocab['password'] = get_string('password', 'enrol_self');
     $vocab['nopassword'] = get_string('nopassword', 'enrol_self');
-    
-    
+
+
     $result['vocabulary'] = $vocab;
-    
+
 
     //printArray($result);
     echo json_encode($result);
@@ -294,21 +294,19 @@ function user($userid) {
 
         // Get roles
         $context = context_course::instance($courseid);
-        $course->roles = get_user_roles($context, false);
-        $roles = "";
+        $course->roles = get_user_roles($context, $userid);
+        
         foreach ($course->roles as $roleid => $role) {
-            $roles .= role_get_name($role) . ", ";
+            $courses_enrolled['rows'][] = [
+                'c' => array(
+                    ['v' => $course->id],
+                    array('v' => $course->parentcategoryname),
+                    array('v' => $course->categoryname),
+                    array('v' => $course->fullname),
+                    array('v' => role_get_name($role))
+                )
+            ];
         }
-
-        $courses_enrolled['rows'][] = [
-            'c' => array(
-                ['v' => $course->id],
-                array('v' => $course->parentcategoryname),
-                array('v' => $course->categoryname),
-                array('v' => $course->fullname),
-                array('v' => $roles)
-            )
-        ];
     }
     /*
      * Possible fields:    
