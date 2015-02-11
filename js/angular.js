@@ -400,6 +400,7 @@ var usersInCourseDashboard = function (result, $scope) {
             }
         }
     });
+    
     // Create a category picker to filter role.
     var roleCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
@@ -413,6 +414,12 @@ var usersInCourseDashboard = function (result, $scope) {
             }
         }
     });
+    
+    $scope.setRoleFilterForUsersInCourseDashboard = function (rolestring) {
+        roleCategoryPicker.setState( {'selectedValues': [rolestring]});
+        roleCategoryPicker.draw();
+    }
+    
     // Create the table to display.
     var table = new google.visualization.ChartWrapper({
         chartType: 'Table',

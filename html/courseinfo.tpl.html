@@ -61,7 +61,7 @@
                     </div>
                     <div class="panel-body">
                         <div class="row" ng-repeat="role in course.data.rolesInCourse| orderBy:role.sortorder">
-                            <div class="col-md-4">{{role.name}}</div>
+                            <div class="col-md-4"><a ng-click="setRoleFilterForUsersInCourseDashboard(role.name);">{{role.name}}</a></div>
                             <div class="col-md-8">{{role.number}}</div>
                         </div>
                     </div>
