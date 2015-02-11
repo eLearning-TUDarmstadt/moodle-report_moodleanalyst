@@ -8,12 +8,12 @@
                     <div class="btn-group btn-group-xs pull-right" role="toolbar" ng-show="course.data">
                         <a href="/course/edit.php?id={{course.data.id.v}}" target="_blank">
                             <button type="button" class="btn btn-default" aria-label="Edit Course">
-                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span class="glyphicon glyphicon-cog"></span>
                             </button>
                         </a>
                         <a href="/course/delete.php?id={{course.data.id.v}}" target="_blank">
                             <button type="button" class="btn btn-default" aria-label="Delete Course">
-                                <span class="glyphicon glyphicon-remove"></span>
+                                <span class="glyphicon glyphicon-trash"></span>
                             </button>
                         </a>
                         <a>
@@ -74,7 +74,7 @@
                 </div>
                 -->
             </div>
-            
+
             <div class="tab panel panel-default" ng-controller="CourseDetailTabController
                         as CourseDetailTab" ng-hide="loadingCourse">
                 <ul class="nav nav-pills panel-heading">
@@ -117,7 +117,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="panel-body" id="activitiesInCourse_table_div"></div>
+                            <div class="panel-body">
+                                <div class="btn-group" role="group" aria-label="..." ng-show="isActivitySelected">
+                                    <a href=""><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-new-window" aria-hidden="true"></span> {{vocabulary.view}}</button></a>
+                                    <a><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> {{vocabulary.editsettings}}</button></a>
+                                    <a><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> {{vocabulary.show}}</button></a>
+                                    <a><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span> {{vocabulary.hide}}</button></a>
+                                </div>
+                                <p></p>
+                                <div id="activitiesInCourse_table_div"></div>
+                            </div>
                         </div>
                     </div>
                     <div ng-show="CourseDetailTab.isSet(3)">

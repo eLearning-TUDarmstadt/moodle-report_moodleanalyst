@@ -158,13 +158,17 @@ function getVocabulary() {
     $result['sitehome'] = get_string('sitehome');
     $result['newcourse'] = get_string('newcourse');
     $result['statistics'] = get_string('statistics');
-
+    $result['show'] = get_string('show');
+    $result['view'] = get_string('viewmore');
+    $result['hide'] = get_string('hide');
+    $result['editsettings'] = get_string('editsettings');
 
     echo json_encode($result);
 }
 
 function getCourseEnrolmentMethods($courseid) {
-    global $DB;
+    global $DB, $PAGE;
+    $PAGE->set_context(context_system::instance());
     $instances = enrol_get_instances($courseid, false);
     $result = array();
 
@@ -192,10 +196,15 @@ function getActivitiesInCourse($courseid) {
     global $OUTPUT;
     $table = array();
     $table['cols'] = array();
+    $table['cols'][] = array('label' => 'id', 'type' => 'number');
     //$table['cols'][] = array('label' => get_string('section'), 'type' => 'number');
     $table['cols'][] = array('label' => get_string('sectionname'), 'type' => 'string');
     $table['cols'][] = array('label' => get_string('activity'), 'type' => 'string');
     $table['cols'][] = array('label' => get_string('name'), 'type' => 'string');
+    $table['cols'][] = array('label' => 'mod', 'type' => 'string');
+    $table['cols'][] = array('label' => 'cm', 'type' => 'string');
+    $table['cols'][] = array('label' => 'visibility', 'type' => 'number');
+
 
     $table['rows'] = array();
 
@@ -203,16 +212,30 @@ function getActivitiesInCourse($courseid) {
     //echo "<pre>" . print_r($activities, true) . "</pre>";
 
     foreach ($activities as $modid => $activity) {
-        $section = $activity->section;
-        $sectionname = get_section_name($courseid, $activity->section);
+        
+        if($activity->visible) {
+            $class="";
+        } else {
+            $class="dimmed";
+        }
+        $spanBegin = ''; //"<span class='" . $class . "'>";
+        $spanEnd = ''; //"</span>";
+        $activityname = $spanBegin . $activity->name . $spanEnd;
+        $sectionname = $spanBegin . get_section_name($courseid, $activity->section) . $spanEnd;
         $icon = ''; //"<img src='" . $OUTPUT->pix_url('icon', 'mod_'.$activity->mod) . "'>";
-        $activityType = $icon . get_string('pluginname', $activity->mod);
-
-        $activityname = $activity->name;
+        $activityType = $spanBegin . $icon . get_string('pluginname', $activity->mod) . $spanEnd;
         //$table['rows'][] = ['c' => array('v' => $sectionname), array('v' => $activityType), array('v' => $activityname)];
-        $table['rows'][] = ['c' => array(['v' => $sectionname], array('v' => $activityType), array('v' => $activityname))];
+        $table['rows'][] = ['c' => array(
+            ['v' => $activity->id],
+            ['v' => $sectionname],
+            ['v' => $activityType],
+            ['v' => $activityname],
+            ['v' => $activity->mod],
+            ['v' => $activity->cm],
+            ['v' => $activity->visible]
+        )];
     }
-
+    //printArray($table);
     echo json_encode($table);
 }
 
@@ -296,7 +319,7 @@ function user($userid) {
         // Get roles
         $context = context_course::instance($courseid);
         $course->roles = get_user_roles($context, $userid);
-        
+
         foreach ($course->roles as $roleid => $role) {
             $courses_enrolled['rows'][] = [
                 'c' => array(
@@ -399,6 +422,9 @@ function user($userid) {
 }
 
 function course($courseid) {
+    //global $PAGE;
+    //$PAGE->set_context();
+    require_login();
     $course = get_course($courseid);
 
     $data = array();

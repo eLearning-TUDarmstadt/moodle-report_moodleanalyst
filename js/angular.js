@@ -95,20 +95,20 @@ app.controller('HeaderController', ['$scope', function ($scope) {
         };
     }]);
 app.controller('CourseDetailTabController', ['$scope', function ($scope) {
-    this.tab = 1;
+        this.tab = 1;
 
-    this.setTab = function (newValue) {
-        this.tab = newValue;
-    };
-    
-    $scope.setCourseDatailTab = function (newValue) {
-        this.tab = newValue;
-    };
+        this.setTab = function (newValue) {
+            this.tab = newValue;
+        };
 
-    this.isSet = function (tabName) {
-        return this.tab === tabName;
-    };
-}]);
+        $scope.setCourseDatailTab = function (newValue) {
+            this.tab = newValue;
+        };
+
+        this.isSet = function (tabName) {
+            return this.tab === tabName;
+        };
+    }]);
 
 app.directive('loader', function () {
     return {
@@ -159,6 +159,13 @@ app.directive('courseinfo', function () {
         templateUrl: '/report/moodleanalyst/html/courseinfo.tpl.html',
         controller: [
             '$http', '$scope', function ($http, $scope) {
+
+                $scope.isActivitySelected = false;
+                $scope.selectedActivity = [];
+                $scope.selectedActivity.id = null;
+                $scope.selectedActivity.cm = null;
+                $scope.selectedActivity.mod = null;
+                
                 $scope.didSelectACourse = function (courseid) {
                     $http.get('/report/moodleanalyst/rest/mastREST.php/course/' + courseid)
                             .success(function (data) {
@@ -242,11 +249,11 @@ app.directive('newcourseform', function () {
                     fullname = $scope.newcourse.fullname;
                     category = $scope.newcourse.category;
                     password = "";
-                    if($scope.password == "randompassword") {
+                    if ($scope.password == "randompassword") {
                         console.log("RANDOM!");
                         password = generatePassword();
                     }
-                    if($scope.password == "userpassword") {
+                    if ($scope.password == "userpassword") {
                         console.log("userpassword");
                         password = $scope.newcourse.userpassword;
                     }
@@ -314,6 +321,8 @@ app.directive('newcourseform', function () {
     }
 });
 var activitiesInCourseDashboard = function (result, $scope) {
+    $scope.activityIsSelected = false;
+
     var data = new google.visualization.DataTable(result);
     // Create a dashboard
     var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardActivitiesInCourse'));
@@ -349,7 +358,7 @@ var activitiesInCourseDashboard = function (result, $scope) {
         'controlType': 'CategoryFilter',
         'containerId': 'activities_section_filter_div',
         options: {
-            filterColumnIndex: 0,
+            filterColumnIndex: 1,
             ui: {
                 label: '',
                 caption: $scope.vocabulary.section,
@@ -362,7 +371,7 @@ var activitiesInCourseDashboard = function (result, $scope) {
         'controlType': 'CategoryFilter',
         'containerId': 'activities_type_filter_div',
         options: {
-            filterColumnIndex: 1,
+            filterColumnIndex: 2,
             ui: {
                 label: '',
                 caption: $scope.vocabulary.activity,
@@ -381,12 +390,41 @@ var activitiesInCourseDashboard = function (result, $scope) {
             allowHtml: true,
             sortColumn: 0,
             sortAscending: false
+        },
+        view: {
+            // 0: instance
+            // 1: section name
+            // 2: localised activity type
+            // 3: activity name
+            // 4: mod - moodle internal mod name, for example forum, chat, assign, choice
+            // 5: course module id (cm)
+            // 6: visible (1 || 0)
+            columns: [1, 2, 3]
         }
     });
     // Establish dependencies.
     dashboard.bind([nameFilter, sectionCategoryPicker, typeCategoryPicker], [table]);
     // Draw the dashboard.
     dashboard.draw(data);
+
+
+    // Define what to do when selecting a table row.
+    function selectHandler() {
+
+        var selection = table.getChart().getSelection();
+        $scope.userid = data.getFormattedValue(selection[0].row, 0);
+        $scope.isActivitySelected = true;
+        $scope.selectedActivity = [];
+        $scope.selectedActivity.id = data.getFormattedValue(selection[0].row, 0);
+        $scope.selectedActivity.cm = data.getFormattedValue(selection[0].row, 5);
+        $scope.selectedActivity.mod = data.getFormattedValue(selection[0].row, 4);
+        console.log($scope.selectedActivity);
+        
+    }
+    ;
+    // Setup listener to listen for clicks on table rows and process the selectHandler.
+    google.visualization.events.addListener(table, 'select', selectHandler);
+
 };
 var usersInCourseDashboard = function (result, $scope) {
     var data = new google.visualization.DataTable(result);
@@ -404,7 +442,7 @@ var usersInCourseDashboard = function (result, $scope) {
             }
         }
     });
-    
+
     // Create a category picker to filter role.
     var roleCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
@@ -418,12 +456,12 @@ var usersInCourseDashboard = function (result, $scope) {
             }
         }
     });
-    
+
     $scope.setRoleFilterForUsersInCourseDashboard = function (rolestring) {
-        roleCategoryPicker.setState( {'selectedValues': [rolestring]});
+        roleCategoryPicker.setState({'selectedValues': [rolestring]});
         roleCategoryPicker.draw();
-    }
-    
+    };
+
     // Create the table to display.
     var table = new google.visualization.ChartWrapper({
         chartType: 'Table',
@@ -671,8 +709,8 @@ var coursesOfUserDashboard = function (result, $scope) {
 
 function generatePassword() {
     var length = 10,
-        charset = "abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-        retVal = "";
+            charset = "abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+            retVal = "";
     for (var i = 0, n = charset.length; i < length; ++i) {
         retVal += charset.charAt(Math.floor(Math.random() * n));
     }
