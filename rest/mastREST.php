@@ -162,7 +162,12 @@ function getVocabulary() {
     $result['view'] = get_string('viewmore');
     $result['hide'] = get_string('hide');
     $result['editsettings'] = get_string('editsettings');
-
+    $result['inactive'] = get_string('inactive');
+    $result['newusers'] = get_string('newusers');
+    $result['personal'] = get_string('personal');
+    $result['info'] = get_string('info');
+    
+    //echo "<pre>" . print_r($result, true) . "</pre>";
     echo json_encode($result);
 }
 
@@ -438,6 +443,8 @@ function course($courseid) {
     $data['visible']['v'] = $course->visible;
     $data['idnumber']['string'] = get_string('idnumber');
     $data['idnumber']['v'] = $course->idnumber;
+    $data['category']['string'] = get_string('coursecategory');
+    $data['category']['v'] = $course->category;
 
     $context = context_course::instance($courseid);
     $data['roles']['string'] = get_string('roles');

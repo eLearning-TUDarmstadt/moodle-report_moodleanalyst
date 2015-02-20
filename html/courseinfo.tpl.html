@@ -35,6 +35,9 @@
             <loader ng-show="loadingCourse"></loader>
             <div class="table" ng-hide="loadingCourse">
                 <div class="panel panel-default">
+                    <div class="panel-heading panel-title">
+                        {{vocabulary.info}}
+                    </div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-4">{{course.data.id.string}}</div>
@@ -55,6 +58,10 @@
                         <div class="row">
                             <div class="col-md-4">{{course.data.visible.string}}</div>
                             <div class="col-md-8">{{course.data.visible.v}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">{{course.data.category.string}}</div>
+                            <div class="col-md-8">{{course.data.category.v}}</div>
                         </div>
                      </div> <!-- panel-body -->
                 </div> <!-- panel panel-default -->
@@ -88,66 +95,75 @@
                     </li>
                 </ul>
                 <div class="panel-body">
-                    <div ng-show="CourseDetailTab.isSet(1)">
-                        <div id="dashboardUsersInCourse">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title"></h3>
-                                    <div id="usersInCourse_name_filter_div"></div>
-                                    <div class="row">
-                                        <div class="col-md-6" id="usersInCourse_role_filter_div"></div>
+                    
+                    <!-- TAB 1 -->
+                    <div ng-show="CourseDetailTab.isSet(1)" id="dashboardUsersInCourse">
+                        <div class="panel panel-default panel-heading row">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div id="usersInCourse_name_filter_div"></div>
+                                        <div id="usersInCourse_role_filter_div"></div>
                                     </div>
                                 </div>
-                                <div class="panel-body" id="usersInCourse_table_div"></div>
                             </div>
+                            
+                            <div class="panel-body" id="usersInCourse_table_div"></div>
                         </div>
                     </div>
 
-                    <div ng-show="CourseDetailTab.isSet(2)">
-                        <div id="dashboardActivitiesInCourse">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title"></h3>
-                                    <div id="activitiesInCourse_name_filter_div"></div>
-                                    <div class="row">
-                                        <!-- <div class="col-md-4" id="activities_sectionnr_filter_div"></div> -->
-                                        <div class="col-md-6" id="activities_section_filter_div"></div>
-                                        <div class="col-md-6" id="activities_type_filter_div"></div>
-                                    </div>
+                    <!-- TAB 2 -->
+                    <div ng-show="CourseDetailTab.isSet(2)" id="dashboardActivitiesInCourse">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="panel-title"></div>
+                                <div id="activitiesInCourse_name_filter_div"></div>
+                                <div class="row">
+                                    <!-- <div class="col-md-4" id="activities_sectionnr_filter_div"></div> -->
+                                    <div class="col-md-6" id="activities_section_filter_div"></div>
+                                    <div class="col-md-6" id="activities_type_filter_div"></div>
                                 </div>
                             </div>
+                        </div>
+                        
+                        <div class="panel-body">
+                            <div class="btn-group" role="group" aria-label="..." ng-show="isActivitySelected">
+                                <a href=""><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-new-window" aria-hidden="true"></span> {{vocabulary.view}}</button></a>
+                                <a><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> {{vocabulary.editsettings}}</button></a>
+                                <a><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> {{vocabulary.show}}</button></a>
+                                <a><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span> {{vocabulary.hide}}</button></a>
+                            </div>
+                            <p></p>
+                            <div id="activitiesInCourse_table_div"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- TAB 3 -->
+                    <div ng-show="CourseDetailTab.isSet(3)" id="dashboardEnrolmentMethods">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="panel-title">{{vocabulary.enrolmentmethods}}</div>
+                            </div>
+
                             <div class="panel-body">
-                                <div class="btn-group" role="group" aria-label="..." ng-show="isActivitySelected">
-                                    <a href=""><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-new-window" aria-hidden="true"></span> {{vocabulary.view}}</button></a>
-                                    <a><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> {{vocabulary.editsettings}}</button></a>
-                                    <a><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> {{vocabulary.show}}</button></a>
-                                    <a><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span> {{vocabulary.hide}}</button></a>
+                                <div ng-repeat="enrol in course.data.enrolmentmethods">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <a href="/enrol/{{enrol.enrol}}/edit.php?courseid={{course.data.id.v}}&id={{enrol.id}}" target="_blank">{{enrol.name}}</a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{vocabulary.user}}: {{enrol.number}}
+                                        </div>
+                                        <div class="col-md-3" ng-show="enrol.password">
+                                            {{vocabulary.password}}: {{enrol.password}}
+                                        </div>
+                                    </div>
+                                    <p></p>
                                 </div>
-                                <p></p>
-                                <div id="activitiesInCourse_table_div"></div>
                             </div>
                         </div>
                     </div>
-                    <div ng-show="CourseDetailTab.isSet(3)">
-                        <div id="dashboardEnrolmentMethods">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">{{vocabulary.enrolmentmethods}}</h3>
-                                </div>
-
-                                <div class="panel-body">
-                                    <div ng-repeat="enrol in course.data.enrolmentmethods">
-                                        <div class="row">
-                                            <div class="col-md-6"><a href="/enrol/{{enrol.enrol}}/edit.php?courseid={{course.data.id.v}}&id={{enrol.id}}" target="_blank">{{enrol.name}}</a></div>
-                                            <div class="col-md-3">{{vocabulary.user}}: {{enrol.number}}</div>
-                                            <div class="col-md-3"><div ng-show="enrol.password">{{vocabulary.password}}: {{enrol.password}}</div></div>
-                                        </div>
-                                        <p></p>
-                                    </div>
-                                </div> <!-- panel-body -->
-                            </div> <!-- panel panel-default -->
-                        </div>
-                    </div>
+                    
                 </div> <!-- panel-body -->
             </div>  <!-- tab panel panel-default -->
         </div>  <!-- panel-body -->

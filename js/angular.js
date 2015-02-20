@@ -431,7 +431,7 @@ var usersInCourseDashboard = function (result, $scope) {
             filterColumnIndex: 4,
             ui: {
                 caption: $scope.vocabulary.role,
-                //label: '',
+                label: '',
                 allowTyping: false
             }
         }
@@ -500,7 +500,7 @@ var courseSearchDashboard = function (result, $scope) {
             filterColumnIndex: 1,
             ui: {
                 caption: $scope.vocabulary.grandparentcategory,
-                //label: $scope.vocabulary.category,
+                label: '',
                 allowTyping: false
             }
         }
@@ -513,7 +513,7 @@ var courseSearchDashboard = function (result, $scope) {
             filterColumnIndex: 2,
             ui: {
                 caption: $scope.vocabulary.parentcategory,
-                //label: '',
+                label: '',
                 allowTyping: false
             }
         }

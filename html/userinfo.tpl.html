@@ -33,6 +33,10 @@
                 </div> <!-- panel panel-default -->
                                 
                 <div class="panel panel-default">
+                    <div class="panel-heading panel-title">
+                        {{vocabulary.personal}}
+                    </div>
+                    
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-4">{{user.id.string}}</div>
@@ -91,16 +95,23 @@
                 <div id="dashboardCoursesOfUser">
                     <div class="panel panel-default">
                         <div class="panel-heading panel-title">
-                            <h4>{{vocabulary.searchcourses}}</h4>    
+                            <div>{{vocabulary.searchcourses}}</div>    
                         </div>
                         <div class="panel-body">
-                            <div id="coursesOfUser_name_filter_div"></div>
-                            <div class="row">
-                                <div class="col-md-4" id="coursesOfUser_grandparentcategory_filter_div"></div>
-                                <div class="col-md-4" id="coursesOfUser_parentcategory_filter_div"></div>
-                                <div class="col-md-4" id="coursesOfUser_role_filter_div"></div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <div id="coursesOfUser_name_filter_div"></div>
+                                    <div class="row">
+                                        <div class="col-md-4" id="coursesOfUser_grandparentcategory_filter_div"></div>
+                                        <div class="col-md-4" id="coursesOfUser_parentcategory_filter_div"></div>
+                                        <div class="col-md-4" id="coursesOfUser_role_filter_div"></div>
+                                    </div>
+                                </div>
+                            
+                                <div class="panel-body">
+                                    <div id="coursesOfUser_table_div"></div>
+                                </div>
                             </div>
-                            <div id="coursesOfUser_table_div"></div>
                         </div> <!-- panel-body -->
                     </div> <!-- panel panel-default -->
                 </div>
