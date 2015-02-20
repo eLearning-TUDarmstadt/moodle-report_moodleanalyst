@@ -34,27 +34,33 @@
         <div class="panel-body">
             <loader ng-show="loadingCourse"></loader>
             <div class="table" ng-hide="loadingCourse">
-                <div class="row">
-                    <div class="col-md-4">{{course.data.id.string}}</div>
-                    <div class="col-md-8">{{course.data.id.v}}</div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">{{course.data.shortname.string}}</div>
-                    <div class="col-md-8">{{course.data.shortname.v}}</div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">{{course.data.fullname.string}}</div>
-                    <div class="col-md-8">{{course.data.fullname.v}}</div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">{{course.data.idnumber.string}}</div>
-                    <div class="col-md-8">{{course.data.idnumber.v}}</div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">{{course.data.visible.string}}</div>
-                    <div class="col-md-8">{{course.data.visible.v}}</div>
-                </div>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4">{{course.data.id.string}}</div>
+                            <div class="col-md-8">{{course.data.id.v}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">{{course.data.shortname.string}}</div>
+                            <div class="col-md-8">{{course.data.shortname.v}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">{{course.data.fullname.string}}</div>
+                            <div class="col-md-8">{{course.data.fullname.v}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">{{course.data.idnumber.string}}</div>
+                            <div class="col-md-8">{{course.data.idnumber.v}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">{{course.data.visible.string}}</div>
+                            <div class="col-md-8">{{course.data.visible.v}}</div>
+                        </div>
+                     </div> <!-- panel-body -->
+                </div> <!-- panel panel-default -->
+                
                 <p></p>
+                
                 <div class="panel panel-default" ng-hide="loadingCourse">
                     <div class="panel-heading">
                         <div class="panel-title">{{vocabulary.enrolledusers}}: {{course.data.personsInCourse}}</div>
@@ -66,14 +72,7 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- 
-                <div class="row" ng-repeat="item in course.data">
-                    <div class="col-md-4">{{item.string}}</div>
-                    <div class="col-md-8">{{item.v}}</div>
-                </div>
-                -->
-            </div>
+            </div> <!-- table -->
 
             <div class="tab panel panel-default" ng-controller="CourseDetailTabController
                         as CourseDetailTab" ng-hide="loadingCourse">
@@ -145,12 +144,12 @@
                                         </div>
                                         <p></p>
                                     </div>
-                                </div>
-                            </div>
+                                </div> <!-- panel-body -->
+                            </div> <!-- panel panel-default -->
                         </div>
                     </div>
                 </div> <!-- panel-body -->
-            </div>  <!-- tab panel -->
+            </div>  <!-- tab panel panel-default -->
         </div>  <!-- panel-body -->
     </div>  <!-- panel-primary -->
 </div>

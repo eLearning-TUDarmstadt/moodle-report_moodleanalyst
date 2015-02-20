@@ -16,68 +16,78 @@
         <div class="panel-body">
             <loader ng-show="loadingUser"></loader>
             <div class="table">
-                <div class="row panel-body" ng-show="course.data.id.v">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <div class="col-md-4">
-                                <button ng-click="addUserToCourse(user.id.v, course.data.id.v, selectedRole);" type="button" class="btn btn-default" aria-label="">
-                                    <span class="glyphicon glyphicon-arrow-left"></span> {{vocabulary.enrol}}
-                                </button>
-                            </div>
-                            <div class="col-md-8">
-                                <label>{{vocabulary.role}} ({{vocabulary.default}}: {{vocabulary.student}}):</label>
-                                <select ng-model="selectedRole">
-                                    <option ng-repeat="role in course.data.roles.v" value="{{role.id}}">{{role.name}}</option>
-                                </select>
-                            </div>
+                <div class="panel panel-default" ng-show="course.data.id.v">
+                    <div class="row panel-body">
+                        <div class="col-md-4">
+                            <button ng-click="addUserToCourse(user.id.v, course.data.id.v, selectedRole);" type="button" class="btn btn-default" aria-label="">
+                                <span class="glyphicon glyphicon-arrow-left"></span> {{vocabulary.enrol}}
+                            </button>
                         </div>
-                    </div>
-                </div>
+                        <div class="col-md-8">
+                            <label>{{vocabulary.role}} ({{vocabulary.default}}: {{vocabulary.student}}):</label>
+                            <select ng-model="selectedRole">
+                                <option ng-repeat="role in course.data.roles.v" value="{{role.id}}">{{role.name}}</option>
+                            </select>
+                        </div>
+                    </div> <!-- row panel-body -->
+                </div> <!-- panel panel-default -->
+                                
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4">{{user.id.string}}</div>
+                            <div class="col-md-8">{{user.id.v}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">{{user.username.string}}</div>
+                            <div class="col-md-8">{{user.username.v}}</div>
+                        </div>
+                        
+                        <p></p>
+                
+                        <div class="row">
+                            <div class="col-md-4">{{user.firstname.string}}</div>
+                            <div class="col-md-8">{{user.firstname.v}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">{{user.lastname.string}}</div>
+                            <div class="col-md-8">{{user.lastname.v}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">{{user.email.string}}</div>
+                            <div class="col-md-8"><a href="mailto:{{user.email.v}}">{{user.email.v}}</a></div>
+                        </div>
+                        
+                        <p></p>
+                        
+                        <div class="row">
+                            <div class="col-md-4">{{user.firstaccess.string}}</div>
+                            <div class="col-md-8">{{user.firstaccess.v}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">{{user.lastlogin.string}}</div>
+                            <div class="col-md-8">{{user.lastlogin.v}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">{{user.lastaccess.string}}</div>
+                            <div class="col-md-8">{{user.lastaccess.v}}</div>
+                        </div>
+                        
+                        <p></p>
+                        
+                        <div class="row">
+                            <div class="col-md-4">{{user.auth.string}}</div>
+                            <div class="col-md-8">{{user.auth.v}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">{{user.lang.string}}</div>
+                            <div class="col-md-8">{{user.lang.v}}</div>
+                        </div>
+                    </div> <!-- panel-body -->
+                </div> <!-- panel panel-default -->
+                
                 <p></p>
-                <div class="row">
-                    <div class="col-md-4">{{user.id.string}}</div>
-                    <div class="col-md-8">{{user.id.v}}</div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">{{user.username.string}}</div>
-                    <div class="col-md-8">{{user.username.v}}</div>
-                </div>
-                <p></p>
-                <div class="row">
-                    <div class="col-md-4">{{user.firstname.string}}</div>
-                    <div class="col-md-8">{{user.firstname.v}}</div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">{{user.lastname.string}}</div>
-                    <div class="col-md-8">{{user.lastname.v}}</div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">{{user.email.string}}</div>
-                    <div class="col-md-8"><a href="mailto:{{user.email.v}}">{{user.email.v}}</a></div>
-                </div>
-                <p></p>
-                <div class="row">
-                    <div class="col-md-4">{{user.firstaccess.string}}</div>
-                    <div class="col-md-8">{{user.firstaccess.v}}</div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">{{user.lastlogin.string}}</div>
-                    <div class="col-md-8">{{user.lastlogin.v}}</div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">{{user.lastaccess.string}}</div>
-                    <div class="col-md-8">{{user.lastaccess.v}}</div>
-                </div>
-                <p></p>
-                <div class="row">
-                    <div class="col-md-4">{{user.auth.string}}</div>
-                    <div class="col-md-8">{{user.auth.v}}</div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">{{user.lang.string}}</div>
-                    <div class="col-md-8">{{user.lang.v}}</div>
-                </div>
-                <p></p>
+                
                 <div id="dashboardCoursesOfUser">
                     <div class="panel panel-default">
                         <div class="panel-heading panel-title">
@@ -91,15 +101,9 @@
                                 <div class="col-md-4" id="coursesOfUser_role_filter_div"></div>
                             </div>
                             <div id="coursesOfUser_table_div"></div>
-                        </div>
-                    </div>
+                        </div> <!-- panel-body -->
+                    </div> <!-- panel panel-default -->
                 </div>
-                <!--
-                <div class="row" ng-repeat="user in user">
-                    <div class="col-md-4">{{user.string}}</div>
-                    <div class="col-md-8">{{user.v}}</div>
-                </div>
-                -->
             </div>  <!-- table -->
         </div>  <!-- panel-body -->
     </div>  <!-- panel-primary -->

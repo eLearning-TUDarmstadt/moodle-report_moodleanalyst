@@ -74,26 +74,6 @@ app.directive('overview', function () {
     };
 });
 
-app.controller('HeaderController', ['$scope', function ($scope) {
-        $scope.tab = 1;
-
-        // WIRD DIESER CODE NOCH GENUTZT?!
-
-        this.setTab = function (newValue) {
-            console.log("Hello this");
-            $scope.tab = newValue;
-        };
-
-        $scope.setTab = function (newValue) {
-
-            console.log("Hello scope");
-            $scope.tab = newValue;
-        };
-
-        this.isSet = function (tabName) {
-            return $scope.tab === tabName;
-        };
-    }]);
 app.controller('CourseDetailTabController', ['$scope', function ($scope) {
         this.tab = 1;
 
