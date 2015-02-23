@@ -426,8 +426,8 @@ function user($userid) {
 }
 
 function course($courseid) {
-    //global $PAGE;
-    //$PAGE->set_context();
+    global $CFG;
+    require_once $CFG->dirroot . '/lib/coursecatlib.php';
     require_login();
     $course = get_course($courseid);
 
@@ -442,8 +442,16 @@ function course($courseid) {
     $data['visible']['v'] = $course->visible;
     $data['idnumber']['string'] = get_string('idnumber');
     $data['idnumber']['v'] = $course->idnumber;
+    
     $data['category']['string'] = get_string('coursecategory');
-    $data['category']['v'] = $course->category;
+    $category = coursecat::get($course->category);
+    $parents = $category->get_parents();
+    
+    $breadcrumb = "// " . coursecat::get($course->category)->name . " ";
+    foreach ($parents as $key => $id) {
+        $breadcrumb .= "// " . coursecat::get($id)->name . " "; 
+    }
+    $data['category']['v'] = $breadcrumb;
 
     $context = context_course::instance($courseid);
     $data['roles']['string'] = get_string('roles');
