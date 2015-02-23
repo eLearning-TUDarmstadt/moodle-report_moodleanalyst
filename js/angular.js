@@ -74,26 +74,6 @@ app.directive('overview', function () {
     };
 });
 
-app.controller('HeaderController', ['$scope', function ($scope) {
-        $scope.tab = 1;
-
-        // WIRD DIESER CODE NOCH GENUTZT?!
-
-        this.setTab = function (newValue) {
-            console.log("Hello this");
-            $scope.tab = newValue;
-        };
-
-        $scope.setTab = function (newValue) {
-
-            console.log("Hello scope");
-            $scope.tab = newValue;
-        };
-
-        this.isSet = function (tabName) {
-            return $scope.tab === tabName;
-        };
-    }]);
 app.controller('CourseDetailTabController', ['$scope', function ($scope) {
         this.tab = 1;
 
@@ -451,7 +431,7 @@ var usersInCourseDashboard = function (result, $scope) {
             filterColumnIndex: 4,
             ui: {
                 caption: $scope.vocabulary.role,
-                //label: '',
+                label: '',
                 allowTyping: false
             }
         }
@@ -520,7 +500,7 @@ var courseSearchDashboard = function (result, $scope) {
             filterColumnIndex: 1,
             ui: {
                 caption: $scope.vocabulary.grandparentcategory,
-                //label: $scope.vocabulary.category,
+                label: '',
                 allowTyping: false
             }
         }
@@ -533,7 +513,7 @@ var courseSearchDashboard = function (result, $scope) {
             filterColumnIndex: 2,
             ui: {
                 caption: $scope.vocabulary.parentcategory,
-                //label: '',
+                label: '',
                 allowTyping: false
             }
         }

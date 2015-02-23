@@ -51,8 +51,8 @@
                                         <span class="glyphicon glyphicon-stats"></span> {{vocabulary.statistics}}<b class="caret"></b>
                                     </a>
                                     <ul class="dropdown-menu" role="menu">
-                                        <li role="presentation"><a id="tablink_inactiveusers" href="#tabs-3" role="tab" data-toggle="tab">Inactive users</a></li>
-                                        <li role="presentation"><a id="tablink_recentlyaddedusers" href="#tabs-4" role="tab" data-toggle="tab">Recently added users</a></li>
+                                        <li role="presentation"><a id="tablink_newusers" href="#tabs-3" role="tab" data-toggle="tab">{{vocabulary.newusers}}</a></li>
+                                        <li role="presentation"><a id="tablink_inactiveusers" href="#tabs-4" role="tab" data-toggle="tab">Inactive users</a></li>
                                         <li role="presentation"><a id="tablink_emptycourses" href="#tabs-5" role="tab" data-toggle="tab">Empty courses</a></li>
                                     </ul>
                                 </li>
@@ -75,10 +75,10 @@
                         <newcourseform></newcourseform>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="tabs-3">
-                        <div ng-include="'inactiveusers.tpl.html'"></div>
+                        <div ng-include="'newusers.tpl.html'"></div>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="tabs-4">
-                        <div ng-include="'recentlyaddedusers.tpl.html'"></div>
+                        <div ng-include="'inactiveusers.tpl.html'"></div>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="tabs-5">
                         <div ng-include="'emptycourses.tpl.html'"></div>
@@ -87,8 +87,14 @@
                 
                 <footer class="navbar-inverse navbar-fixed-bottom">
                     <div class="container-fluid">
-                        <p class="pull-right" id="backtotop"><a href="" target="_self" style="color:#A4A4A4;">Back to top</a></p>
-                        <p style="color:#A4A4A4;"><span class="glyphicon glyphicon-copyright-mark"></span> All Rights reserved.</p>
+                        <p class="pull-right" id="backtotop">
+                            <a href="" target="_self" style="color:#A4A4A4;">
+                                {{vocabulary.backtotop}}
+                            </a>
+                        </p>
+                        <p style="color:#A4A4A4;">
+                            <span class="glyphicon glyphicon-copyright-mark"></span> All Rights reserved.
+                        </p>
                     </div>
                 </footer>
         </div> <!-- wrapper -->
