@@ -166,6 +166,7 @@ function getVocabulary() {
     $result['newusers'] = get_string('newusers');
     $result['personal'] = get_string('personal');
     $result['info'] = get_string('info');
+    $result['search'] = get_string('search');
     
     //echo "<pre>" . print_r($result, true) . "</pre>";
     echo json_encode($result);
