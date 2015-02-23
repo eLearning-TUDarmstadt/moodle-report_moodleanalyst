@@ -162,11 +162,10 @@ function getVocabulary() {
     $result['view'] = get_string('viewmore');
     $result['hide'] = get_string('hide');
     $result['editsettings'] = get_string('editsettings');
-    $result['inactive'] = get_string('inactive');
     $result['newusers'] = get_string('newusers');
     $result['personal'] = get_string('personal');
-    $result['info'] = get_string('info');
-    $result['search'] = get_string('search');
+    $result['courseinfo'] = get_string('courseinfo');
+    $result['backtotop'] = get_string('backto', 'moodle', get_string('top'));
     
     //echo "<pre>" . print_r($result, true) . "</pre>";
     echo json_encode($result);
