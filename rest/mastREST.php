@@ -212,7 +212,6 @@ function getActivitiesInCourse($courseid) {
     //echo "<pre>" . print_r($activities, true) . "</pre>";
 
     foreach ($activities as $modid => $activity) {
-        
         if($activity->visible) {
             $class="";
         } else {
