@@ -77,6 +77,22 @@ app.directive('overview', function () {
 app.controller('CourseDetailTabController', ['$scope', function ($scope) {
         this.tab = 1;
 
+        $scope.isActivitySelected = false;
+        $scope.activity = [];
+        $scope.activity.id = null;
+        $scope.activity.cm = null;
+        $scope.activity.mod = null;
+        $scope.activity.visible = null;
+        
+
+        $scope.setActivity = function(id, cm, mod, visible) {
+            $scope.activity.id = id;
+            $scope.activity.cm = cm;
+            $scope.activity.mod = mod;
+            $scope.activity.visible = visible;
+            console.log($scope.activity);
+        };
+
         this.setTab = function (newValue) {
             this.tab = newValue;
         };
@@ -96,7 +112,6 @@ app.directive('loader', function () {
         template: '<img style="display: block; margin-left: auto; margin-right: auto;" src="/report/moodleanalyst/pix/ajax-loader.gif">'
     };
 });
-
 app.directive('coursesearch', function () {
     return {
         restrict: 'E',
@@ -114,7 +129,6 @@ app.directive('coursesearch', function () {
         controllerAs: 'courseSearchCtrl'
     }
 });
-
 app.directive('usersearch', function () {
     return {
         restrict: 'E',
@@ -132,7 +146,6 @@ app.directive('usersearch', function () {
         controllerAs: 'userSearchCtrl'
     }
 });
-
 app.directive('courseinfo', function () {
     return {
         restrict: 'E',
@@ -145,11 +158,11 @@ app.directive('courseinfo', function () {
                 $scope.selectedActivity.id = null;
                 $scope.selectedActivity.cm = null;
                 $scope.selectedActivity.mod = null;
-                
+
                 $scope.didSelectACourse = function (courseid) {
                     $http.get('/report/moodleanalyst/rest/mastREST.php/course/' + courseid)
                             .success(function (data) {
-                                console.log(data);
+                                //console.log(data);
                                 $scope.loadingCourse = false;
                                 $scope.course = data;
                                 $http.get('/report/moodleanalyst/rest/mastREST.php/course/getPersons/' + courseid)
@@ -175,7 +188,6 @@ app.directive('courseinfo', function () {
         controllerAs: 'courseInfoCtrl'
     }
 });
-
 app.directive('userinfo', function () {
     return {
         restrict: 'E',
@@ -209,7 +221,6 @@ app.directive('userinfo', function () {
         controllerAs: 'userInfoCtrl'
     }
 });
-
 app.directive('newcourseform', function () {
     return {
         restrict: 'E',
@@ -365,11 +376,12 @@ var activitiesInCourseDashboard = function (result, $scope) {
         containerId: 'activitiesInCourse_table_div',
         options: {
             showRowNumber: false,
+            width: '100%',
             page: 'enable',
             pageSize: 25,
             allowHtml: true,
-            sortColumn: 0,
-            sortAscending: false
+            //sortColumn: 0,
+            //sortAscending: false
         },
         view: {
             // 0: instance
@@ -379,7 +391,7 @@ var activitiesInCourseDashboard = function (result, $scope) {
             // 4: mod - moodle internal mod name, for example forum, chat, assign, choice
             // 5: course module id (cm)
             // 6: visible (1 || 0)
-            columns: [1, 2, 3]
+            columns: [1, 2, 3, 6]
         }
     });
     // Establish dependencies.
@@ -390,18 +402,27 @@ var activitiesInCourseDashboard = function (result, $scope) {
 
     // Define what to do when selecting a table row.
     function selectHandler() {
-
-        var selection = table.getChart().getSelection();
-        $scope.userid = data.getFormattedValue(selection[0].row, 0);
-        $scope.isActivitySelected = true;
-        $scope.selectedActivity = [];
-        $scope.selectedActivity.id = data.getFormattedValue(selection[0].row, 0);
-        $scope.selectedActivity.cm = data.getFormattedValue(selection[0].row, 5);
-        $scope.selectedActivity.mod = data.getFormattedValue(selection[0].row, 4);
-        console.log($scope.selectedActivity);
+        var selection = table.getChart().getSelection()[0];
+        selection = table.getDataTable().getTableRowIndex(selection.row);
         
+        id = data.getFormattedValue(selection, 0);
+        cm = data.getFormattedValue(selection, 5);
+        mod = data.getFormattedValue(selection, 4);
+        visible = data.getFormattedValue(selection, 6);
+
+        scope = angular.element(document.getElementById("tabController")).scope();
+        scope.$apply(function () {
+            scope.setActivity(id, cm, mod, visible);
+        });
+        /*
+         $scope.activity.id = id;
+         $scope.activity.cm = cm;
+         $scope.activity.mod = mod;
+         */
+        //angular.element(document.getElementById('CourseDetailTabController')).scope().setActivity(id, cm, mod);
     }
     ;
+
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
 

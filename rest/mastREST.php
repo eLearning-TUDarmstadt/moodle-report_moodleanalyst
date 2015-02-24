@@ -209,7 +209,7 @@ function getActivitiesInCourse($courseid) {
     $table['cols'][] = array('label' => get_string('name'), 'type' => 'string');
     $table['cols'][] = array('label' => 'mod', 'type' => 'string');
     $table['cols'][] = array('label' => 'cm', 'type' => 'string');
-    $table['cols'][] = array('label' => 'visibility', 'type' => 'number');
+    $table['cols'][] = array('label' => get_string('visible'), 'type' => 'boolean');
 
 
     $table['rows'] = array();
@@ -230,6 +230,7 @@ function getActivitiesInCourse($courseid) {
         $icon = ''; //"<img src='" . $OUTPUT->pix_url('icon', 'mod_'.$activity->mod) . "'>";
         $activityType = $spanBegin . $icon . get_string('pluginname', $activity->mod) . $spanEnd;
         //$table['rows'][] = ['c' => array('v' => $sectionname), array('v' => $activityType), array('v' => $activityname)];
+        $visibility = ($activity->visible) ? true : false ;
         $table['rows'][] = ['c' => array(
             ['v' => $activity->id],
             ['v' => $sectionname],
@@ -237,7 +238,7 @@ function getActivitiesInCourse($courseid) {
             ['v' => $activityname],
             ['v' => $activity->mod],
             ['v' => $activity->cm],
-            ['v' => $activity->visible]
+            ['v' => $visibility]
         )];
     }
     //printArray($table);
@@ -566,6 +567,7 @@ function allUsersWithLastAccess() {
     $result['cols'][] = array('label' => get_string('firstname'), 'type' => 'string');
     $result['cols'][] = array('label' => get_string('lastname'), 'type' => 'string');
     $result['cols'][] = array('label' => get_string('email'), 'type' => 'string');
+    $result['cols'][] = array('label' => get_string('lastaccess'), 'type' => 'date');
     $result['cols'][] = array('label' => get_string('fullname'), 'type' => 'string');
     $result['rows'] = array();
 
@@ -577,6 +579,7 @@ function allUsersWithLastAccess() {
                 array('v' => $user->firstname),
                 array('v' => $user->lastname),
                 array('v' => $user->email),
+                array('v' => date('D M d Y H:i:s O', $user->lastaccess)),
                 array('v' => $user->firstname . ' ' . $user->lastname)
             )
         ];

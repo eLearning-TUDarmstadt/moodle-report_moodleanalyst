@@ -82,7 +82,7 @@
             </div> <!-- table -->
 
             <div class="tab panel panel-default" ng-controller="CourseDetailTabController
-                        as CourseDetailTab" ng-hide="loadingCourse">
+                        as CourseDetailTab" ng-hide="loadingCourse" id="tabController">
                 <ul class="nav nav-pills panel-heading">
                     <li ng-class="{ active: CourseDetailTab.isSet(1) }">
                         <a href ng-click="CourseDetailTab.setTab(1)">{{vocabulary.enrolledusers}}</a>
@@ -127,11 +127,11 @@
                         </div>
                         
                         <div class="panel-body">
-                            <div class="btn-group" role="group" aria-label="..." ng-show="isActivitySelected">
-                                <a href=""><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-new-window" aria-hidden="true"></span> {{vocabulary.view}}</button></a>
-                                <a><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> {{vocabulary.editsettings}}</button></a>
-                                <a><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> {{vocabulary.show}}</button></a>
-                                <a><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span> {{vocabulary.hide}}</button></a>
+                            <div class="btn-group" role="group" aria-label="..." ng-show="activity.id">
+                                <a href="/mod/{{activity.mod}}/view.php?id={{activity.cm}}" target="_blanc"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-new-window" aria-hidden="true"></span> {{vocabulary.view}}</button></a>
+                                <a href="/course/mod.php?update={{activity.cm}}" target="_blanc"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> {{vocabulary.editsettings}}</button></a>
+                                <!-- <a href="/course/mod.php?hide={{activity.cm}}" target="_blanc" ng-show="activity.visible === 1"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> {{vocabulary.show}}</button></a>-->
+                                <!-- <a href="/course/mod.php?show={{activity.cm}}" target="_blanc" ng-show="activity.visible === 0"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span> {{vocabulary.hide}}</button></a>-->
                             </div>
                             <p></p>
                             <div id="activitiesInCourse_table_div"></div>
