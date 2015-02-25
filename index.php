@@ -13,7 +13,8 @@ global $OUTPUT;
 
 $context = context_system::instance();
 require_capability('report/moodleanalyst:view', $context);
-
+ 
+ 
 echo '<script type="text/javascript">
 
 window.location = "/report/moodleanalyst/html/angular.html";
