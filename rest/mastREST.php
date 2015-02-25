@@ -305,6 +305,7 @@ function user($userid) {
     $courses_enrolled['cols'][] = array('label' => get_string('parentcategory', 'report_moodleanalyst'), 'type' => 'string');
     $courses_enrolled['cols'][] = array('label' => get_string('course', 'report_moodleanalyst'), 'type' => 'string');
     $courses_enrolled['cols'][] = array('label' => get_string('roles'), 'type' => 'string');
+    $courses_enrolled['cols'][] = array('label' => get_string('visible'), 'type' => 'boolean');
     $courses_enrolled['rows'] = array();
 
     foreach ($courses as $courseid => $course) {
@@ -327,13 +328,15 @@ function user($userid) {
         $course->roles = get_user_roles($context, $userid);
 
         foreach ($course->roles as $roleid => $role) {
+            $visible = ($course->visible) ? true : false;
             $courses_enrolled['rows'][] = [
                 'c' => array(
                     ['v' => $course->id],
                     array('v' => $course->parentcategoryname),
                     array('v' => $course->categoryname),
                     array('v' => $course->fullname),
-                    array('v' => role_get_name($role))
+                    array('v' => role_get_name($role)),
+                    array('v' => $visible)
                 )
             ];
         }
@@ -601,6 +604,8 @@ function allCourses() {
     $result['cols'][] = array('label' => get_string('grandparentcategory', 'report_moodleanalyst'), 'type' => 'string');
     $result['cols'][] = array('label' => get_string('parentcategory', 'report_moodleanalyst'), 'type' => 'string');
     $result['cols'][] = array('label' => get_string('course', 'report_moodleanalyst'), 'type' => 'string');
+    $result['cols'][] = array('label' => get_string('visible'), 'type' => 'boolean');
+    
     $result['rows'] = array();
 
     foreach ($courses as $courseid => $data) {
@@ -619,7 +624,8 @@ function allCourses() {
         }
         $coursename = $data->fullname;
         // Filling the return table
-        $result['rows'][] = ['c' => array(['v' => $data->id], array('v' => $data->grandparentcategoryname), array('v' => $data->parentcategoryname), array('v' => $coursename))];
+        $data->visible = ($data->visible) ? true : false ;
+        $result['rows'][] = ['c' => array(['v' => $data->id], array('v' => $data->grandparentcategoryname), array('v' => $data->parentcategoryname), array('v' => $coursename), array('v' => $data->visible))];
     }
     echo json_encode($result);
     //printArray($result);

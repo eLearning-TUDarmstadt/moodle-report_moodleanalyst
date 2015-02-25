@@ -3,7 +3,7 @@
         <div class="panel-heading">
             <div class="panel-title row">
                 <div class="col-md-12">
-                    <a href="/course/view.php?id={{course.data.id.v}}" target="_blank" style="color: #000000">{{course.data.shortname.v}}</a>
+                    <a href="/course/view.php?id={{course.data.id.v}}" target="_blank" style="color: #000000"><h4 ng-class="{'dimmed': course.data.visible.v == 0}">{{course.data.shortname.v}}</h4></a>
 
                     <div class="btn-group btn-group-xs pull-right" role="toolbar" ng-show="course.data">
                         <a href="/course/edit.php?id={{course.data.id.v}}" target="_blank">
@@ -70,7 +70,7 @@
                 
                 <div class="panel panel-default" ng-hide="loadingCourse">
                     <div class="panel-heading">
-                        <div class="panel-title">{{vocabulary.enrolledusers}}: {{course.data.personsInCourse}}</div>
+                        <div class="panel-title"><a href="/enrol/users.php?id={{course.data.id.v}}" target="_blanc">{{vocabulary.enrolledusers}}: {{course.data.personsInCourse}}</a></div>
                     </div>
                     <div class="panel-body">
                         <div class="row" ng-repeat="role in course.data.rolesInCourse| orderBy:role.sortorder">
@@ -142,7 +142,7 @@
                     <div ng-show="CourseDetailTab.isSet(3)" id="dashboardEnrolmentMethods">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <div class="panel-title">{{vocabulary.enrolmentmethods}}</div>
+                                <div class="panel-title"><a target="_blanc" href="/enrol/instances.php?id={{course.data.id.v}}">{{vocabulary.enrolmentmethods}}</a></div>
                             </div>
 
                             <div class="panel-body">
