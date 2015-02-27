@@ -10,7 +10,6 @@ defined('MOODLE_INTERNAL') || die;
 $context = context_system::instance();
 require_capability('report/moodleanalyst:view', $context);
 
-//$googleLibs = 'https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["table","corechart","controls"]}]}';
 $googleLibs = 'https://www.google.com/jsapi?autoload={%22modules%22:[{%22name%22:%22visualization%22,%22version%22:%221%22,%22packages%22:[%22table%22,%22corechart%22,%22controls%22]}]}';
 /*
  * Old referrer to angular.html 
