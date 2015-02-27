@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 
+wwwroot = document.getElementById("angularJSloader").getAttribute("wwwroot");
 var app = angular.module('overview', []);
 
 // BEGIN MODAL
@@ -54,19 +55,19 @@ app.directive('modal', function () {
 app.directive('overview', function () {
     return {
         restrict: 'E',
-        templateUrl: '/report/moodleanalyst/html/overview.tpl.html',
+        templateUrl: wwwroot + '/report/moodleanalyst/html/overview.tpl.html',
         controller: [
             '$http', '$scope', function ($http, $scope) {
                 $scope.showModal = false;
                 $scope.toggleModal = function () {
                     $scope.showModal = !$scope.showModal;
                 };
-                $http.get('/report/moodleanalyst/rest/mastREST.php/isUserLoggedIn')
+                $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/isUserLoggedIn')
                         .error(function (data, status, headers, config) {
                             $scope.toggleModal();
                         });
                 $scope.vocabulary = null;
-                $http.get('/report/moodleanalyst/rest/mastREST.php/vocabulary')
+                $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/vocabulary')
                         .success(function (result) {
                             $scope.vocabulary = result;
                         });
@@ -123,12 +124,12 @@ app.directive('loader', function () {
 app.directive('coursesearch', function () {
     return {
         restrict: 'E',
-        templateUrl: '/report/moodleanalyst/html/coursesearch.tpl.html',
+        templateUrl: wwwroot + '/report/moodleanalyst/html/coursesearch.tpl.html',
         controller: [
             '$http', '$scope', function ($http, $scope) {
                 $scope.courseid = false;
                 $scope.gotAllCourses = false;
-                $http.get('/report/moodleanalyst/rest/mastREST.php/allCourses')
+                $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/allCourses')
                         .success(function (result) {
                             $scope.gotAllCourses = true;
                             courseSearchDashboard(result, $scope);
@@ -140,12 +141,12 @@ app.directive('coursesearch', function () {
 app.directive('usersearch', function () {
     return {
         restrict: 'E',
-        templateUrl: '/report/moodleanalyst/html/usersearch.tpl.html',
+        templateUrl: wwwroot + '/report/moodleanalyst/html/usersearch.tpl.html',
         controller: [
             '$http', '$scope', function ($http, $scope) {
                 $scope.courseid = false;
                 $scope.gotAllUsers = false;
-                $http.get('/report/moodleanalyst/rest/mastREST.php/allUsers')
+                $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/allUsers')
                         .success(function (result) {
                             $scope.gotAllUsers = true;
                             userSearchDashboard(result, $scope);
@@ -157,7 +158,7 @@ app.directive('usersearch', function () {
 app.directive('courseinfo', function () {
     return {
         restrict: 'E',
-        templateUrl: '/report/moodleanalyst/html/courseinfo.tpl.html',
+        templateUrl: wwwroot + '/report/moodleanalyst/html/courseinfo.tpl.html',
         controller: [
             '$http', '$scope', function ($http, $scope) {
 
@@ -168,15 +169,15 @@ app.directive('courseinfo', function () {
                 $scope.selectedActivity.mod = null;
 
                 $scope.didSelectACourse = function (courseid) {
-                    $http.get('/report/moodleanalyst/rest/mastREST.php/course/' + courseid)
+                    $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/course/' + courseid)
                             .success(function (data) {
                                 //console.log(data);
                                 $scope.loadingCourse = false;
                                 $scope.course = data;
-                                $http.get('/report/moodleanalyst/rest/mastREST.php/course/getPersons/' + courseid)
+                                $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/course/getPersons/' + courseid)
                                         .success(function (result) {
                                             usersInCourseDashboard(result, $scope);
-                                            $http.get('/report/moodleanalyst/rest/mastREST.php/course/getActivities/' + courseid)
+                                            $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/course/getActivities/' + courseid)
                                                     .success(function (result) {
                                                         activitiesInCourseDashboard(result, $scope);
                                                     });
@@ -187,7 +188,7 @@ app.directive('courseinfo', function () {
                 $scope.changeVisibility = function (courseid, visibility) {
                     $scope.loadingCourse = true;
                     $scope.course = null;
-                    $http.get('/report/moodleanalyst/rest/mastREST.php/course/' + courseid + '/setVisibility/' + visibility)
+                    $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/course/' + courseid + '/setVisibility/' + visibility)
                             .success(function () {
                                 $scope.didSelectACourse(courseid);
                             });
@@ -199,12 +200,12 @@ app.directive('courseinfo', function () {
 app.directive('userinfo', function () {
     return {
         restrict: 'E',
-        templateUrl: '/report/moodleanalyst/html/userinfo.tpl.html',
+        templateUrl: wwwroot + '/report/moodleanalyst/html/userinfo.tpl.html',
         controller: [
             '$http', '$scope', function ($http, $scope) {
                 $scope.didSelectAUser = function (userid) {
                     $scope.selectedUser = null;
-                    $http.get('/report/moodleanalyst/rest/mastREST.php/user/' + userid)
+                    $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/user/' + userid)
                             .success(function (data) {
                                 console.log(data);
                                 $scope.loadingUser = false;
@@ -218,7 +219,7 @@ app.directive('userinfo', function () {
                     $scope.loadingUser = true;
                     $scope.user = null;
                     $scope.course = null;
-                    $http.get('/report/moodleanalyst/rest/mastREST.php/addUser/' + userid + '/ToCourse/' + courseid + '/withRole/' + roleid)
+                    $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/addUser/' + userid + '/ToCourse/' + courseid + '/withRole/' + roleid)
                             .success(function (data) {
                                 $scope.didSelectACourse(courseid);
                                 $scope.didSelectAUser(userid);
@@ -232,10 +233,10 @@ app.directive('userinfo', function () {
 app.directive('newcourseform', function () {
     return {
         restrict: 'E',
-        templateUrl: '/report/moodleanalyst/html/createnewcourse.tpl.html',
+        templateUrl: wwwroot + '/report/moodleanalyst/html/createnewcourse.tpl.html',
         controller: [
             '$http', '$scope', function ($http, $scope) {
-                $http.get('/report/moodleanalyst/rest/mastREST.php/course/new/options')
+                $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/course/new/options')
                         .success(function (data) {
                             $scope.password = "randompassword";
                             //console.log(data);
@@ -268,7 +269,7 @@ app.directive('newcourseform', function () {
                         'category': category,
                         'password': password
                     };
-                    $http.post('/report/moodleanalyst/rest/mastREST.php/course/new', params)
+                    $http.post(wwwroot + '/report/moodleanalyst/rest/mastREST.php/course/new', params)
                             .success(function (data) {
                                 console.log(data);
                                 if (data.error) {
