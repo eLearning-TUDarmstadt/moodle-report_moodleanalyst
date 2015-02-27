@@ -167,6 +167,11 @@ function getVocabulary() {
     $result['personal'] = get_string('personal');
     $result['courseinfo'] = get_string('courseinfo');
     $result['backtotop'] = get_string('backto', 'moodle', get_string('top'));
+    $result['edit'] = get_string('edit');
+    $result['delete'] = get_string('delete');
+    $result['visible'] = get_string('visible');
+    $result['downloadfile'] = get_string('downloadfile');
+    $result['reset'] = get_string('reset');
     
     //echo "<pre>" . print_r($result, true) . "</pre>";
     echo json_encode($result);

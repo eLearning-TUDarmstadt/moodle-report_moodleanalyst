@@ -6,22 +6,22 @@
                     <a href="/course/view.php?id={{course.data.id.v}}" target="_blank" style="color: #000000"><h4 ng-class="{'dimmed': course.data.visible.v == 0}">{{course.data.shortname.v}}</h4></a>
 
                     <div class="btn-group btn-group-xs pull-right" role="toolbar" ng-show="course.data">
-                        <a href="/course/edit.php?id={{course.data.id.v}}" target="_blank">
+                        <a href="/course/edit.php?id={{course.data.id.v}}" target="_blank" title="{{vocabulary.editsettings}}">
                             <button type="button" class="btn btn-default" aria-label="Edit Course">
                                 <span class="glyphicon glyphicon-cog"></span>
                             </button>
                         </a>
-                        <a href="/course/delete.php?id={{course.data.id.v}}" target="_blank">
+                        <a href="/course/delete.php?id={{course.data.id.v}}" target="_blank" title="{{vocabulary.delete}}">
                             <button type="button" class="btn btn-default" aria-label="Delete Course">
                                 <span class="glyphicon glyphicon-trash"></span>
                             </button>
                         </a>
-                        <a>
+                        <a title="{{vocabulary.hide}}">
                             <button type="button" class="btn btn-default" aria-label="Hide Course from Students" ng-show="course.data.visible.v == 1" ng-click="changeVisibility(course.data.id.v, 0);">
                                 <span class="glyphicon glyphicon-eye-open"></span>
                             </button>
                         </a>
-                        <a>
+                        <a title="{{vocabulary.show}}">
                             <button type="button" class="btn btn-default" aria-label="Make Course visible to Students" ng-show="course.data.visible.v == 0" ng-click="changeVisibility(course.data.id.v, 1);">
                                 <span class="glyphicon glyphicon-eye-close"></span>
                             </button>
@@ -70,7 +70,7 @@
                 
                 <div class="panel panel-default" ng-hide="loadingCourse">
                     <div class="panel-heading">
-                        <div class="panel-title"><a href="/enrol/users.php?id={{course.data.id.v}}" target="_blanc">{{vocabulary.enrolledusers}}: {{course.data.personsInCourse}}</a></div>
+                        <div class="panel-title"><a href="/enrol/users.php?id={{course.data.id.v}}" target="_blank">{{vocabulary.enrolledusers}}: {{course.data.personsInCourse}}</a></div>
                     </div>
                     <div class="panel-body">
                         <div class="row" ng-repeat="role in course.data.rolesInCourse| orderBy:role.sortorder">
@@ -128,10 +128,23 @@
                         
                         <div class="panel-body">
                             <div class="btn-group" role="group" aria-label="..." ng-show="activity.id">
-                                <a href="/mod/{{activity.mod}}/view.php?id={{activity.cm}}" target="_blanc"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-new-window" aria-hidden="true"></span> {{vocabulary.view}}</button></a>
-                                <a href="/course/mod.php?update={{activity.cm}}" target="_blanc"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> {{vocabulary.editsettings}}</button></a>
-                                <!-- <a href="/course/mod.php?hide={{activity.cm}}" target="_blanc" ng-show="activity.visible === 1"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> {{vocabulary.show}}</button></a>-->
-                                <!-- <a href="/course/mod.php?show={{activity.cm}}" target="_blanc" ng-show="activity.visible === 0"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span> {{vocabulary.hide}}</button></a>-->
+                                <a href="/mod/{{activity.mod}}/view.php?id={{activity.cm}}" target="_blank">
+                                    <button type="button" class="btn btn-default" ng-hide="activity.resourceyesorno">
+                                        <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span> {{vocabulary.view}}
+                                    </button>
+                                    
+                                    <button type="button" class="btn btn-default" ng-show="activity.resourceyesorno">
+                                        <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> {{vocabulary.downloadfile}}
+                                    </button>
+                                </a>
+                                
+                                <a href="/course/mod.php?update={{activity.cm}}" target="_blank">
+                                    <button type="button" class="btn btn-default">
+                                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> {{vocabulary.editsettings}}
+                                    </button>
+                                </a>
+                                <!-- <a href="/course/mod.php?hide={{activity.cm}}" target="_blank" ng-show="activity.visible === 1"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> {{vocabulary.show}}</button></a>-->
+                                <!-- <a href="/course/mod.php?show={{activity.cm}}" target="_blank" ng-show="activity.visible === 0"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span> {{vocabulary.hide}}</button></a>-->
                             </div>
                             <p></p>
                             <div id="activitiesInCourse_table_div"></div>
@@ -142,7 +155,7 @@
                     <div ng-show="CourseDetailTab.isSet(3)" id="dashboardEnrolmentMethods">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <div class="panel-title"><a target="_blanc" href="/enrol/instances.php?id={{course.data.id.v}}">{{vocabulary.enrolmentmethods}}</a></div>
+                                <div class="panel-title"><a target="_blank" href="/enrol/instances.php?id={{course.data.id.v}}">{{vocabulary.enrolmentmethods}}</a></div>
                             </div>
 
                             <div class="panel-body">

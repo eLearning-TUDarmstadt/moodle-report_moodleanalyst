@@ -83,13 +83,21 @@ app.controller('CourseDetailTabController', ['$scope', function ($scope) {
         $scope.activity.cm = null;
         $scope.activity.mod = null;
         $scope.activity.visible = null;
-        
+        $scope.activity.resourceyesorno = null;
 
-        $scope.setActivity = function(id, cm, mod, visible) {
+
+        $scope.setActivity = function (id, cm, mod, visible) {
             $scope.activity.id = id;
             $scope.activity.cm = cm;
             $scope.activity.mod = mod;
             $scope.activity.visible = visible;
+            if (mod == "resource") {
+                $scope.activity.resourceyesorno = true;
+            }
+            else {
+                $scope.activity.resourceyesorno = false;
+            }
+            ;
             console.log($scope.activity);
         };
 
@@ -235,6 +243,12 @@ app.directive('newcourseform', function () {
                             $scope.allCategories = data.categories;
                             //console.log($scope.allCategories);
                         });
+                $scope.reset = function () {
+                    $scope.newcourse.shortname = null;
+                    $scope.newcourse.fullname = null;
+                    $scope.newcourse.category = null;
+                    $scope.password = "randompassword";
+                };
                 $scope.createNewCourse = function () {
                     shortname = $scope.newcourse.shortname;
                     fullname = $scope.newcourse.fullname;
@@ -299,14 +313,6 @@ app.directive('newcourseform', function () {
                 $scope.update = function (user) {
                     $scope.master = angular.copy(user);
                 };
-                $scope.reset = function (form) {
-                    if (form) {
-                        form.$setPristine();
-                        form.$setUntouched();
-                    }
-                    $scope.user = angular.copy($scope.master);
-                };
-                $scope.reset();
             }],
         controllerAs: 'newCourseCtrl'
     }
@@ -404,7 +410,7 @@ var activitiesInCourseDashboard = function (result, $scope) {
     function selectHandler() {
         var selection = table.getChart().getSelection()[0];
         selection = table.getDataTable().getTableRowIndex(selection.row);
-        
+
         id = data.getFormattedValue(selection, 0);
         cm = data.getFormattedValue(selection, 5);
         mod = data.getFormattedValue(selection, 4);
