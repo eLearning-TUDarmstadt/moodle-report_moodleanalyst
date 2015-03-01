@@ -19,12 +19,12 @@
                             </button>
                         </a>
                         <a title="{{vocabulary.hide}}">
-                            <button type="button" class="btn btn-default" aria-label="Hide Course from Students" ng-show="course.data.visible.v == 1" ng-click="changeVisibility(course.data.id.v, 0);">
+                            <button type="button" class="btn btn-default" aria-label="Hide Course from Students" ng-show="course.data.visible.v === 1" ng-click="changeVisibility(course.data.id.v, 0);">
                                 <span class="glyphicon glyphicon-eye-open"></span>
                             </button>
                         </a>
                         <a title="{{vocabulary.show}}">
-                            <button type="button" class="btn btn-default" aria-label="Make Course visible to Students" ng-show="course.data.visible.v == 0" ng-click="changeVisibility(course.data.id.v, 1);">
+                            <button type="button" class="btn btn-default" aria-label="Make Course visible to Students" ng-show="course.data.visible.v === 0" ng-click="changeVisibility(course.data.id.v, 1);">
                                 <span class="glyphicon glyphicon-eye-close"></span>
                             </button>
                         </a>
