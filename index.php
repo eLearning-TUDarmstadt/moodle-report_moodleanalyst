@@ -48,7 +48,7 @@ echo '<html>
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </button>
-                            <a href="' . $wwwroot . '/report/moodleanalyst/html/angular.html" class="navbar-brand"> 
+                            <a href="' . $wwwroot . '/report/moodleanalyst/index.php" class="navbar-brand"> 
                                 <span><img alt="Brand" src="' . $wwwroot . '/report/moodleanalyst/pix/favicon.ico">&nbsp;Moodle Analyst Support Tool</span>
                             </a>
                         </div>
