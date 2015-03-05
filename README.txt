@@ -37,7 +37,7 @@ Moodle makes (for good reasons) only very conservately use of JavaScript.
 For the reasons see [1], [2] and [3].
 In consequence many full page reloads are necessary to perform even simple tasks.
 
-For this project we dropped of the moodle principles of accessibility to get 
+For this project we dropped the moodle principles of accessibility to get 
 a high speed support/administration tool, realised under heavy JavaScript usage.
 
 Libraries we used:
