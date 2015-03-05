@@ -1,30 +1,52 @@
+<!--
+This page displays detailed Information about a course
+-->
+
 <div id="courseInfo">
     <div class="panel panel-primary">
+        <!--
+        ======================================================
+        The panel header consists of:
+            1) the course's short name
+            2) a button group that consists of 3 button links:
+                2.1) edit course settings
+                2.2) delete course
+                2.3) show/hide course from student's view
+        ======================================================
+        -->
         <div class="panel-heading">
             <div class="panel-title row">
                 <div class="col-md-12">
-                    <div ng-class="{'dimmed': course.data.visible.v === 0}">
-                        <a href="/course/view.php?id={{course.data.id.v}}" target="_blank" style="color: #000000">{{course.data.shortname.v}}</a>
-                    </div>
+                    <!-- 1) course's short name (dimmed if not visible to students -->
+                    <a href="/course/view.php?id={{course.data.id.v}}" target="_blank" style="color: #000000">
+                        <h4 ng-class="{'dimmed': course.data.visible.v == 0}">{{course.data.shortname.v}}</h4>
+                    </a>
 
+                    <!-- 2) button group -->
                     <div class="btn-group btn-group-xs pull-right" role="group" ng-show="course.data">
+                        
+                        <!-- 2.1) edit course settings button -->
                         <a href="/course/edit.php?id={{course.data.id.v}}" target="_blank" title="{{vocabulary.editsettings}}">
                             <button type="button" class="btn btn-default" aria-label="Edit Course">
                                 <span class="glyphicon glyphicon-cog"></span>
                             </button>
                         </a>
+                        
+                        <!-- 2.2) delete course button -->
                         <a href="/course/delete.php?id={{course.data.id.v}}" target="_blank" title="{{vocabulary.delete}}">
                             <button type="button" class="btn btn-default" aria-label="Delete Course">
                                 <span class="glyphicon glyphicon-trash"></span>
                             </button>
                         </a>
+                        
+                        <!-- 2.3) hide/show course to users button -->
                         <a title="{{vocabulary.hide}}">
-                            <button type="button" class="btn btn-default" aria-label="Hide Course from Students" ng-show="course.data.visible.v === 1" ng-click="changeVisibility(course.data.id.v, 0);">
+                            <button type="button" class="btn btn-default" aria-label="Hide Course from Students" ng-show="course.data.visible.v == 1" ng-click="changeVisibility(course.data.id.v, 0);">
                                 <span class="glyphicon glyphicon-eye-open"></span>
                             </button>
                         </a>
                         <a title="{{vocabulary.show}}">
-                            <button type="button" class="btn btn-default" aria-label="Make Course visible to Students" ng-show="course.data.visible.v === 0" ng-click="changeVisibility(course.data.id.v, 1);">
+                            <button type="button" class="btn btn-default" aria-label="Make Course visible to Students" ng-show="course.data.visible.v == 0" ng-click="changeVisibility(course.data.id.v, 1);">
                                 <span class="glyphicon glyphicon-eye-close"></span>
                             </button>
                         </a>
@@ -33,58 +55,74 @@
             </div>  <!-- panel-title -->
         </div>  <!-- panel-heading -->
 
+        <!--
+        =================================================================================
+        The panel body consists of 3 nested panels:
+            1) general information about the course (such as course id, full name, etc.)
+            2) overview of enrolled users
+            3) a tab panel consisting of 3 tabs:
+                3.1) enrolled users (with filter-by-role and name search) listed in an interactive table where selecting a user opens the userinfo page
+                3.2) activities (an overview of all activities in the course
+                3.3) enrolment methods
+        =================================================================================
+        -->
         <div class="panel-body">
             <loader ng-show="loadingCourse"></loader>
-            <div class="table" ng-hide="loadingCourse">
-                <div class="panel panel-default">
-                    <div class="panel-heading panel-title">
-                        {{vocabulary.courseinfo}}
-                    </div>
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-4">{{course.data.id.string}}</div>
-                            <div class="col-md-8">{{course.data.id.v}}</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">{{course.data.shortname.string}}</div>
-                            <div class="col-md-8">{{course.data.shortname.v}}</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">{{course.data.fullname.string}}</div>
-                            <div class="col-md-8">{{course.data.fullname.v}}</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">{{course.data.idnumber.string}}</div>
-                            <div class="col-md-8">{{course.data.idnumber.v}}</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">{{course.data.visible.string}}</div>
-                            <div class="col-md-8">{{course.data.visible.v}}</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">{{course.data.category.string}}</div>
-                            <div class="col-md-8">{{course.data.category.v}}</div>
-                        </div>
-                     </div> <!-- panel-body -->
-                </div> <!-- panel panel-default -->
+            
+            <!-- 1) panel "general information about the course" -->
+            <div class="panel panel-default" ng-hide="loadingCourse">
+                <div class="panel-heading panel-title">
+                    {{vocabulary.courseinfo}}
+                </div>
                 
-                <p></p>
-                
-                <div class="panel panel-default" ng-hide="loadingCourse">
-                    <div class="panel-heading">
-                        <div class="panel-title"><a href="/enrol/users.php?id={{course.data.id.v}}" target="_blank">{{vocabulary.enrolledusers}}: {{course.data.personsInCourse}}</a></div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-4">{{course.data.id.string}}</div>
+                        <div class="col-md-8">{{course.data.id.v}}</div>
                     </div>
-                    <div class="panel-body">
-                        <div class="row" ng-repeat="role in course.data.rolesInCourse| orderBy:role.sortorder">
-                            <div class="col-md-4"><a ng-click="setRoleFilterForUsersInCourseDashboard(role.name);">{{role.name}}</a></div>
-                            <div class="col-md-8">{{role.number}}</div>
-                        </div>
+                    <div class="row">
+                        <div class="col-md-4">{{course.data.shortname.string}}</div>
+                        <div class="col-md-8">{{course.data.shortname.v}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">{{course.data.fullname.string}}</div>
+                        <div class="col-md-8">{{course.data.fullname.v}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">{{course.data.idnumber.string}}</div>
+                        <div class="col-md-8">{{course.data.idnumber.v}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">{{course.data.visible.string}}</div>
+                        <div class="col-md-8">{{course.data.visible.v}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">{{course.data.category.string}}</div>
+                        <div class="col-md-8">{{course.data.category.v}}</div>
+                    </div>
+                </div> <!-- panel-body -->
+            </div> <!-- panel panel-default -->
+                
+            <p></p>
+            
+            <!-- 2) panel "enrolled users overview" -->
+            <div class="panel panel-default" ng-hide="loadingCourse">
+                <div class="panel-heading panel-title">
+                    <a href="/enrol/users.php?id={{course.data.id.v}}" target="_blank">{{vocabulary.enrolledusers}}: {{course.data.personsInCourse}}</a>
+                </div>
+                
+                <div class="panel-body">
+                    <div class="row" ng-repeat="role in course.data.rolesInCourse| orderBy:role.sortorder">
+                        <div class="col-md-4"><a ng-click="setRoleFilterForUsersInCourseDashboard(role.name);">{{role.name}}</a></div>
+                        <div class="col-md-8">{{role.number}}</div>
                     </div>
                 </div>
-            </div> <!-- table -->
+            </div>
 
+            <!-- 3) panel "tab-panel" -->
             <div class="tab panel panel-default" ng-controller="CourseDetailTabController
                         as CourseDetailTab" ng-hide="loadingCourse" id="tabController">
+                
                 <ul class="nav nav-pills panel-heading">
                     <li ng-class="{ active: CourseDetailTab.isSet(1) }">
                         <a href ng-click="CourseDetailTab.setTab(1)">{{vocabulary.enrolledusers}}</a>
@@ -96,9 +134,9 @@
                         <a href ng-click="CourseDetailTab.setTab(3)">{{vocabulary.enrolmentmethods}}</a>
                     </li>
                 </ul>
+                
                 <div class="panel-body">
-                    
-                    <!-- TAB 1 -->
+                    <!-- 3.1) TAB 1 - enrolled users, detailed -->
                     <div ng-show="CourseDetailTab.isSet(1)" id="dashboardUsersInCourse">
                         <div class="panel panel-default panel-heading row">
                             <div class="panel-heading">
@@ -111,10 +149,10 @@
                             </div>
                             
                             <div class="panel-body" id="usersInCourse_table_div"></div>
-                        </div>
+                        </div> <!-- panel panel-default panel-heading row -->
                     </div>
 
-                    <!-- TAB 2 -->
+                    <!-- 3.2) TAB 2 - activities in course -->
                     <div ng-show="CourseDetailTab.isSet(2)" id="dashboardActivitiesInCourse">
                         <div class="panel panel-default">
                             <div class="panel-heading">
@@ -145,15 +183,15 @@
                                         <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> {{vocabulary.editsettings}}
                                     </button>
                                 </a>
-                                <!-- <a href="/course/mod.php?hide={{activity.cm}}" target="_blank" ng-show="activity.visible === 1"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> {{vocabulary.show}}</button></a>-->
-                                <!-- <a href="/course/mod.php?show={{activity.cm}}" target="_blank" ng-show="activity.visible === 0"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span> {{vocabulary.hide}}</button></a>-->
+                                <!-- <a href="/course/mod.php?hide={{activity.cm}}" target="_blank" ng-show="activity.visible == 1"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> {{vocabulary.show}}</button></a>-->
+                                <!-- <a href="/course/mod.php?show={{activity.cm}}" target="_blank" ng-show="activity.visible == 0"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span> {{vocabulary.hide}}</button></a>-->
                             </div>
                             <p></p>
                             <div id="activitiesInCourse_table_div"></div>
-                        </div>
+                        </div> <!-- panel-body -->
                     </div>
                     
-                    <!-- TAB 3 -->
+                    <!-- 3.3) TAB 3 - enrolment methods -->
                     <div ng-show="CourseDetailTab.isSet(3)" id="dashboardEnrolmentMethods">
                         <div class="panel panel-default">
                             <div class="panel-heading">
@@ -175,8 +213,8 @@
                                     </div>
                                     <p></p>
                                 </div>
-                            </div>
-                        </div>
+                            </div>  <!-- panel-body -->
+                        </div> <!-- panel panel-default -->
                     </div>
                     
                 </div> <!-- panel-body -->
