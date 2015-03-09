@@ -93,6 +93,13 @@ function newCourse() {
             break;
         }
     }
+    
+    // It seems as a self enrolment is not created by default => create it!
+    if(!isset($enrolinstance->id)) {
+        require_once $CFG->dirroot . '/enrol/self/lib.php';
+        $self = new enrol_self_plugin();
+        $enrolinstance->id = $self->add_default_instance($course);
+    }
     $enrolinstance->password = $content->password;
     $DB->update_record('enrol', $enrolinstance);
 

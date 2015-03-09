@@ -472,10 +472,6 @@ var usersInCourseDashboard = function (result, $scope) {
         roleCategoryPicker.draw();
         scope = angular.element($('#tabController')).scope();
         scope.tab = 1;
-        /*
-        scope.$apply(function () {  
-        });
-        */
     };
 
     // Create the table to display.
