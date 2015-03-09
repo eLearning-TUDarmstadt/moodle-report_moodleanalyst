@@ -76,7 +76,7 @@ app.directive('overview', function () {
 });
 
 app.controller('CourseDetailTabController', ['$scope', function ($scope) {
-        this.tab = 1;
+        $scope.tab = 1;
 
         $scope.isActivitySelected = false;
         $scope.activity = [];
@@ -103,15 +103,17 @@ app.controller('CourseDetailTabController', ['$scope', function ($scope) {
         };
 
         this.setTab = function (newValue) {
-            this.tab = newValue;
+            $scope.tab = newValue;
         };
+        
+        
 
         $scope.setCourseDatailTab = function (newValue) {
-            this.tab = newValue;
+            $scope = newValue;
         };
 
         this.isSet = function (tabName) {
-            return this.tab === tabName;
+            return $scope.tab === tabName;
         };
     }]);
 
@@ -468,6 +470,12 @@ var usersInCourseDashboard = function (result, $scope) {
     $scope.setRoleFilterForUsersInCourseDashboard = function (rolestring) {
         roleCategoryPicker.setState({'selectedValues': [rolestring]});
         roleCategoryPicker.draw();
+        scope = angular.element($('#tabController')).scope();
+        scope.tab = 1;
+        /*
+        scope.$apply(function () {  
+        });
+        */
     };
 
     // Create the table to display.
