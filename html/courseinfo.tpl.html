@@ -8,10 +8,11 @@ This page displays detailed Information about a course
         ======================================================
         The panel header consists of:
             1) the course's short name
-            2) a button group that consists of 3 button links:
+            2) a button group that consists of 4 button links:
                 2.1) edit course settings
                 2.2) delete course
                 2.3) show/hide course from student's view
+                2.4) refresh button
         ======================================================
         -->
         <div class="panel-heading">
@@ -50,6 +51,13 @@ This page displays detailed Information about a course
                                 <span class="glyphicon glyphicon-eye-close"></span>
                             </button>
                         </a>
+                        
+                        <!-- 2.4) refresh button -->
+                        <a title="{{vocabulary.refresh}}">
+                            <button type="button" class="btn btn-default" aria-label="Refresh" ng-click="loadDataCourseInfo()">
+                                <span class="glyphicon glyphicon-refresh"></span>
+                            </button>
+                        </a>
                     </div> <!-- btn-group -->
                 </div> <!-- col-md-12 -->
             </div>  <!-- panel-title -->
@@ -72,8 +80,19 @@ This page displays detailed Information about a course
             <!-- 1) panel "general information about the course" -->
             <div class="panel panel-default" ng-hide="loadingCourse">
                 <div class="panel-heading panel-title">
-                    {{vocabulary.courseinfo}}
-                </div>
+                    <div class="row">
+                        <div class="col-md-9">
+                            {{vocabulary.courseinfo}}
+                        </div>
+                        
+                        <!-- refresh button -->
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataCourseInfo()" title="{{vocabulary.refresh}}">
+                                <span class="glyphicon glyphicon-refresh"></span>
+                            </button>
+                        </div>
+                    </div> <!-- row -->
+                </div> <!-- panel-heading panel-title -->
                 
                 <div class="panel-body">
                     <div class="row">
@@ -108,8 +127,19 @@ This page displays detailed Information about a course
             <!-- 2) panel "enrolled users overview" -->
             <div class="panel panel-default" ng-hide="loadingCourse">
                 <div class="panel-heading panel-title">
-                    <a href="/enrol/users.php?id={{course.data.id.v}}" target="_blank">{{vocabulary.enrolledusers}}: {{course.data.personsInCourse}}</a>
-                </div>
+                    <div class="row">
+                        <div class="col-md-9">
+                            <a href="/enrol/users.php?id={{course.data.id.v}}" target="_blank">{{vocabulary.enrolledusers}}: {{course.data.personsInCourse}}</a>
+                        </div>
+                        
+                        <!-- refresh button -->
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataCourseInfo()" title="{{vocabulary.refresh}}">
+                                <span class="glyphicon glyphicon-refresh"></span>
+                            </button>
+                        </div>
+                    </div> <!-- row -->
+                </div> <!-- panel-heading panel-title -->
                 
                 <div class="panel-body">
                     <div class="row" ng-repeat="role in course.data.rolesInCourse| orderBy:role.sortorder">
@@ -133,6 +163,11 @@ This page displays detailed Information about a course
                     <li ng-class="{ active: CourseDetailTab.isSet(3) }">
                         <a href ng-click="CourseDetailTab.setTab(3)">{{vocabulary.enrolmentmethods}}</a>
                     </li>
+                    
+                    <!-- refresh button -->
+                    <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataCourseInfo()" title="{{vocabulary.refresh}}">
+                        <span class="glyphicon glyphicon-refresh"></span>
+                    </button>
                 </ul>
                 
                 <div class="panel-body">

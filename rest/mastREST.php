@@ -179,6 +179,7 @@ function getVocabulary() {
     $result['visible'] = get_string('visible');
     $result['downloadfile'] = get_string('downloadfile');
     $result['reset'] = get_string('reset');
+    $result['refresh'] = get_string('refresh');
     
     //echo "<pre>" . print_r($result, true) . "</pre>";
     echo json_encode($result);

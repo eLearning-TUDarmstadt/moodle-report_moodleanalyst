@@ -8,7 +8,9 @@ This page displays detailed Information about a user.
         ======================================================
         The panel header consists of:
             1) the user's name
-            2) a button link to edit the user's settings
+            2) a button group containing 2 buttons:
+                2.1) a button link to edit the user's settings
+                2.2) refresh button
         ======================================================
         -->
         <div class="panel-heading">
@@ -17,12 +19,23 @@ This page displays detailed Information about a user.
                     <!-- 1) user's name -->
                     <a href="/user/profile.php?id={{user.id.v}}" target="_blank" style="color: #000000">{{user.firstname.v}} {{user.lastname.v}}</a>
                     
-                    <!-- 2) "edit user" button -->
-                    <a href="/user/editadvanced.php?id={{user.id.v}}" target="_blank" title="{{vocabulary.edit}}">
-                        <button type="button" class="btn btn-default pull-right" aria-label="Edit User">
-                            <span class="glyphicon glyphicon-pencil"></span>
-                        </button>
-                    </a>
+                    <!-- 2) button group -->
+                    <div class="btn-group btn-group-xs pull-right" role="group">
+                        
+                        <!-- 2.1) "edit user" button -->
+                        <a href="/user/editadvanced.php?id={{user.id.v}}" target="_blank" title="{{vocabulary.edit}}">
+                            <button type="button" class="btn btn-default" aria-label="Edit User">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </a>
+                    
+                        <!-- 2.1) refresh button -->
+                        <a title="{{vocabulary.refresh}}">
+                            <button type="button" class="btn btn-default" aria-label="Refresh" ng-click="loadDataUserInfo()">
+                                <span class="glyphicon glyphicon-refresh"></span>
+                            </button>
+                        </a>
+                    </div> <!-- btn-group -->
                 </div> <!-- col-md-12 -->
             </div>  <!-- panel-title row -->
         </div>  <!-- panel-heading -->
@@ -58,8 +71,19 @@ This page displays detailed Information about a user.
             <!-- 2) detailed user information -->
             <div class="panel panel-default">
                 <div class="panel-heading panel-title">
-                    {{vocabulary.personal}}
-                </div>
+                    <div class="row">
+                        <div class="col-md-9">
+                            {{vocabulary.personal}}
+                        </div>
+                        
+                        <!-- refresh button -->
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataUserInfo()" title="{{vocabulary.refresh}}">
+                                <span class="glyphicon glyphicon-refresh"></span>
+                            </button>
+                        </div>
+                    </div> <!-- row -->
+                </div> <!-- panel-heading panel-title -->
                     
                 <div class="panel-body">
                     <div class="row">
@@ -120,8 +144,20 @@ This page displays detailed Information about a user.
             <div id="dashboardCoursesOfUser">
                 <div class="panel panel-default">
                     <div class="panel-heading panel-title">
-                        <div>{{vocabulary.searchcourses}}</div>    
-                    </div>
+                        <div class="row">
+                            <div class="col-md-9">
+                                {{vocabulary.searchcourses}}
+                            </div>
+                            
+                            <!-- refresh button -->
+                            <div class="col-md-3">
+                                <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataUserInfo()" title="{{vocabulary.refresh}}">
+                                    <span class="glyphicon glyphicon-refresh"></span>
+                                </button>
+                            </div>
+                        </div> <!-- row -->
+                    </div> <!-- panel-heading panel-title -->
+                    
                     <div class="panel-body">
                         <div class="panel panel-default">
                             <div class="panel-heading">

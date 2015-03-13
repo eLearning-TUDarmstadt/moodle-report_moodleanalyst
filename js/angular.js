@@ -76,45 +76,44 @@ app.directive('overview', function () {
 });
 
 app.controller('CourseDetailTabController', ['$scope', function ($scope) {
-        $scope.tab = 1;
+            $scope.tab = 1;
 
-        $scope.isActivitySelected = false;
-        $scope.activity = [];
-        $scope.activity.id = null;
-        $scope.activity.cm = null;
-        $scope.activity.mod = null;
-        $scope.activity.visible = null;
-        $scope.activity.resourceyesorno = null;
+            $scope.isActivitySelected = false;
+            $scope.activity = [];
+            $scope.activity.id = null;
+            $scope.activity.cm = null;
+            $scope.activity.mod = null;
+            $scope.activity.visible = null;
+            $scope.activity.resourceyesorno = null;
 
 
-        $scope.setActivity = function (id, cm, mod, visible) {
-            $scope.activity.id = id;
-            $scope.activity.cm = cm;
-            $scope.activity.mod = mod;
-            $scope.activity.visible = visible;
-            if (mod == "resource") {
-                $scope.activity.resourceyesorno = true;
-            }
-            else {
-                $scope.activity.resourceyesorno = false;
-            }
-            ;
-            console.log($scope.activity);
-        };
+            $scope.setActivity = function (id, cm, mod, visible) {
+                $scope.activity.id = id;
+                $scope.activity.cm = cm;
+                $scope.activity.mod = mod;
+                $scope.activity.visible = visible;
+                if (mod == "resource") {
+                    $scope.activity.resourceyesorno = true;
+                }
+                else {
+                    $scope.activity.resourceyesorno = false;
+                };
+                //console.log($scope.activity);
+            };
 
-        this.setTab = function (newValue) {
-            $scope.tab = newValue;
-        };
+            this.setTab = function (newValue) {
+                $scope.tab = newValue;
+            };
         
         
 
-        $scope.setCourseDatailTab = function (newValue) {
-            $scope = newValue;
-        };
+            $scope.setCourseDetailTab = function (newValue) {
+                $scope = newValue;
+            };
 
-        this.isSet = function (tabName) {
-            return $scope.tab === tabName;
-        };
+            this.isSet = function (tabName) {
+                return $scope.tab === tabName;
+            };
     }]);
 
 app.directive('loader', function () {
@@ -129,13 +128,17 @@ app.directive('coursesearch', function () {
         templateUrl: wwwroot + '/report/moodleanalyst/html/coursesearch.tpl.html',
         controller: [
             '$http', '$scope', function ($http, $scope) {
-                $scope.courseid = false;
-                $scope.gotAllCourses = false;
-                $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/allCourses')
-                        .success(function (result) {
-                            $scope.gotAllCourses = true;
-                            courseSearchDashboard(result, $scope);
-                        });
+                $scope.loadDataCourseSearch = function() {
+                    $scope.courseid = false;
+                    $scope.gotAllCourses = false;
+                    $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/allCourses')
+                            .success(function (result) {
+                                $scope.gotAllCourses = true;
+                                courseSearchDashboard(result, $scope);
+                            });
+                };
+                //initial load
+                $scope.loadDataCourseSearch();
             }],
         controllerAs: 'courseSearchCtrl'
     }
@@ -146,13 +149,17 @@ app.directive('usersearch', function () {
         templateUrl: wwwroot + '/report/moodleanalyst/html/usersearch.tpl.html',
         controller: [
             '$http', '$scope', function ($http, $scope) {
-                $scope.courseid = false;
-                $scope.gotAllUsers = false;
-                $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/allUsers')
-                        .success(function (result) {
-                            $scope.gotAllUsers = true;
-                            userSearchDashboard(result, $scope);
-                        });
+                $scope.loadDataUserSearch = function() {
+                    $scope.courseid = false;
+                    $scope.gotAllUsers = false;
+                    $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/allUsers')
+                            .success(function (result) {
+                                $scope.gotAllUsers = true;
+                                userSearchDashboard(result, $scope);
+                            });
+                };
+                //initial load
+                $scope.loadDataUserSearch();
             }],
         controllerAs: 'userSearchCtrl'
     }
@@ -163,38 +170,41 @@ app.directive('courseinfo', function () {
         templateUrl: wwwroot + '/report/moodleanalyst/html/courseinfo.tpl.html',
         controller: [
             '$http', '$scope', function ($http, $scope) {
+                $scope.loadDataCourseInfo = function() {
+                    $scope.isActivitySelected = false;
+                    $scope.selectedActivity = [];
+                    $scope.selectedActivity.id = null;
+                    $scope.selectedActivity.cm = null;
+                    $scope.selectedActivity.mod = null;
 
-                $scope.isActivitySelected = false;
-                $scope.selectedActivity = [];
-                $scope.selectedActivity.id = null;
-                $scope.selectedActivity.cm = null;
-                $scope.selectedActivity.mod = null;
+                    $scope.didSelectACourse = function (courseid) {
+                        $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/course/' + courseid)
+                                .success(function (data) {
+                                    //console.log(data);
+                                    $scope.loadingCourse = false;
+                                    $scope.course = data;
+                                    $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/course/getPersons/' + courseid)
+                                            .success(function (result) {
+                                                usersInCourseDashboard(result, $scope);
+                                                $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/course/getActivities/' + courseid)
+                                                        .success(function (result) {
+                                                            activitiesInCourseDashboard(result, $scope);
+                                                        });
+                                            });
 
-                $scope.didSelectACourse = function (courseid) {
-                    $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/course/' + courseid)
-                            .success(function (data) {
-                                //console.log(data);
-                                $scope.loadingCourse = false;
-                                $scope.course = data;
-                                $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/course/getPersons/' + courseid)
-                                        .success(function (result) {
-                                            usersInCourseDashboard(result, $scope);
-                                            $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/course/getActivities/' + courseid)
-                                                    .success(function (result) {
-                                                        activitiesInCourseDashboard(result, $scope);
-                                                    });
-                                        });
-
-                            });
+                                });
+                    };
+                    $scope.changeVisibility = function (courseid, visibility) {
+                        $scope.loadingCourse = true;
+                        $scope.course = null;
+                        $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/course/' + courseid + '/setVisibility/' + visibility)
+                                .success(function () {
+                                    $scope.didSelectACourse(courseid);
+                                });
+                    };
                 };
-                $scope.changeVisibility = function (courseid, visibility) {
-                    $scope.loadingCourse = true;
-                    $scope.course = null;
-                    $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/course/' + courseid + '/setVisibility/' + visibility)
-                            .success(function () {
-                                $scope.didSelectACourse(courseid);
-                            });
-                };
+                //initial load
+                $scope.loadDataCourseInfo();
             }],
         controllerAs: 'courseInfoCtrl'
     }
@@ -205,29 +215,32 @@ app.directive('userinfo', function () {
         templateUrl: wwwroot + '/report/moodleanalyst/html/userinfo.tpl.html',
         controller: [
             '$http', '$scope', function ($http, $scope) {
-                $scope.didSelectAUser = function (userid) {
-                    $scope.selectedUser = null;
-                    $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/user/' + userid)
-                            .success(function (data) {
-                                console.log(data);
-                                $scope.loadingUser = false;
-                                $scope.user = data;
-                                coursesOfUserDashboard(data.courses, $scope);
-                            });
-                };
+                $scope.loadDataUserInfo = function() {
+                    $scope.didSelectAUser = function (userid) {
+                        $scope.selectedUser = null;
+                        $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/user/' + userid)
+                                .success(function (data) {
+                                    console.log(data);
+                                    $scope.loadingUser = false;
+                                    $scope.user = data;
+                                    coursesOfUserDashboard(data.courses, $scope);
+                                });
+                    };
 
-                $scope.addUserToCourse = function (userid, courseid, roleid) {
-                    $scope.loadingCourse = true;
-                    $scope.loadingUser = true;
-                    $scope.user = null;
-                    $scope.course = null;
-                    $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/addUser/' + userid + '/ToCourse/' + courseid + '/withRole/' + roleid)
-                            .success(function (data) {
-                                $scope.didSelectACourse(courseid);
-                                $scope.didSelectAUser(userid);
-                            });
+                    $scope.addUserToCourse = function (userid, courseid, roleid) {
+                        $scope.loadingCourse = true;
+                        $scope.loadingUser = true;
+                        $scope.user = null;
+                        $scope.course = null;
+                        $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/addUser/' + userid + '/ToCourse/' + courseid + '/withRole/' + roleid)
+                                .success(function (data) {
+                                    $scope.didSelectACourse(courseid);
+                                    $scope.didSelectAUser(userid);
+                                });
+                    };
                 };
-
+                //initial load
+                $scope.loadDataUserInfo();
             }],
         controllerAs: 'userInfoCtrl'
     }
