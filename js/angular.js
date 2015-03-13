@@ -170,7 +170,6 @@ app.directive('courseinfo', function () {
         templateUrl: wwwroot + '/report/moodleanalyst/html/courseinfo.tpl.html',
         controller: [
             '$http', '$scope', function ($http, $scope) {
-                $scope.loadDataCourseInfo = function() {
                     $scope.isActivitySelected = false;
                     $scope.selectedActivity = [];
                     $scope.selectedActivity.id = null;
@@ -178,6 +177,7 @@ app.directive('courseinfo', function () {
                     $scope.selectedActivity.mod = null;
 
                     $scope.didSelectACourse = function (courseid) {
+                        $scope.loadDataCourseInfo = function() {
                         $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/course/' + courseid)
                                 .success(function (data) {
                                     //console.log(data);
@@ -191,8 +191,10 @@ app.directive('courseinfo', function () {
                                                             activitiesInCourseDashboard(result, $scope);
                                                         });
                                             });
-
                                 });
+                        };
+                        //initial load
+                        $scope.loadDataCourseInfo();
                     };
                     $scope.changeVisibility = function (courseid, visibility) {
                         $scope.loadingCourse = true;
@@ -202,9 +204,6 @@ app.directive('courseinfo', function () {
                                     $scope.didSelectACourse(courseid);
                                 });
                     };
-                };
-                //initial load
-                $scope.loadDataCourseInfo();
             }],
         controllerAs: 'courseInfoCtrl'
     }
@@ -215,16 +214,20 @@ app.directive('userinfo', function () {
         templateUrl: wwwroot + '/report/moodleanalyst/html/userinfo.tpl.html',
         controller: [
             '$http', '$scope', function ($http, $scope) {
-                $scope.loadDataUserInfo = function() {
+                
                     $scope.didSelectAUser = function (userid) {
-                        $scope.selectedUser = null;
-                        $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/user/' + userid)
-                                .success(function (data) {
-                                    console.log(data);
-                                    $scope.loadingUser = false;
-                                    $scope.user = data;
-                                    coursesOfUserDashboard(data.courses, $scope);
-                                });
+                        $scope.loadDataUserInfo = function() {
+                            $scope.selectedUser = null;
+                            $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/user/' + userid)
+                                    .success(function (data) {
+                                        //console.log(data);
+                                        $scope.loadingUser = false;
+                                        $scope.user = data;
+                                        coursesOfUserDashboard(data.courses, $scope);
+                                    });
+                            };
+                            //initial load
+                            $scope.loadDataUserInfo();
                     };
 
                     $scope.addUserToCourse = function (userid, courseid, roleid) {
@@ -238,9 +241,6 @@ app.directive('userinfo', function () {
                                     $scope.didSelectAUser(userid);
                                 });
                     };
-                };
-                //initial load
-                $scope.loadDataUserInfo();
             }],
         controllerAs: 'userInfoCtrl'
     }
