@@ -31,7 +31,7 @@ This page contains a form to create a new course.
                 </div>
                 <div class="col-md-10">
                     <select ng-model="newcourse.category">
-                        <option ng-repeat="category in allCategories" value="{{category.id}}">{{category.name}}</option>
+                        <option ng-repeat="category in allCategories | toArray | orderBy:'name'" value="{{category.id}}">{{category.name}}</option>
                     </select>
                 </div>
             </div>
