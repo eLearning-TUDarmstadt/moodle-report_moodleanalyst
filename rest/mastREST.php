@@ -467,7 +467,7 @@ function course($courseid) {
     
     $breadcrumb = "// " . coursecat::get($course->category)->name . " ";
     foreach ($parents as $key => $id) {
-        $breadcrumb .= "// " . coursecat::get($id)->name . " "; 
+        $breadcrumb = "// " . coursecat::get($id)->name . " " . $breadcrumb; 
     }
     $data['category']['v'] = $breadcrumb;
 
