@@ -246,10 +246,15 @@ app.directive('userinfo', function () {
     }
 });
 
+/**
+ * 
+ * @param {type} param1
+ * @param {type} param2
+ */
 app.filter('toArray', function() {
     return function(obj) {
         var result = [];
-        angular.forEach(obj, function(val, key) {
+        angular.forEach(obj, function(val) {
             result.push(val);
         });
         return result;
