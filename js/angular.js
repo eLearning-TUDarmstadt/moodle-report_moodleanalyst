@@ -247,9 +247,7 @@ app.directive('userinfo', function () {
 });
 
 /**
- * 
- * @param {type} param1
- * @param {type} param2
+ * This filter puts the contents of an object into an array so it can be sorted using angularJS functions in the html code.
  */
 app.filter('toArray', function() {
     return function(obj) {
