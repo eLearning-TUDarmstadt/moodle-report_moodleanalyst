@@ -5,7 +5,11 @@
 
 require 'Slim/Slim.php';
 require_once '../../../config.php';
-require_once '../../../course/lib.php';
+
+GLOBAL $CFG;
+require_once $CFG->dirroot . '/course/lib.php';
+//require_once '../../../course/lib.php';
+require_once $CFG->dirroot . '/report/moodleanalyst/rest/lib.php';
 
 // GZIP Compression for output
 if (!ob_start("ob_gzhandler"))
@@ -146,6 +150,7 @@ function getVocabulary() {
     $result = array();
     $result['course'] = get_string('course');
     $result['user'] = get_string('user');
+    $result['users'] = get_string('users');
     $result['category'] = get_string('category');
     $result['role'] = get_string('role');
     $result['parentcategory'] = get_string('parentcategory', 'report_moodleanalyst');
@@ -518,9 +523,8 @@ function allUsers() {
     $lastinitial = '';
     $page = '';
     $recordsperpage = '100000000';
-    $fields = 'id, username, firstname, lastname, email';
+    $fields = 'id, username, firstname, lastname, email, lastaccess';
     $users = get_users($get, $search, $confirmed, $exceptions, $sort, $firstinitial, $lastinitial, $page, $recordsperpage, $fields);
-
     // Preparing the return table
     $result = array();
     $result['cols'] = array();
@@ -530,9 +534,12 @@ function allUsers() {
     $result['cols'][] = array('label' => get_string('lastname'), 'type' => 'string');
     $result['cols'][] = array('label' => get_string('email'), 'type' => 'string');
     $result['cols'][] = array('label' => get_string('fullname'), 'type' => 'string');
+    $result['cols'][] = array('label' => get_string('lastaccess'), 'type' => 'date');
+    $result['cols'][] = array('label' => get_string('days'), 'type' => 'number');
+    
     $result['rows'] = array();
 
-    foreach ($users as $userid => $user) {
+    foreach ($users as $userid => $user) {        
         $result['rows'][] = [
             'c' => array(
                 ['v' => $user->id],
@@ -540,7 +547,10 @@ function allUsers() {
                 array('v' => $user->firstname),
                 array('v' => $user->lastname),
                 array('v' => $user->email),
-                array('v' => $user->firstname . ' ' . $user->lastname)
+                array('v' => $user->firstname . ' ' . $user->lastname),
+                array('v' => createDateForJavaScript($user->lastaccess)),
+                // Days since last access 
+                array('v' => round((time() - $user->lastaccess) / (60 * 60 * 24), 0))
             )
         ];
     }

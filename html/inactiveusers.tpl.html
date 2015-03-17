@@ -1,16 +1,19 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
-</html>
+<div class="row">
+    <div class="col-md-6">
+        <div id="dashboardInactiveUsers_div">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3>{{vocabulary.users}}</h3>
+                    <div id="inactiveUsers_dateOfLastAccessFilter_div"></div>
+                    <div id="inactiveUsers_timeSinceLastAccessFilter_div"></div>
+                </div> <!-- panel-heading -->
+                <div class="panel-body" id="inactiveUsers_user_table_div">
+                    <loader ng-hide="gotAllUsers"></loader>
+                </div>
+            </div> <!-- panel panel-info -->
+        </div>
+    </div>
+    <div class="col-md-6">
+        <userinfo ng-show="userid"></userinfo>
+    </div>
+</div>

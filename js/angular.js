@@ -74,7 +74,6 @@ app.directive('overview', function () {
             }],
     };
 });
-
 app.controller('CourseDetailTabController', ['$scope', function ($scope) {
             $scope.tab = 1;
 
@@ -115,7 +114,6 @@ app.controller('CourseDetailTabController', ['$scope', function ($scope) {
                 return $scope.tab === tabName;
             };
     }]);
-
 app.directive('loader', function () {
     return {
         restrict: 'E',
@@ -156,6 +154,7 @@ app.directive('usersearch', function () {
                             .success(function (result) {
                                 $scope.gotAllUsers = true;
                                 userSearchDashboard(result, $scope);
+                                inactiveUsersDashboard(result, $scope);
                             });
                 };
                 //initial load
@@ -639,6 +638,65 @@ var userSearchDashboard = function (result, $scope) {
     });
     // Establish dependencies.
     dashboard.bind([userNameFilter], [table]);
+    // Draw the dashboard.
+    dashboard.draw(data);
+    // Define what to do when selecting a table row.
+    function selectHandler() {
+        $scope.loadingUser = true;
+        $scope.user = null;
+        var selection = table.getChart().getSelection();
+        $scope.userid = table.getDataTable().getFormattedValue(selection[0].row, 0);
+        //console.log($scope.userid);
+        $scope.didSelectAUser($scope.userid);
+        $("html, body").animate({scrollTop: 0}, 800);
+    }
+    ;
+    // Setup listener to listen for clicks on table rows and process the selectHandler.
+    google.visualization.events.addListener(table, 'select', selectHandler);
+};
+var inactiveUsersDashboard = function (result, $scope) {
+    var data = new google.visualization.DataTable(result);
+    // Create a dashboard
+    var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardInactiveUsers_div'));
+    // Create a search box to search for the user name.
+    var dateOfLastAccessFilter = new google.visualization.ControlWrapper({
+        controlType: 'DateRangeFilter',
+        containerId: 'inactiveUsers_dateOfLastAccessFilter_div',
+        options: {
+            filterColumnIndex: 6
+        }
+    });
+    
+    var timeSinceLastAccessFilter = new google.visualization.ControlWrapper({
+        controlType: 'NumberRangeFilter',
+        containerId: 'inactiveUsers_timeSinceLastAccessFilter_div',
+        options: {
+            filterColumnIndex: 7
+        }
+    });
+    // Create the table to display.
+    var table = new google.visualization.ChartWrapper({
+        chartType: 'Table',
+        containerId: 'inactiveUsers_user_table_div',
+        options: {
+            showRowNumber: false,
+            page: 'enable',
+            pageSize: 25,
+            // Only counts the displayed rows!
+            sortColumn: 5,
+            sortAscending: false,
+            ui: {
+                format: {
+                    //pattern: ""
+                }
+            }
+        },
+        view: {
+            columns: [1, 2, 3, 4, 6, 7]
+        }
+    });
+    // Establish dependencies.
+    dashboard.bind([dateOfLastAccessFilter, timeSinceLastAccessFilter], [table]);
     // Draw the dashboard.
     dashboard.draw(data);
     // Define what to do when selecting a table row.
