@@ -75,44 +75,45 @@ app.directive('overview', function () {
     };
 });
 app.controller('CourseDetailTabController', ['$scope', function ($scope) {
-            $scope.tab = 1;
+        $scope.tab = 1;
 
-            $scope.isActivitySelected = false;
-            $scope.activity = [];
-            $scope.activity.id = null;
-            $scope.activity.cm = null;
-            $scope.activity.mod = null;
-            $scope.activity.visible = null;
-            $scope.activity.resourceyesorno = null;
+        $scope.isActivitySelected = false;
+        $scope.activity = [];
+        $scope.activity.id = null;
+        $scope.activity.cm = null;
+        $scope.activity.mod = null;
+        $scope.activity.visible = null;
+        $scope.activity.resourceyesorno = null;
 
 
-            $scope.setActivity = function (id, cm, mod, visible) {
-                $scope.activity.id = id;
-                $scope.activity.cm = cm;
-                $scope.activity.mod = mod;
-                $scope.activity.visible = visible;
-                if (mod == "resource") {
-                    $scope.activity.resourceyesorno = true;
-                }
-                else {
-                    $scope.activity.resourceyesorno = false;
-                };
-                //console.log($scope.activity);
-            };
+        $scope.setActivity = function (id, cm, mod, visible) {
+            $scope.activity.id = id;
+            $scope.activity.cm = cm;
+            $scope.activity.mod = mod;
+            $scope.activity.visible = visible;
+            if (mod == "resource") {
+                $scope.activity.resourceyesorno = true;
+            }
+            else {
+                $scope.activity.resourceyesorno = false;
+            }
+            ;
+            //console.log($scope.activity);
+        };
 
-            this.setTab = function (newValue) {
-                $scope.tab = newValue;
-            };
-        
-        
+        this.setTab = function (newValue) {
+            $scope.tab = newValue;
+        };
 
-            $scope.setCourseDetailTab = function (newValue) {
-                $scope = newValue;
-            };
 
-            this.isSet = function (tabName) {
-                return $scope.tab === tabName;
-            };
+
+        $scope.setCourseDetailTab = function (newValue) {
+            $scope = newValue;
+        };
+
+        this.isSet = function (tabName) {
+            return $scope.tab === tabName;
+        };
     }]);
 app.directive('loader', function () {
     return {
@@ -126,13 +127,19 @@ app.directive('coursesearch', function () {
         templateUrl: wwwroot + '/report/moodleanalyst/html/coursesearch.tpl.html',
         controller: [
             '$http', '$scope', function ($http, $scope) {
-                $scope.loadDataCourseSearch = function() {
+                $scope.loadDataCourseSearch = function () {
                     $scope.courseid = false;
                     $scope.gotAllCourses = false;
+                    $scope.gotAllEmptyCourses = false;
                     $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/allCourses')
                             .success(function (result) {
                                 $scope.gotAllCourses = true;
                                 courseSearchDashboard(result, $scope);
+                                $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/courses/getEmpty')
+                                        .success(function (result) {
+                                            emptyCoursesDashboard(result, $scope);
+                                            $scope.gotAllEmptyCourses = true;
+                                        });
                             });
                 };
                 //initial load
@@ -147,7 +154,7 @@ app.directive('usersearch', function () {
         templateUrl: wwwroot + '/report/moodleanalyst/html/usersearch.tpl.html',
         controller: [
             '$http', '$scope', function ($http, $scope) {
-                $scope.loadDataUserSearch = function() {
+                $scope.loadDataUserSearch = function () {
                     $scope.courseid = false;
                     $scope.gotAllUsers = false;
                     $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/allUsers')
@@ -169,14 +176,14 @@ app.directive('courseinfo', function () {
         templateUrl: wwwroot + '/report/moodleanalyst/html/courseinfo.tpl.html',
         controller: [
             '$http', '$scope', function ($http, $scope) {
-                    $scope.isActivitySelected = false;
-                    $scope.selectedActivity = [];
-                    $scope.selectedActivity.id = null;
-                    $scope.selectedActivity.cm = null;
-                    $scope.selectedActivity.mod = null;
+                $scope.isActivitySelected = false;
+                $scope.selectedActivity = [];
+                $scope.selectedActivity.id = null;
+                $scope.selectedActivity.cm = null;
+                $scope.selectedActivity.mod = null;
 
-                    $scope.didSelectACourse = function (courseid) {
-                        $scope.loadDataCourseInfo = function() {
+                $scope.didSelectACourse = function (courseid) {
+                    $scope.loadDataCourseInfo = function () {
                         $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/course/' + courseid)
                                 .success(function (data) {
                                     //console.log(data);
@@ -191,18 +198,18 @@ app.directive('courseinfo', function () {
                                                         });
                                             });
                                 });
-                        };
-                        //initial load
-                        $scope.loadDataCourseInfo();
                     };
-                    $scope.changeVisibility = function (courseid, visibility) {
-                        $scope.loadingCourse = true;
-                        $scope.course = null;
-                        $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/course/' + courseid + '/setVisibility/' + visibility)
-                                .success(function () {
-                                    $scope.didSelectACourse(courseid);
-                                });
-                    };
+                    //initial load
+                    $scope.loadDataCourseInfo();
+                };
+                $scope.changeVisibility = function (courseid, visibility) {
+                    $scope.loadingCourse = true;
+                    $scope.course = null;
+                    $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/course/' + courseid + '/setVisibility/' + visibility)
+                            .success(function () {
+                                $scope.didSelectACourse(courseid);
+                            });
+                };
             }],
         controllerAs: 'courseInfoCtrl'
     }
@@ -213,33 +220,33 @@ app.directive('userinfo', function () {
         templateUrl: wwwroot + '/report/moodleanalyst/html/userinfo.tpl.html',
         controller: [
             '$http', '$scope', function ($http, $scope) {
-                
-                    $scope.didSelectAUser = function (userid) {
-                        $scope.loadDataUserInfo = function() {
-                            $scope.selectedUser = null;
-                            $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/user/' + userid)
-                                    .success(function (data) {
-                                        //console.log(data);
-                                        $scope.loadingUser = false;
-                                        $scope.user = data;
-                                        coursesOfUserDashboard(data.courses, $scope);
-                                    });
-                            };
-                            //initial load
-                            $scope.loadDataUserInfo();
-                    };
 
-                    $scope.addUserToCourse = function (userid, courseid, roleid) {
-                        $scope.loadingCourse = true;
-                        $scope.loadingUser = true;
-                        $scope.user = null;
-                        $scope.course = null;
-                        $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/addUser/' + userid + '/ToCourse/' + courseid + '/withRole/' + roleid)
+                $scope.didSelectAUser = function (userid) {
+                    $scope.loadDataUserInfo = function () {
+                        $scope.selectedUser = null;
+                        $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/user/' + userid)
                                 .success(function (data) {
-                                    $scope.didSelectACourse(courseid);
-                                    $scope.didSelectAUser(userid);
+                                    //console.log(data);
+                                    $scope.loadingUser = false;
+                                    $scope.user = data;
+                                    coursesOfUserDashboard(data.courses, $scope);
                                 });
                     };
+                    //initial load
+                    $scope.loadDataUserInfo();
+                };
+
+                $scope.addUserToCourse = function (userid, courseid, roleid) {
+                    $scope.loadingCourse = true;
+                    $scope.loadingUser = true;
+                    $scope.user = null;
+                    $scope.course = null;
+                    $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/addUser/' + userid + '/ToCourse/' + courseid + '/withRole/' + roleid)
+                            .success(function (data) {
+                                $scope.didSelectACourse(courseid);
+                                $scope.didSelectAUser(userid);
+                            });
+                };
             }],
         controllerAs: 'userInfoCtrl'
     }
@@ -248,10 +255,10 @@ app.directive('userinfo', function () {
 /**
  * This filter puts the contents of an object into an array so it can be sorted using angularJS functions in the html code.
  */
-app.filter('toArray', function() {
-    return function(obj) {
+app.filter('toArray', function () {
+    return function (obj) {
         var result = [];
-        angular.forEach(obj, function(val) {
+        angular.forEach(obj, function (val) {
             result.push(val);
         });
         return result;
@@ -607,6 +614,79 @@ var courseSearchDashboard = function (result, $scope) {
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
 };
+var emptyCoursesDashboard = function (result, $scope) {
+    var data = new google.visualization.DataTable(result);
+    // Create a dashboard
+    var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardEmptyCourses'));
+    // Create a search box to search for the course name.
+    var nameFilter = new google.visualization.ControlWrapper({
+        controlType: 'StringFilter',
+        containerId: 'emptycourses_courses_name_filter_div',
+        options: {
+            filterColumnIndex: 3,
+            matchType: 'any',
+            ui: {
+                label: $scope.vocabulary.course
+            }
+        }
+    });
+    // Create a category picker to filter by grand parent category.
+    var grandparentCategoryPicker = new google.visualization.ControlWrapper({
+        'controlType': 'CategoryFilter',
+        'containerId': 'emptycourses_courses_grandparentcategory_filter_div',
+        options: {
+            filterColumnIndex: 1,
+            ui: {
+                caption: $scope.vocabulary.grandparentcategory,
+                label: '',
+                allowTyping: false
+            }
+        }
+    });
+    // Create a category picker to filter by Fachbereich.
+    var parentCategoryPicker = new google.visualization.ControlWrapper({
+        'controlType': 'CategoryFilter',
+        'containerId': 'emptycourses_courses_parentcategory_filter_div',
+        options: {
+            filterColumnIndex: 2,
+            ui: {
+                caption: $scope.vocabulary.parentcategory,
+                label: '',
+                allowTyping: false
+            }
+        }
+    });
+    // Create the table to display.
+    var table = new google.visualization.ChartWrapper({
+        chartType: 'Table',
+        containerId: 'emptycourses_courses_table_div',
+        options: {
+            showRowNumber: false,
+            page: 'enable',
+            pageSize: 25,
+            allowHtml: true,
+            sortColumn: 0,
+            sortAscending: false
+        }
+    });
+    // Establish dependencies.
+    dashboard.bind([nameFilter, grandparentCategoryPicker, parentCategoryPicker], [table]);
+    // Draw the dashboard.
+    dashboard.draw(data);
+    // Define what to do when selecting a table row.
+    function selectHandler() {
+        var selection = table.getChart().getSelection();
+        $scope.loadingCourse = true;
+        $scope.course = null;
+        $scope.courseid = table.getDataTable().getFormattedValue(selection[0].row, 0);
+        $scope.didSelectACourse($scope.courseid);
+        //window.scrollTo(0,0);
+        $("html, body").animate({scrollTop: 0}, 800);
+    }
+    ;
+    // Setup listener to listen for clicks on table rows and process the selectHandler.
+    google.visualization.events.addListener(table, 'select', selectHandler);
+};
 var userSearchDashboard = function (result, $scope) {
     var data = new google.visualization.DataTable(result);
     // Create a dashboard
@@ -666,7 +746,7 @@ var inactiveUsersDashboard = function (result, $scope) {
             filterColumnIndex: 6
         }
     });
-    
+
     var timeSinceLastAccessFilter = new google.visualization.ControlWrapper({
         controlType: 'NumberRangeFilter',
         containerId: 'inactiveUsers_timeSinceLastAccessFilter_div',

@@ -28,6 +28,7 @@ $app->map('/allUsers', 'allUsers')->via('GET');
 $app->map('/allUsersWithLastAccess', 'allUsersWithLastAccess')->via('GET');
 $app->map('/user/:id', 'user')->via('GET');
 $app->map('/course/:id', 'course')->via('GET');
+$app->map('/courses/getEmpty', 'emptyCourses')->via('GET');
 $app->map('/course/getPersons/:id', 'getPersonsInCourse')->via('GET');
 $app->map('/course/getActivities/:id', 'getActivitiesInCourse')->via('GET');
 $app->map('/course/new/options', 'newCourseOptions')->via('GET');
@@ -97,9 +98,9 @@ function newCourse() {
             break;
         }
     }
-    
+
     // It seems as a self enrolment is not created by default => create it!
-    if(!isset($enrolinstance->id)) {
+    if (!isset($enrolinstance->id)) {
         require_once $CFG->dirroot . '/enrol/self/lib.php';
         $self = new enrol_self_plugin();
         $enrolinstance->id = $self->add_default_instance($course);
@@ -185,7 +186,7 @@ function getVocabulary() {
     $result['downloadfile'] = get_string('downloadfile');
     $result['reset'] = get_string('reset');
     $result['refresh'] = get_string('refresh');
-    
+
     //echo "<pre>" . print_r($result, true) . "</pre>";
     echo json_encode($result);
 }
@@ -236,10 +237,10 @@ function getActivitiesInCourse($courseid) {
     //echo "<pre>" . print_r($activities, true) . "</pre>";
 
     foreach ($activities as $modid => $activity) {
-        if($activity->visible) {
-            $class="";
+        if ($activity->visible) {
+            $class = "";
         } else {
-            $class="dimmed";
+            $class = "dimmed";
         }
         $spanBegin = ''; //"<span class='" . $class . "'>";
         $spanEnd = ''; //"</span>";
@@ -248,15 +249,15 @@ function getActivitiesInCourse($courseid) {
         $icon = ''; //"<img src='" . $OUTPUT->pix_url('icon', 'mod_'.$activity->mod) . "'>";
         $activityType = $spanBegin . $icon . get_string('pluginname', $activity->mod) . $spanEnd;
         //$table['rows'][] = ['c' => array('v' => $sectionname), array('v' => $activityType), array('v' => $activityname)];
-        $visibility = ($activity->visible) ? true : false ;
+        $visibility = ($activity->visible) ? true : false;
         $table['rows'][] = ['c' => array(
-            ['v' => $activity->id],
-            ['v' => $sectionname],
-            ['v' => $activityType],
-            ['v' => $activityname],
-            ['v' => $activity->mod],
-            ['v' => $activity->cm],
-            ['v' => $visibility]
+                ['v' => $activity->id],
+                ['v' => $sectionname],
+                ['v' => $activityType],
+                ['v' => $activityname],
+                ['v' => $activity->mod],
+                ['v' => $activity->cm],
+                ['v' => $visibility]
         )];
     }
     //printArray($table);
@@ -448,6 +449,48 @@ function user($userid) {
     echo json_encode($ret);
 }
 
+function emptyCourses() {
+    global $DB;
+    //$courses = get_courses("all", "c.sortorder DESC", 'c.*, c.category as parentcategory');
+    $courses = get_courses("all", "c.sortorder DESC", 'c.id, c.fullname, c.shortname, c.category as parentcategory, c.visible');
+    $categories = $DB->get_records('course_categories', null, null, 'id, name, parent, visible');
+    // Preparing the return table
+    $result = array();
+    $result['cols'] = array();
+    $result['cols'][] = array('label' => 'ID', 'type' => 'number');
+    $result['cols'][] = array('label' => get_string('grandparentcategory', 'report_moodleanalyst'), 'type' => 'string');
+    $result['cols'][] = array('label' => get_string('parentcategory', 'report_moodleanalyst'), 'type' => 'string');
+    $result['cols'][] = array('label' => get_string('course', 'report_moodleanalyst'), 'type' => 'string');
+    $result['cols'][] = array('label' => get_string('visible'), 'type' => 'boolean');
+
+    $result['rows'] = array();
+
+    foreach ($courses as $courseid => $data) {
+        $activities = get_array_of_activities($courseid);
+        if (count($activities) <= 0) {
+            if ($data->parentcategory != 0) {
+                $data->parentcategoryname = $categories[$data->parentcategory]->name;
+                $data->grandparentcategory = $categories[$data->parentcategory]->parent;
+                if ($data->grandparentcategory != 0) {
+                    $data->grandparentcategoryname = $categories[$data->grandparentcategory]->name;
+                } else {
+                    $data->grandparentcategoryname = "";
+                }
+            } else {
+                $data->parentcategoryname = "";
+                $data->grandparentcategory = "";
+                $data->grandparentcategoryname = "";
+            }
+            $coursename = $data->fullname;
+            // Filling the return table
+            $data->visible = ($data->visible) ? true : false;
+            $result['rows'][] = ['c' => array(['v' => $data->id], array('v' => $data->grandparentcategoryname), array('v' => $data->parentcategoryname), array('v' => $coursename), array('v' => $data->visible))];
+        }
+    }
+    echo json_encode($result);
+    //printArray($result);
+}
+
 function course($courseid) {
     global $CFG;
     require_once $CFG->dirroot . '/lib/coursecatlib.php';
@@ -465,14 +508,14 @@ function course($courseid) {
     $data['visible']['v'] = $course->visible;
     $data['idnumber']['string'] = get_string('idnumber');
     $data['idnumber']['v'] = $course->idnumber;
-    
+
     $data['category']['string'] = get_string('coursecategory');
     $category = coursecat::get($course->category);
     $parents = $category->get_parents();
-    
+
     $breadcrumb = "// " . coursecat::get($course->category)->name . " ";
     foreach ($parents as $key => $id) {
-        $breadcrumb = "// " . coursecat::get($id)->name . " " . $breadcrumb; 
+        $breadcrumb = "// " . coursecat::get($id)->name . " " . $breadcrumb;
     }
     $data['category']['v'] = $breadcrumb;
 
@@ -536,10 +579,10 @@ function allUsers() {
     $result['cols'][] = array('label' => get_string('fullname'), 'type' => 'string');
     $result['cols'][] = array('label' => get_string('lastaccess'), 'type' => 'date');
     $result['cols'][] = array('label' => get_string('days'), 'type' => 'number');
-    
+
     $result['rows'] = array();
 
-    foreach ($users as $userid => $user) {        
+    foreach ($users as $userid => $user) {
         $result['rows'][] = [
             'c' => array(
                 ['v' => $user->id],
@@ -614,7 +657,6 @@ function allUsersWithLastAccess() {
     echo json_encode($result);
 }
 
-
 function allCourses() {
     global $DB;
     $courses = get_courses("all", "c.sortorder DESC", 'c.id, c.fullname, c.shortname, c.category as parentcategory, c.visible');
@@ -628,7 +670,7 @@ function allCourses() {
     $result['cols'][] = array('label' => get_string('parentcategory', 'report_moodleanalyst'), 'type' => 'string');
     $result['cols'][] = array('label' => get_string('course', 'report_moodleanalyst'), 'type' => 'string');
     $result['cols'][] = array('label' => get_string('visible'), 'type' => 'boolean');
-    
+
     $result['rows'] = array();
 
     foreach ($courses as $courseid => $data) {
@@ -647,7 +689,7 @@ function allCourses() {
         }
         $coursename = $data->fullname;
         // Filling the return table
-        $data->visible = ($data->visible) ? true : false ;
+        $data->visible = ($data->visible) ? true : false;
         $result['rows'][] = ['c' => array(['v' => $data->id], array('v' => $data->grandparentcategoryname), array('v' => $data->parentcategoryname), array('v' => $coursename), array('v' => $data->visible))];
     }
     echo json_encode($result);
