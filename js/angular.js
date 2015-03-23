@@ -135,11 +135,13 @@ app.directive('coursesearch', function () {
                             .success(function (result) {
                                 $scope.gotAllCourses = true;
                                 courseSearchDashboard(result, $scope);
+                                
                                 $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/courses/getEmpty')
                                         .success(function (result) {
                                             emptyCoursesDashboard(result, $scope);
                                             $scope.gotAllEmptyCourses = true;
                                         });
+                                
                             });
                 };
                 //initial load
@@ -594,6 +596,9 @@ var courseSearchDashboard = function (result, $scope) {
             allowHtml: true,
             sortColumn: 0,
             sortAscending: false
+        },
+        view: {
+            columns: [0, 1, 2, 3, 4]
         }
     });
     // Establish dependencies.
