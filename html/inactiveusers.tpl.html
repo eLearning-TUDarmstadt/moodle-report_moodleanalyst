@@ -14,10 +14,22 @@ Detailed information is shown on the right hand side of the screen after clickin
                 <div id="dashboardInactiveUsers_div">
                     <div class="panel panel-info">
                         <div class="panel-heading">
-                            <h3>{{vocabulary.users}}</h3>
-                            <div id="inactiveUsers_dateOfLastAccessFilter_div"></div>
-                            <div id="inactiveUsers_timeSinceLastAccessFilter_div"></div>
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <h3>{{vocabulary.users}}</h3>
+                                    <div id="inactiveUsers_dateOfLastAccessFilter_div"></div>
+                                    <div id="inactiveUsers_timeSinceLastAccessFilter_div"></div>
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <!-- refresh button -->
+                                    <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataCourseSearch()" title="{{vocabulary.refresh}}">
+                                        <span class="glyphicon glyphicon-refresh"></span>
+                                    </button>
+                                </div>
+                            </div> <!-- row -->
                         </div> <!-- panel-heading -->
+                        
                         <div class="panel-body" id="inactiveUsers_user_table_div">
                             <loader ng-hide="gotAllUsers"></loader>
                         </div>
@@ -29,5 +41,5 @@ Detailed information is shown on the right hand side of the screen after clickin
                 <userinfo ng-show="userid"></userinfo>
             </div>
         </div> <!-- row -->
-    </div>
+    </div> <!-- panel-body -->
 </div> <!-- panel panel-default -->

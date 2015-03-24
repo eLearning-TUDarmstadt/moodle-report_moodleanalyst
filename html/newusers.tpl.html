@@ -1,16 +1,22 @@
-<!DOCTYPE html>
 <!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
+This page lists all new users with the option of filtering by inactivity.
+Detailed information is shown on the right hand side of the screen after clicking on a user.
 -->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
-</html>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3>{{vocabulary.newusers}}</h3>
+    </div>
+    
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div>TODO write content</div>
+            </div>
+            
+            <div class="col-md-6">
+                <userinfo ng-show="userid"></userinfo>
+            </div>
+        </div> <!-- row -->
+    </div> <!-- panel-body -->
+</div> <!-- panel panel-default -->
