@@ -784,6 +784,7 @@ var inactiveUsersDashboard = function (result, $scope) {
     dashboard.bind([dateOfLastAccessFilter, timeSinceLastAccessFilter], [table]);
     // Draw the dashboard.
     dashboard.draw(data);
+    
     // Define what to do when selecting a table row.
     function selectHandler() {
         $scope.loadingUser = true;
@@ -797,6 +798,11 @@ var inactiveUsersDashboard = function (result, $scope) {
     ;
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
+    
+    google.visualization.events.addListener(dateOfLastAccessFilter, 'statechange', function() {
+        $scope.numberOfRowsShown = table.getDataTable().getNumberOfRows();
+        console.log(table.getDataTable().getNumberOfRows());
+    });
 };
 var coursesOfUserDashboard = function (result, $scope) {
     console.log(result);
