@@ -186,6 +186,7 @@ function getVocabulary() {
     $result['downloadfile'] = get_string('downloadfile');
     $result['reset'] = get_string('reset');
     $result['refresh'] = get_string('refresh');
+    $result['inactive'] = get_string('inactive');
 
     //echo "<pre>" . print_r($result, true) . "</pre>";
     echo json_encode($result);
