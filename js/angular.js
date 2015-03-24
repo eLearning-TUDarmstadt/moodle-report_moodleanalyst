@@ -135,12 +135,14 @@ app.directive('coursesearch', function () {
                             .success(function (result) {
                                 $scope.gotAllCourses = true;
                                 courseSearchDashboard(result, $scope);
+
                                 /*
                                 $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/courses/getEmpty')
                                         .success(function (result) {
                                             emptyCoursesDashboard(result, $scope);
                                             $scope.gotAllEmptyCourses = true;
                                         });
+
                                 */
                             });
                 };
