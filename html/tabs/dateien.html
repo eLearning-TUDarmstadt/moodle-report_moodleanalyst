@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <base target="_self">
+        <script>
+            $( '#table_div_dateien' ).html(loader);
+            var fields = { 
+		folder: { bezeichnung: 'Ordner', typ: 'number'},
+		resource: { bezeichnung:'Dateien', typ:'number'},
+		};
+            google.setOnLoadCallback(tabelle('dateien', fields, '/Dateien'));	
+        </script>
+    </head>
+    <body>
+        <div id="dateien">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"></h3>
+                        <div class="row">
+                            <div class="col-md-6" id="semester_filter_div_dateien"></div>
+                            <div class="col-md-6" id="fb_filter_div_dateien"></div>
+                        </div>
+                    </div>
+                <div class="panel-body" id="table_div_dateien"></div>
+            </div>
+        </div>
+    </body>
+</html>

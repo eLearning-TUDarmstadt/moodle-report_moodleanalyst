@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+
+    <body>
+        <div class="templateUser">
+            <div class="panel">
+                <div class="panel-heading" id="kopf">
+                        <div class="row">
+                            <div class='col-md-6'>
+                                <h1 id="panel-title"></h1>
+                                <h5>
+                                    <div id="username"></div>
+                                    <div id="email"></div>
+                                </h5>
+                            </div>
+                            <div class='col-md-6'>
+                                <div id="googleSearch"></div>
+                            </div>
+                        </div>
+                </div>
+                <div class="panel-body">
+                    <div class="well">
+                        <div id="id"></div>
+                        <div id="sprache"></div>
+                        <div id="lastaccess"></div>
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    <h3>Kurse</h3>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div id="dashboardUsersCourses">
+                                    <div id="string_filter_div_Userskurse"></div>
+                                    <div class="row">
+                                        <div class="col-md-4" id="semester_filter_div_Userskurse"></div>
+                                        <div class="col-md-4" id="fb_filter_div_Userskurse"></div>
+                                        <div class="col-md-4" id="Rolle_filter_div_Userskurse"></div>
+                                    </div>
+                                    <div id="table_div_Userskurse"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="dashboard_div">
+            <!--Divs that will hold each control and chart-->
+            <div id="filter_div"></div>
+            <div id="chart_div"></div>
+        </div>
+        <script>
+            google.load('visualization', '1.1', {'packages': ['controls']});
+
+            //------------------------------------------------------------------//
+            // Set a callback to run when the Google Visualization API is loaded.
+            //------------------------------------------------------------------//
+
+
+            $("#panel-title").html(loader);
+            $
+                    .ajax({
+                url: "/report/moodleanalyst/rest/router.php/user/id/USERID",
+                context: document.body
+            })
+                    .done(
+                    function(res) {
+                        directive = {
+                            '#panel-title': function(a) {
+                                a = a.context;
+                                var userID = a.id;
+                                var vorname = a.firstname;
+                                var nachname = a.lastname;
+                                var userLink = "<a href='/user/profile.php?id=" + userID + "'>" + vorname
+                                        + " " + nachname + "</a>";
+                                return userLink;
+                            },
+                            /*
+                             '#kopf@style' : function (a) {
+                             var temp = "tu-darmstadt.de";
+                             var email = a.email;
+                             if(email.indexOf(temp) < 1) {
+                             return "background-color: #F5A300;";
+                             }
+                             else {
+                             return "background-color: #99A604;";
+                             }
+                             },
+                             */
+                            '#id': function(a) {
+                                a = a.context;
+                                return "<div class='row'><div class='col-md-3'>User-ID:</div><div class='col-md-9'>" + a.id + "</div></div>";
+                            },
+                            '#username': function(a) {
+                                a = a.context;
+                                return "TU-ID: " + a.username;
+                            },
+                            '#email': function(a) {
+                                a = a.context;
+                                var email = a.email;
+                                return "<a href='mailto:" + email + "'>" + email + "</a>";
+                            },
+                            '#googleSearch': function(a) {
+                                a = a.context;
+                                var name = a.firstname + " " + a.lastname + " TU Darmstadt";
+                                name = name.replace(/ /g, '%20');
+                                var link = "https://www.google.de/#q=" + name;
+                                var string = "<a href='" + link + "'><img src=/report/moodleanalyst/pix/google.jpg width='200px' align='right'></a>";
+                                return string;
+                            },
+                            '#sprache': function(a) {
+                                a = a.context;
+                                var sprache = a.lang;
+                                return "<div class='row'><div class='col-md-3'>Sprache:</div><div class='col-md-9'>" + sprache + "</div></div>";
+                            },
+                            '#lastaccess': function(a) {
+                                return "<div class='row'><div class='col-md-3'>Letzter Zugriff:</div><div class='col-md-9'>" + DateAndTimeBetween(a.context.lastaccess) + "</div></div>";
+                            }
+                        };
+                        //console.log(navigator.userAgent.toLowerCase());
+                        
+                        if (checkBrowserName('firefox')) {
+                            var json = res;
+                        }
+                        else {
+                            var json = JSON.parse(res);
+                        }
+                        
+                        //var json = JSON.parse(res);
+                        
+                        $('div.templateUser')
+                                .render(json.Records, directive);
+                        // alert(res);
+                        //console.log(json);
+                        a = json.Records.roles;
+                        //console.log(a);
+                        //Dashboard
+                        google.load('visualization', '1.0', {'packages': ['controls']});
+
+                        var Userdata = new google.visualization.DataTable();
+
+                        Userdata.addColumn('number', 'ID');
+                        Userdata.addColumn('string', 'Semester');
+                        Userdata.addColumn('string', 'Fachbereich');
+                        Userdata.addColumn('string', 'Name / <i>Kurzname</i>');
+                        Userdata.addColumn('string', 'Rolle');
+                        Userdata.addColumn('string', 'Verwalten');
+
+                        var array = new Array();
+                        $.each(a, function(id, felder) {
+                            //console.log(felder);
+                            var subarray = new Array();
+                            subarray.push(parseInt(felder.course));
+                            subarray.push(felder.semester);
+                            subarray.push(felder.fb);
+                            //subarray.push(felder.fullname);
+                            if (felder.visible == 1) {
+                                subarray.push('<a href="/course/view.php?id=' + felder.course + '">' + felder.fullname + '<br /><i>' + felder.shortname + '</i></a>');
+                            } 
+                            else {
+                                subarray.push('<a href="/course/view.php?id=' + felder.course + '"><div class="dimmed">' + felder.fullname + '<br /><i>' + felder.shortname + '</i></div></a>');
+                            }
+                            subarray.push(felder.name);
+                            var fullname = (json.Records.firstname + " " + json.Records.lastname).replace(" ", "%20"); //
+                            //console.log(json.Records);
+                            subarray.push('<a href="/enrol/users.php?id=' + felder.course + '&search=' + fullname + '"><span class="ui-icon ui-icon-person"></span></a>');
+                            array.push(subarray);
+                        });
+                        Userdata.addRows(array);
+                        //var Usertable = new google.visualization.Table(document.getElementById('table_div_Userskurse'));
+
+                        //Usertable.draw(Userdata, {showRowNumber: true});
+
+
+                        // Create a dashboard.
+                        var dashboard = new google.visualization.Dashboard(
+                                document.getElementById('dashboardUsersCourses'));
+
+                        var CourseNameStringFilter = new google.visualization.ControlWrapper({
+                            controlType: 'StringFilter',
+                            containerId: 'string_filter_div_Userskurse',
+                            options: {
+                                filterColumnIndex: 3,
+                                matchType: 'any',
+                                ui: {
+                                    label: 'Kursname:'
+                                }
+                            }
+                        });
+
+                        var categoryPickerFB = new google.visualization.ControlWrapper({
+                            'controlType': 'CategoryFilter',
+                            'containerId': 'fb_filter_div_Userskurse',
+                            'options': {
+                                filterColumnIndex: 2,
+                                ui: {
+                                    caption: 'Fachbereich',
+                                    label: '',
+                                    allowTyping: false
+                                }
+                            }
+                        });
+
+                        var categoryPickerSemester = new google.visualization.ControlWrapper({
+                            'controlType': 'CategoryFilter',
+                            'containerId': 'semester_filter_div_Userskurse',
+                            'options': {
+                                filterColumnIndex: 1,
+                                ui: {
+                                    caption: 'Semester',
+                                    label: '',
+                                    allowTyping: false
+                                }
+                            }
+                        });
+
+                        var categoryPickerRolle = new google.visualization.ControlWrapper({
+                            'controlType': 'CategoryFilter',
+                            'containerId': 'Rolle_filter_div_Userskurse',
+                            'options': {
+                                filterColumnIndex: 4,
+                                ui: {
+                                    caption: 'Rolle',
+                                    label: '',
+                                    allowTyping: false
+                                }
+                            }
+                        });
+                        var UsersCourseTable = new google.visualization.ChartWrapper({
+                            chartType: 'Table',
+                            containerId: 'table_div_Userskurse',
+                            options: {
+                                showRowNumber: false,
+                                page: 'enable',
+                                pageSize: 50,
+                                allowHtml: true,
+                                sortColumn: 0,
+                                sortAscending: false
+                            }
+                        });
+
+
+
+                        // Establish dependencies, declaring that 'filter' drives 'pieChart',
+                        // so that the pie chart will only display entries that are let through
+                        // given the chosen slider range.
+                        dashboard.bind([CourseNameStringFilter, categoryPickerSemester, categoryPickerFB, categoryPickerRolle], UsersCourseTable);
+
+                        // Draw the dashboard.
+                        dashboard.draw(Userdata);
+
+                        //------------------------------------------------------------------//
+                        // Define what to do when selecting a table row.
+                        //------------------------------------------------------------------//
+                        /*
+                        function selectHandler() {
+                            var selection = UsersCourseTable.getChart().getSelection();
+                            for (var i = 0; i < selection.length; i++) {
+                                $.get("/report/moodleanalyst/html/detailed_course_view.html", function(inhalt) {
+                                    $("#getCourse").html(loader);
+
+                                    var selectedCourseId = UsersCourseTable.getDataTable().getFormattedValue(selection[0].row, 0);
+                                    //console.log(selectedCourseId);
+
+                                    inhalt = inhalt.replace(/#ID#/g, selectedCourseId);
+                                    //console.log(inhalt);
+                                    $("#getCourse").html(inhalt);
+                                    $('body,html').animate({scrollTop: 0}, 800);
+                                    $("#tabs").tabs({active: 0});
+                                });
+                            }
+                        }
+                        ;
+
+                        //------------------------------------------------------------------//
+                        // Setup listener to listen for clicks on table rows and process the selectHandler.
+                        //------------------------------------------------------------------//
+                        google.visualization.events.addListener(UsersCourseTable, 'select', selectHandler);
+                        */
+                    });
+
+
+
+        </script>
+    </body>
+</html>

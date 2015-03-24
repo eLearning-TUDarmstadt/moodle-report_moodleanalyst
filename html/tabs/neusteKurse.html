@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+	<head>		
+ 		<!-- Create table -->
+		<script type="text/javascript">
+		
+			//------------------------------------------------------------------//
+			// Load the Visualization API and the controls package.
+			//------------------------------------------------------------------//
+	    	google.load('visualization', '1.1', {'packages':['controls']});
+
+			//------------------------------------------------------------------//
+	    	// Set a callback to run when the Google Visualization API is loaded.
+	    	//------------------------------------------------------------------//
+	    	google.setOnLoadCallback(DrawDashboard());
+			
+	    	//------------------------------------------------------------------//
+	    	// Dashboard Function.
+	    	//------------------------------------------------------------------//
+			function DrawDashboard() {
+				$.ajax({
+					url: "/report/moodleanalyst/rest/router.php/NeuesteKurse",
+					dataType: 'json'
+				}).done(function (result) {
+					
+					//------------------------------------------------------------------//
+					// Create and populate the data table.
+					//------------------------------------------------------------------//
+					var data = new google.visualization.DataTable();
+					data.addColumn('number', 'ID');
+			        data.addColumn('string', 'Semester');
+			        data.addColumn('string', 'FB');
+			        data.addColumn('string', 'Name');
+			        data.addColumn('datetime', 'Erstellt am');
+			        var array = new Array();
+			        result = result.Records;
+			        //console.log(result);
+        	    	$.each(result, function(id, felder) {
+        	    		//console.log(felder);
+        	    		
+        	    		var subarray = new Array();
+        	    		subarray.push(parseInt(felder.id));
+        	    		subarray.push(felder.semester);
+        	    		subarray.push(felder.fb);
+        	    		subarray.push(felder.fullname);
+        	    		subarray.push(new Date(felder.timecreated*1000));
+        	    		//console.log(felder.timecreated);
+        	    		//data.addRow(array);
+        				//data.addRow('boolean', eigenschaften.bezeichnung);
+        				array.push(subarray);
+        			});
+        	    	data.addRows(array);
+        	    	
+        	    	//------------------------------------------------------------------//
+        	    	// Create a dashboard.
+        	    	//------------------------------------------------------------------//
+        	    	var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardNeuesteKurse'));
+        	    	
+        	    	//------------------------------------------------------------------//
+        	    	// Create a search box to search for the course name.
+        	    	//------------------------------------------------------------------//
+        	    	/*var stringFilter = new google.visualization.ControlWrapper({
+        	            controlType: 'StringFilter',
+        	            containerId: 'string_filter_div_neueste_kurse',
+        	            options: {
+        	                filterColumnLabel: 'Name',
+        	                matchType: 'any',
+        	                ui: {
+        	                	label: 'Kurs suchen:'
+        	                }
+        	            }
+        	        });*/
+        	    	
+        	    	//------------------------------------------------------------------//
+		        	// Create a category picker to filter by Semester.
+		        	//------------------------------------------------------------------//
+		        	var categoryPickerSemester = new google.visualization.ControlWrapper({
+		        	  'controlType': 'CategoryFilter',
+		        	  'containerId': 'semester_filter_div_neueste_kurse',
+		        	  'options': {
+		        	    filterColumnLabel: 'Semester',
+		        	    ui: {
+		        	    	caption: 'Nach Semester filtern',
+		        	    	label: '',
+		        	    	allowTyping: false
+		        	    }
+		        	  }
+		        	});
+		        	
+		        	//------------------------------------------------------------------//
+		        	// Create a category picker to filter by Fachbereich.
+		        	//------------------------------------------------------------------//
+		        	var categoryPickerFB = new google.visualization.ControlWrapper({
+		        	  'controlType': 'CategoryFilter',
+		        	  'containerId': 'fb_filter_div_neueste_kurse',
+		        	  'options': {
+		        	    filterColumnLabel: 'FB',
+		        	    ui: {
+		        	    	caption: 'Nach Fachbereich filtern',
+		        	    	label: '',
+		        	    	allowTyping: false
+		        	    }
+		        	  }
+		        	});
+		        	
+		        	//------------------------------------------------------------------//
+		        	// Create the table to display.
+		        	//------------------------------------------------------------------//
+        	    	var table = new google.visualization.ChartWrapper({
+        	            chartType: 'Table',
+        	            containerId: 'table_div_neueste_kurse',
+        	            options: {
+        	                showRowNumber: false,
+        	                page: 'enable',
+        	                pageSize: 25,
+        	                sortAscending: false,
+        	                sortColumn: 0
+        	            }
+        	        });
+        	    	
+        	    	//------------------------------------------------------------------//
+		        	// Establish dependencies.
+		        	//------------------------------------------------------------------//
+        	    	dashboard.bind([/*stringFilter,*/ categoryPickerSemester, categoryPickerFB], [table]);
+		        	
+        	    	//------------------------------------------------------------------//
+		        	// Draw the dashboard.
+		        	//------------------------------------------------------------------//
+        	    	dashboard.draw(data);
+			        
+        	    	//------------------------------------------------------------------//
+        	    	// Define what to do when selecting a table row.
+        	    	//------------------------------------------------------------------//
+		        	function selectHandler() {
+		        		var selection = table.getChart().getSelection();
+		        		for (var i = 0; i < selection.length; i++) {
+		        			$.get("/report/moodleanalyst/html/detailed_course_view.html", function( inhalt ) {
+				        		$( "#getCourse" ).html(loader);
+				        		
+				        		var selectedCourseId = table.getDataTable().getFormattedValue(selection[0].row, 0);
+				        		//console.log(selectedCourseId);
+				        		
+		    					inhalt = inhalt.replace(/#ID#/g, selectedCourseId);
+		    					//console.log(inhalt);
+		    					$( "#getCourse" ).html(inhalt);
+		    					$('body,html').animate({scrollTop:0},800);
+		    					$("#tabs").tabs({
+		    						active : 0
+		    					});
+				        	});
+		        		}
+		        	};
+		        	
+		        	//------------------------------------------------------------------//
+			        // Setup listener to listen for clicks on table rows and process the selectHandler.
+			        //------------------------------------------------------------------//
+			        google.visualization.events.addListener(table, 'select', selectHandler);
+				});
+			};
+		</script>
+	</head>
+
+	<body>
+		<div class="row">
+			<div id="dashboardNeuesteKurse">
+				<div class="panel panel-default">
+		           	<div class="panel-heading">
+		             	<h3 class="panel-title"></h3>
+		             		<div class="row">
+		             			<div class="col-md-4"><h4>Die 50 neuesten Kurse</h4></div>
+    							<!-- <div class="col-md-4" id="string_filter_div_neueste_kurse"></div> -->
+    							<div class="col-md-4" id="semester_filter_div_neueste_kurse"></div>
+    							<div class="col-md-4" id="fb_filter_div_neueste_kurse"></div>
+    						</div>
+    				</div>
+    				<div class="panel-body" id="table_div_neueste_kurse"></div>
+    			</div>
+			</div>
+		</div>
+	</body>
+</html>

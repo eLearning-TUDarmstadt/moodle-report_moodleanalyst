@@ -1,0 +1,46 @@
+<!--
+This file joins together
+    - coursesearch
+    - courseinfo
+    - usersearch and
+    - userinfo
+on one page.
+
+It will also show an error message if the user is not logged into moodle with the proper rights (at least course creator).
+-->
+
+<modal title="Error" visible="showModal">
+    <form role="form">
+        <div class="alert alert-danger" role="alert"><strong>Login Error</strong></div>
+        <button type="submit" class="btn btn-default" onclick="location.reload();">Reload</button>
+    </form>
+</modal>
+
+<div class="row main">
+    <div class="col-md-6" id="course">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    <h3>{{vocabulary.course}}</h3>
+                </div>
+            </div>
+            <div class="panel-body">
+                <courseinfo ng-show="courseid"></courseinfo>
+                <coursesearch></coursesearch>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6" id="user">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    <h3>{{vocabulary.user}}</h3>
+                </div>
+            </div>
+            <div class="panel-body">
+                <userinfo ng-show="userid"></userinfo>
+                <usersearch></usersearch>
+            </div>
+        </div>
+    </div>
+</div>

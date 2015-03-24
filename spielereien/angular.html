@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html ng-app="store">
+    <head>
+        <title>Angular.js</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="/report/moodleanalyst/spielereien/bootstrap.min.css" />
+    </head>
+    <body>
+        <div ng-controller="StoreController as store">
+            <div ng-repeat="product in store.products"> 
+                <h1> {{product.name}} </h1>
+                <h2> {{product.price | currency}} </h2>
+                <p> {{product.description}} </p>
+                <button ng-show="store.product.canPurchase"> Add to Cart </button>
+                <section ng-controller="PanelController as panel">
+                    <ul class="nav nav-pills">
+                        <li ng-class="{active:panel.isSelected(1)}">
+                            <a href ng-click="panel.selectTab(1)">Description</a>
+                        </li>
+                        <li ng-class="{active:panel.isSelected(2)}">
+                            <a href ng-click="panel.selectTab(2)">Specifications</a>
+                        </li>
+                        <li ng-class="{active:panel.isSelected(3)}">
+                            <a href ng-click="panel.selectTab(3)">Reviews</a>
+                        </li>
+                    </ul>
+                </section>
+                <div class="panel" ng-show="panel.isSelected(1)">
+                    <h4>Description</h4>
+                    <p>{{product.description}}</p>
+                </div>
+                <div class="panel" ng-show="panel.isSelected(2)">
+                    <h4>Specifications</h4>
+                    <blockquote>None yet</blockquote>
+                </div>
+                <div class="panel" ng-show="panel.isSelected(3)">
+                    <h4>Reviews</h4>
+                    <blockquote>None yet</blockquote>
+                </div>
+            </div>
+        </div>
+        <div class="panel" ng-show="tab === 1">
+            <h4>Description</h4>
+            <p>{{product.description}}</p>
+        </div>
+        <script type="text/javascript" src="/report/moodleanalyst/spielereien/angular.min.js"></script>
+        <script type="text/javascript" src="/report/moodleanalyst/spielereien/app.js"></script>           
+    </body>
+</html>

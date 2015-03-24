@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <base target="_self">
+        <script>
+            $( '#table_div_lehrorga' ).html(loader);
+            var fields = { 
+		gruppen: { bezeichnung: 'Gruppen', typ: 'number'},
+		};
+            google.setOnLoadCallback(tabelle('lehrorga', fields, '/Lehrorganisation'));	
+        </script>
+    </head>
+    <body>
+        <div id="lehrorga">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"></h3>
+                        <div class="row">
+                            <div class="col-md-6" id="semester_filter_div_lehrorga"></div>
+                            <div class="col-md-6" id="fb_filter_div_lehrorga"></div>
+                        </div>
+                    </div>
+                <div class="panel-body" id="table_div_lehrorga"></div>
+            </div>
+        </div>
+    </body>
+</html>

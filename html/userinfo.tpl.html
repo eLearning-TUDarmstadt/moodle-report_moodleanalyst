@@ -1,0 +1,183 @@
+<!--
+This page displays detailed Information about a user.
+-->
+
+<div id="userInfo">
+    <div class="panel panel-primary">
+        <!--
+        ======================================================
+        The panel header consists of:
+            1) the user's name
+            2) a button group containing 2 buttons:
+                2.1) a button link to edit the user's settings
+                2.2) refresh button
+        ======================================================
+        -->
+        <div class="panel-heading">
+            <div class="panel-title row">
+                <div class="col-md-12">
+                    <!-- 1) user's name -->
+                    <a href="/user/profile.php?id={{user.id.v}}" target="_blank" style="color: #000000">
+                        {{user.firstname.v}} {{user.lastname.v}}
+                    </a>
+                    
+                    <!-- 2) button group -->
+                    <div class="btn-group btn-group-xs pull-right" role="group">
+                        
+                        <!-- 2.1) "edit user" button -->
+                        <a href="/user/editadvanced.php?id={{user.id.v}}" target="_blank" title="{{vocabulary.edit}}">
+                            <button type="button" class="btn btn-default" aria-label="Edit User">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </a>
+                    
+                        <!-- 2.1) refresh button -->
+                        <a title="{{vocabulary.refresh}}">
+                            <button type="button" class="btn btn-default" aria-label="Refresh" ng-click="loadDataUserInfo()">
+                                <span class="glyphicon glyphicon-refresh"></span>
+                            </button>
+                        </a>
+                    </div> <!-- btn-group -->
+                </div> <!-- col-md-12 -->
+            </div>  <!-- panel-title row -->
+        </div>  <!-- panel-heading -->
+
+        <!--
+        =================================================================================
+        The panel body consists of 3 nested panels:
+            1) directly enrol user in the course selected on the left-hand side (only visible when a course is selected)
+            2) detailed information about the user
+            3) an interactive list of all courses the user is enrolled in (with course search and filter-by-parent-/grandparentcategory and/or -role
+        =================================================================================
+        -->
+        <div class="panel-body">
+            <loader ng-show="loadingUser"></loader>
+            
+            <!-- 1) directly enrol user in selected course (only visible when a course is selected) -->
+            <div class="panel panel-default" ng-show="course.data.id.v">
+                <div class="row panel-body">
+                    <div class="col-md-4">
+                        <button ng-click="addUserToCourse(user.id.v, course.data.id.v, selectedRole);" type="button" class="btn btn-default" aria-label="">
+                            <span class="glyphicon glyphicon-arrow-left"></span> {{vocabulary.enrol}}
+                        </button>
+                    </div>
+                    <div class="col-md-8">
+                        <label>{{vocabulary.role}} ({{vocabulary.default}}: {{vocabulary.student}}):</label>
+                        <select ng-model="selectedRole">
+                            <option ng-repeat="role in course.data.roles.v" value="{{role.id}}">{{role.name}}</option>
+                        </select>
+                    </div>
+                </div> <!-- row panel-body -->
+            </div> <!-- panel panel-default -->
+            
+            <!-- 2) detailed user information -->
+            <div class="panel panel-default">
+                <div class="panel-heading panel-title">
+                    <div class="row">
+                        <div class="col-md-9">
+                            {{vocabulary.personal}}
+                        </div>
+                        
+                        <!-- refresh button -->
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataUserInfo()" title="{{vocabulary.refresh}}">
+                                <span class="glyphicon glyphicon-refresh"></span>
+                            </button>
+                        </div>
+                    </div> <!-- row -->
+                </div> <!-- panel-heading panel-title -->
+                    
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-4">{{user.id.string}}</div>
+                        <div class="col-md-8">{{user.id.v}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">{{user.username.string}}</div>
+                        <div class="col-md-8">{{user.username.v}}</div>
+                    </div>
+            
+                    <p></p>
+                
+                    <div class="row">
+                        <div class="col-md-4">{{user.firstname.string}}</div>
+                        <div class="col-md-8">{{user.firstname.v}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">{{user.lastname.string}}</div>
+                        <div class="col-md-8">{{user.lastname.v}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">{{user.email.string}}</div>
+                        <div class="col-md-8"><a href="mailto:{{user.email.v}}">{{user.email.v}}</a></div>
+                    </div>
+                        
+                    <p></p>
+             
+                    <div class="row">
+                        <div class="col-md-4">{{user.firstaccess.string}}</div>
+                        <div class="col-md-8">{{user.firstaccess.v}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">{{user.lastlogin.string}}</div>
+                        <div class="col-md-8">{{user.lastlogin.v}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">{{user.lastaccess.string}}</div>
+                        <div class="col-md-8">{{user.lastaccess.v}}</div>
+                    </div>
+                        
+                    <p></p>
+                        
+                    <div class="row">
+                        <div class="col-md-4">{{user.auth.string}}</div>
+                        <div class="col-md-8">{{user.auth.v}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">{{user.lang.string}}</div>
+                        <div class="col-md-8">{{user.lang.v}}</div>
+                    </div>
+                </div> <!-- panel-body -->
+            </div> <!-- panel panel-default -->
+            
+            <p></p>
+            
+            <!-- 3) interactive list of courses the user is enrolled in -->
+            <div id="dashboardCoursesOfUser">
+                <div class="panel panel-default">
+                    <div class="panel-heading panel-title">
+                        <div class="row">
+                            <div class="col-md-9">
+                                {{vocabulary.searchcourses}}
+                            </div>
+                            
+                            <!-- refresh button -->
+                            <div class="col-md-3">
+                                <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataUserInfo()" title="{{vocabulary.refresh}}">
+                                    <span class="glyphicon glyphicon-refresh"></span>
+                                </button>
+                            </div>
+                        </div> <!-- row -->
+                    </div> <!-- panel-heading panel-title -->
+                    
+                    <div class="panel-body">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div id="coursesOfUser_name_filter_div"></div>
+                                <div class="row">
+                                    <div class="col-md-4" id="coursesOfUser_grandparentcategory_filter_div"></div>
+                                    <div class="col-md-4" id="coursesOfUser_parentcategory_filter_div"></div>
+                                    <div class="col-md-4" id="coursesOfUser_role_filter_div"></div>
+                                </div>
+                            </div>
+             
+                            <div class="panel-body">
+                                <div id="coursesOfUser_table_div"></div>
+                            </div>
+                        </div>
+                    </div> <!-- panel-body -->
+                </div> <!-- panel panel-default -->
+            </div>
+        </div>  <!-- panel-body -->
+    </div>  <!-- panel-primary -->
+</div>

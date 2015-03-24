@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<base target="_self">
+		
+	<!-- Create table -->
+	<script type="text/javascript">
+		
+            //------------------------------------------------------------------//
+            // Load the Visualization API and the controls package.
+            //------------------------------------------------------------------//
+            google.load('visualization', '1.1', {'packages':['controls']});
+
+            //------------------------------------------------------------------//
+            // Set a callback to run when the Google Visualization API is loaded.
+            //------------------------------------------------------------------//
+            google.setOnLoadCallback(DrawDashboard());
+			
+            //------------------------------------------------------------------//
+            // Dashboard Function.
+            //------------------------------------------------------------------//
+            function DrawDashboard() {
+                $("#table_div_nutzer").html(loader);
+		$.ajax({
+                    url: "/report/moodleanalyst/rest/router.php/user/",
+                    dataType: 'json'
+		}).done(function (result) {
+				
+                    //------------------------------------------------------------------//
+                    // Create and populate the data table.
+                    //------------------------------------------------------------------//
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('number', 'ID');
+                    data.addColumn('string', 'TU-ID');
+                    data.addColumn('string', 'Vorname');
+                    data.addColumn('string', 'Nachname');
+                    data.addColumn('string', 'E-Mail');
+                    data.addColumn('string', 'FullNameTUID');
+                    var array = new Array();
+		    result = result.Records;
+		    //console.log(result);
+                    $.each(result, function(id, felder) {
+                        //console.log(felder);	
+                        var subarray = new Array();
+                        subarray.push(parseInt(felder.id));
+                        subarray.push(felder.username);
+                        subarray.push(felder.firstname);
+                        subarray.push(felder.lastname);
+                        subarray.push(felder.email);
+                        subarray.push(felder.firstname + ' ' + felder.lastname + ' ' + felder.username + ' ' + felder.email);
+                        //data.addRow(array);
+                        //data.addRow('boolean', eigenschaften.bezeichnung);
+                        array.push(subarray);
+                    });
+        	    data.addRows(array);
+        	    	
+        	    //------------------------------------------------------------------//
+        	    // Create a search box to search for the user name.
+        	    //------------------------------------------------------------------//
+        	    var stringFilter = new google.visualization.ControlWrapper({
+        	        controlType: 'StringFilter',
+        	        containerId: 'string_filter_div_nutzer',
+        	        options: {
+        	            filterColumnIndex: 5,
+        	            matchType: 'any',
+        	            ui: {
+        	              	label: 'Nutzer suchen:'
+        	            }
+        	        }
+        	    });
+		        	
+		    //------------------------------------------------------------------//
+		    // Create the table to display.
+		    //------------------------------------------------------------------//
+        	    var table = new google.visualization.ChartWrapper({
+        	        chartType: 'Table',
+        	        containerId: 'table_div_nutzer',
+        	        options: {
+        	            showRowNumber: false,
+        	            page: 'enable',
+        	            pageSize: 25
+        	        },
+        	        view: {
+                            columns: [1, 2, 3, 4]
+        	        }
+        	    });
+		        	
+        	    //------------------------------------------------------------------//
+        	    // Create a dashboard.
+        	    //------------------------------------------------------------------//
+        	    var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardUser'));
+        	    	
+        	    //------------------------------------------------------------------//
+		    // Establish dependencies.
+		    //------------------------------------------------------------------//
+        	    dashboard.bind([stringFilter], [table]);
+		        	
+        	    //------------------------------------------------------------------//
+		    // Draw the dashboard.
+		    //------------------------------------------------------------------//
+        	    dashboard.draw(data);
+			        
+        	    //------------------------------------------------------------------//
+        	    // Define what to do when selecting a table row.
+        	    //------------------------------------------------------------------//
+		    function selectHandler() {
+                        var selection = table.getChart().getSelection();
+		        for (var i = 0; i < selection.length; i++) {
+                            $.get("/report/moodleanalyst/html/detailed_user_view.html", function( inhalt ) {
+                                $( "#getUser" ).html(loader);
+				        		
+                                var selectedUserId = table.getDataTable().getFormattedValue(selection[0].row, 0);
+                                //console.log(selectedUserId);
+				        		
+                                inhalt = inhalt.replace(/USERID/g, selectedUserId);
+                                //console.log(inhalt);
+                                $( "#getUser" ).html(inhalt);
+                                $('body,html').animate({scrollTop:0},800);
+                            });
+		        }
+		    };
+		        	
+		    //------------------------------------------------------------------//
+		    // Setup listener to listen for clicks on table rows and process the selectHandler.
+		    //------------------------------------------------------------------//
+		    google.visualization.events.addListener(table, 'select', selectHandler);
+		});
+            };
+	</script>
+    </head>
+
+    <body>
+        <div class="row">
+            <div class="col-md-6">
+                <div id="dashboardUser">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"></h3>
+                            <div id="string_filter_div_nutzer"></div>
+                        </div>
+                        <div class="panel-body" id="table_div_nutzer"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div id = "getUser"></div>
+            </div>
+        </div>
+    </body>
+</html>
