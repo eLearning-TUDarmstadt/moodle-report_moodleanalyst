@@ -71,7 +71,7 @@ echo '<html>
                                     </a>
                                     <ul class="dropdown-menu" role="menu">
                                         <li role="presentation"><a id="tablink_newusers" href="#tabs-3" role="tab" data-toggle="tab">{{vocabulary.newusers}}</a></li>
-                                        <li role="presentation"><a id="tablink_inactiveusers" href="#tabs-4" role="tab" data-toggle="tab">{{vocabulary.users}} ({{vocabulary.inactive}})</a></li>
+                                        <li role="presentation"><a id="tablink_inactiveusers" href="#tabs-4" role="tab" data-toggle="tab">Inactive users</a></li>
                                         <li role="presentation"><a id="tablink_emptycourses" href="#tabs-5" role="tab" data-toggle="tab">Empty courses</a></li>
                                     </ul>
                                 </li>
