@@ -30,11 +30,11 @@ echo '<html>
         <!-- Bootstrap core CSS-->
         <link rel="stylesheet" href="' . $wwwroot . '/report/moodleanalyst/css/bootstrap.min.css" />
         
-        <!-- jQuery core CSS -->
-        <link rel="stylesheet" href="' . $wwwroot . '/report/moodleanalyst/css/jquery-ui.min.css" />
-            
         <!-- Bootstrap core CSS-->
         <link rel="stylesheet" href="' . $wwwroot . '/report/moodleanalyst/css/ownModifications.css" />
+        
+        <!-- jQuery core CSS -->
+        <link rel="stylesheet" href="' . $wwwroot . '/report/moodleanalyst/css/jquery-ui.min.css" />
     </head>
     
     <body ng-app="overview" style="padding-top:40px">
@@ -71,8 +71,7 @@ echo '<html>
                                     </a>
                                     <ul class="dropdown-menu" role="menu">
                                         <li role="presentation"><a id="tablink_newusers" href="#tabs-3" role="tab" data-toggle="tab">{{vocabulary.newusers}}</a></li>
-                                        <li role="presentation"><a id="tablink_inactiveusers" href="#tabs-4" role="tab" data-toggle="tab">Inactive users</a></li>
-
+                                        <li role="presentation"><a id="tablink_inactiveusers" href="#tabs-4" role="tab" data-toggle="tab">{{vocabulary.users}} ({{vocabulary.inactive}})</a></li>
                                         <li role="presentation"><a id="tablink_emptycourses" href="#tabs-5" role="tab" data-toggle="tab">Empty courses</a></li>
                                     </ul>
                                 </li>

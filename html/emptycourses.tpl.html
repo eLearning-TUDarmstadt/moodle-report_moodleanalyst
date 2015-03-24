@@ -1,34 +1,45 @@
-<div class="row">
-    <div class="col-md-6">
-        <!--
-This page lists all courses along with a search box and the option to filter by parent and/or grandparent category.
-Selecting a course will load the courseinfo page.
-        -->
-        <div id="dashboardEmptyCourses">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-md-9">
-                            <div id="emptycourses_courses_name_filter_div"></div>
-                            <div id="emptycourses_courses_grandparentcategory_filter_div"></div>
-                            <div id="emptycourses_courses_parentcategory_filter_div"></div>
-                        </div>
-                        <div class="col-md-3">
-                            <!-- refresh button -->
-                            <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataCourseSearch()" title="{{vocabulary.refresh}}">
-                                <span class="glyphicon glyphicon-refresh"></span>
-                            </button>
-                        </div>
-                    </div> <!-- row -->
-                </div> <!-- panel-heading -->
+<!--
+This page lists all empty courses with the option to show detailed information about a certain
+course by clicking on it. The Details will appear on the right half of the screen while the list
+appears on the left half.
+-->
 
-                <div class="panel-body" id="emptycourses_courses_table_div">
-                    <loader ng-hide="gotAllEmptyCourses"></loader>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3>empty courses</h3>
+    </div>
+    
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div id="dashboardEmptyCourses">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div id="emptycourses_courses_name_filter_div"></div>
+                                    <div id="emptycourses_courses_grandparentcategory_filter_div"></div>
+                                    <div id="emptycourses_courses_parentcategory_filter_div"></div>
+                                </div>
+                                <div class="col-md-3">
+                                    <!-- refresh button -->
+                                    <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataCourseSearch()" title="{{vocabulary.refresh}}">
+                                        <span class="glyphicon glyphicon-refresh"></span>
+                                    </button>
+                                </div>
+                            </div> <!-- row -->
+                        </div> <!-- panel-heading -->
+                        
+                        <div class="panel-body" id="emptycourses_courses_table_div">
+                            <loader ng-hide="gotAllEmptyCourses"></loader>
+                        </div>
+                    </div> <!-- panel panel-info -->
                 </div>
-            </div> <!-- panel panel-info -->
-        </div>
-    </div>
-    <div class="col-md-6">
-        <courseinfo ng-show="courseid"></courseinfo>
-    </div>
-</div>
+            </div> <!-- col-md-6 -->
+            
+            <div class="col-md-6">
+                <courseinfo ng-show="courseid"></courseinfo>
+            </div>
+        </div> <!-- row -->
+    </div> <!-- panel-body -->
+</div> <!-- panel panel-default -->

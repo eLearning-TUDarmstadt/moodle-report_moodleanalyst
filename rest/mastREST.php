@@ -1,27 +1,19 @@
 <?php
-
 //ini_set('display_errors', 'On');
 //error_reporting(E_ALL | E_STRICT);
-
 require 'Slim/Slim.php';
 require_once '../../../config.php';
-
 GLOBAL $CFG;
 require_once $CFG->dirroot . '/course/lib.php';
 //require_once '../../../course/lib.php';
 require_once $CFG->dirroot . '/report/moodleanalyst/rest/lib.php';
-
 // GZIP Compression for output
 if (!ob_start("ob_gzhandler"))
     ob_start();
-
 //require_login();
 require_capability('report/moodleanalyst:view', context_system::instance());
-
 \Slim\Slim::registerAutoloader();
-
 $app = new \Slim\Slim ();
-
 $app->map('/isUserLoggedIn', 'isUserLoggedIn')->via('GET');
 $app->map('/allCourses', 'allCourses')->via('GET');
 $app->map('/allUsers', 'allUsers')->via('GET');
@@ -37,22 +29,16 @@ $app->map('/course/new', 'newCourse')->via('POST');
 $app->map('/course/:id/setVisibility/:visibility', 'setCourseVisibility')->via('GET');
 $app->map('/vocabulary', 'getVocabulary')->via('GET');
 $app->map('/addUser/:userid/ToCourse/:courseid/withRole/:roleid', 'enrolUserToCourse')->via('GET');
-
 $app->run();
-
 function isUserLoggedIn() {
     echo json_encode(true);
 }
-
 function setCourseVisibility($courseid, $visibility) {
     echo json_encode(course_change_visibility($courseid, $visibility));
 }
-
 function newCourse() {
     global $DB;
-
     $app = \Slim\Slim::getInstance();
-
     $data = new stdClass();
     $content = json_decode($app->request->getBody());
     if (!isset($content->shortname)) {
@@ -63,32 +49,25 @@ function newCourse() {
             errorAndDie('shortnametaken');
         }
     }
-
     if (!isset($content->fullname)) {
         errorAndDie('fullname needs to be set!');
     } else {
         $data->fullname = $content->fullname;
     }
-
     if (!isset($content->category)) {
         errorAndDie('category needs to be set!');
     } else {
         $data->category = $content->category;
     }
-
     if (!isset($content->password)) {
         errorAndDie('password needs to be set!');
     }
-
     if (!isset($content->visible)) {
         //nothing here
     } else {
         $data->visible = $content->visible;
     }
     $course = create_course($data);
-
-
-
     // Changing password
     $instances = enrol_get_instances($course->id, false);
     $enrolinstance = new stdClass();
@@ -98,7 +77,6 @@ function newCourse() {
             break;
         }
     }
-
     // It seems as a self enrolment is not created by default => create it!
     if (!isset($enrolinstance->id)) {
         require_once $CFG->dirroot . '/enrol/self/lib.php';
@@ -107,10 +85,8 @@ function newCourse() {
     }
     $enrolinstance->password = $content->password;
     $DB->update_record('enrol', $enrolinstance);
-
     echo json_encode(array('course' => $course->id, 'selfenrolinstance' => $enrolinstance->id));
 }
-
 function newCourseOptions() {
     global $DB;
     // collecting all categories, with path and id
@@ -138,15 +114,10 @@ function newCourseOptions() {
     $vocab['selfenrolment'] = get_string('pluginname', 'enrol_self');
     $vocab['password'] = get_string('password', 'enrol_self');
     $vocab['nopassword'] = get_string('nopassword', 'enrol_self');
-
-
     $result['vocabulary'] = $vocab;
-
-
     //printArray($result);
     echo json_encode($result);
 }
-
 function getVocabulary() {
     $result = array();
     $result['course'] = get_string('course');
@@ -187,21 +158,16 @@ function getVocabulary() {
     $result['reset'] = get_string('reset');
     $result['refresh'] = get_string('refresh');
     $result['inactive'] = get_string('inactive');
-
-
     //echo "<pre>" . print_r($result, true) . "</pre>";
     echo json_encode($result);
 }
-
 function getCourseEnrolmentMethods($courseid) {
     global $DB, $PAGE;
     $PAGE->set_context(context_system::instance());
     $instances = enrol_get_instances($courseid, false);
     $result = array();
-
     foreach ($instances as $instanceid => $instance) {
         $enrol = enrol_get_plugin($instance->enrol);
-
         $array['id'] = $instance->id;
         $array['enrol'] = $instance->enrol;
         if (!enrol_is_enabled($instance->enrol) or $instance->status != ENROL_INSTANCE_ENABLED) {
@@ -218,7 +184,6 @@ function getCourseEnrolmentMethods($courseid) {
     //echo json_encode($result);
     return $result;
 }
-
 function getActivitiesInCourse($courseid) {
     global $OUTPUT;
     $table = array();
@@ -231,13 +196,9 @@ function getActivitiesInCourse($courseid) {
     $table['cols'][] = array('label' => 'mod', 'type' => 'string');
     $table['cols'][] = array('label' => 'cm', 'type' => 'string');
     $table['cols'][] = array('label' => get_string('visible'), 'type' => 'boolean');
-
-
     $table['rows'] = array();
-
     $activities = get_array_of_activities($courseid);
     //echo "<pre>" . print_r($activities, true) . "</pre>";
-
     foreach ($activities as $modid => $activity) {
         if ($activity->visible) {
             $class = "";
@@ -265,7 +226,6 @@ function getActivitiesInCourse($courseid) {
     //printArray($table);
     echo json_encode($table);
 }
-
 function getPersonsInCourse($courseid) {
     // Preparing the return table
     $result = array();
@@ -278,7 +238,6 @@ function getPersonsInCourse($courseid) {
     $result['cols'][] = array('label' => get_string('role'), 'type' => 'string');
     $result['cols'][] = array('label' => get_string('fullname'), 'type' => 'string');
     $result['rows'] = array();
-
     $context = context_course::instance($courseid);
     $usedRoles = get_roles_used_in_context($context);
     //printArray($usedRoles);
@@ -291,34 +250,27 @@ function getPersonsInCourse($courseid) {
             }
         }
     }
-
     echo json_encode($result);
     //printArray($result);
 }
-
 function enrolUserToCourse($userid, $courseid, $roleid) {
     global $DB, $CFG;
     require_once '../../../enrol/manual/externallib.php';
-
     if (!isset($roleid) || !is_numeric($roleid) || $roleid < 0) {
         echo "Invalid role: $role. Add as student.";
         $roleid = $DB->get_record('role', array('shortname' => 'student'), $fields = 'id', IGNORE_MISSING);
         $roleid = $roleid->id;
     }
-
     $enrolment = array('courseid' => $courseid, 'userid' => $userid, 'roleid' => $roleid);
     $enrolments[] = $enrolment;
     enrol_manual_external::enrol_users($enrolments);
 }
-
 function user($userid) {
     require_once '../../../user/lib.php';
     require_once '../../../lib/coursecatlib.php';
     $user = user_get_users_by_id(array($userid));
     $user = $user[$userid];
-
     $courses = enrol_get_all_users_courses($userid);
-
     $courses_enrolled = array();
     $courses_enrolled['cols'] = array();
     $courses_enrolled['cols'][] = array('label' => 'ID', 'type' => 'number');
@@ -328,7 +280,6 @@ function user($userid) {
     $courses_enrolled['cols'][] = array('label' => get_string('roles'), 'type' => 'string');
     $courses_enrolled['cols'][] = array('label' => get_string('visible'), 'type' => 'boolean');
     $courses_enrolled['rows'] = array();
-
     foreach ($courses as $courseid => $course) {
         $categoryid = $course->category;
         $category = coursecat::get($categoryid);
@@ -343,11 +294,9 @@ function user($userid) {
             $course->parentcategory = null;
             $course->parentcategoryname = null;
         }
-
         // Get roles
         $context = context_course::instance($courseid);
         $course->roles = get_user_roles($context, $userid);
-
         foreach ($course->roles as $roleid => $role) {
             $visible = ($course->visible) ? true : false;
             $courses_enrolled['rows'][] = [
@@ -419,7 +368,6 @@ function user($userid) {
       [alternatename] =>
       [calendartype] => gregorian
      */
-
     $ret = array();
     $ret['id']['string'] = "ID";
     $ret['id']['v'] = $user->id;
@@ -445,12 +393,10 @@ function user($userid) {
     $ret['lastip']['v'] = $user->lastip;
     $ret['lang']['string'] = get_string('language');
     $ret['lang']['v'] = $user->lang;
-
     $ret['courses'] = $courses_enrolled;
     //printArray($ret);
     echo json_encode($ret);
 }
-
 function emptyCourses() {
     global $DB;
     //$courses = get_courses("all", "c.sortorder DESC", 'c.*, c.category as parentcategory');
@@ -464,9 +410,7 @@ function emptyCourses() {
     $result['cols'][] = array('label' => get_string('parentcategory', 'report_moodleanalyst'), 'type' => 'string');
     $result['cols'][] = array('label' => get_string('course', 'report_moodleanalyst'), 'type' => 'string');
     $result['cols'][] = array('label' => get_string('visible'), 'type' => 'boolean');
-
     $result['rows'] = array();
-
     foreach ($courses as $courseid => $data) {
         $activities = get_array_of_activities($courseid);
         if (count($activities) <= 0) {
@@ -492,13 +436,11 @@ function emptyCourses() {
     echo json_encode($result);
     //printArray($result);
 }
-
 function course($courseid) {
     global $CFG;
     require_once $CFG->dirroot . '/lib/coursecatlib.php';
     require_login();
     $course = get_course($courseid);
-
     $data = array();
     $data['id']['string'] = get_string('course');
     $data['id']['v'] = $courseid;
@@ -510,23 +452,19 @@ function course($courseid) {
     $data['visible']['v'] = $course->visible;
     $data['idnumber']['string'] = get_string('idnumber');
     $data['idnumber']['v'] = $course->idnumber;
-
     $data['category']['string'] = get_string('coursecategory');
     $category = coursecat::get($course->category);
     $parents = $category->get_parents();
-
     $breadcrumb = "// " . coursecat::get($course->category)->name . " ";
     foreach ($parents as $key => $id) {
         $breadcrumb = "// " . coursecat::get($id)->name . " " . $breadcrumb;
     }
     $data['category']['v'] = $breadcrumb;
-
     $context = context_course::instance($courseid);
     $data['roles']['string'] = get_string('roles');
     $data['roles']['v'] = role_get_names($context);
     $data['personsInCourse'] = count_enrolled_users($context);
     $data['enrolmentmethods'] = getCourseEnrolmentMethods($courseid);
-
     $usedRoles = get_roles_used_in_context($context);
     //printArray($usedRoles);
     foreach ($usedRoles as $roleid => $role) {
@@ -543,7 +481,6 @@ function course($courseid) {
     //printArray($result);
     echo json_encode($result);
 }
-
 function allUsers() {
     /*
      * @param bool $get If false then only a count of the records is returned
@@ -581,9 +518,7 @@ function allUsers() {
     $result['cols'][] = array('label' => get_string('fullname'), 'type' => 'string');
     $result['cols'][] = array('label' => get_string('lastaccess'), 'type' => 'date');
     $result['cols'][] = array('label' => get_string('days'), 'type' => 'number');
-
     $result['rows'] = array();
-
     foreach ($users as $userid => $user) {
         $result['rows'][] = [
             'c' => array(
@@ -602,7 +537,6 @@ function allUsers() {
     //printArray($result);
     echo json_encode($result);
 }
-
 function allUsersWithLastAccess() {
     /*
      * @param bool $get If false then only a count of the records is returned
@@ -629,7 +563,6 @@ function allUsersWithLastAccess() {
     $recordsperpage = '100000000';
     $fields = 'id, username, firstname, lastname, email, lastaccess';
     $users = get_users($get, $search, $confirmed, $exceptions, $sort, $firstinitial, $lastinitial, $page, $recordsperpage, $fields);
-
     // Preparing the return table
     $result = array();
     $result['cols'] = array();
@@ -641,7 +574,6 @@ function allUsersWithLastAccess() {
     $result['cols'][] = array('label' => get_string('lastaccess'), 'type' => 'date');
     $result['cols'][] = array('label' => get_string('fullname'), 'type' => 'string');
     $result['rows'] = array();
-
     foreach ($users as $userid => $user) {
         $result['rows'][] = [
             'c' => array(
@@ -658,12 +590,10 @@ function allUsersWithLastAccess() {
     //printArray($result);
     echo json_encode($result);
 }
-
 function allCourses() {
     global $DB;
     $courses = get_courses("all", "c.sortorder DESC", 'c.id, c.fullname, c.shortname, c.category as parentcategory, c.visible');
     $categories = $DB->get_records('course_categories', null, null, 'id, name, parent, visible');
-
     // Preparing the return table
     $result = array();
     $result['cols'] = array();
@@ -672,9 +602,7 @@ function allCourses() {
     $result['cols'][] = array('label' => get_string('parentcategory', 'report_moodleanalyst'), 'type' => 'string');
     $result['cols'][] = array('label' => get_string('course', 'report_moodleanalyst'), 'type' => 'string');
     $result['cols'][] = array('label' => get_string('visible'), 'type' => 'boolean');
-
     $result['rows'] = array();
-
     foreach ($courses as $courseid => $data) {
         if ($data->parentcategory != 0) {
             $data->parentcategoryname = $categories[$data->parentcategory]->name;
@@ -697,14 +625,11 @@ function allCourses() {
     echo json_encode($result);
     //printArray($result);
 }
-
 function printArray($array) {
     echo "<pre>" . print_r($array, true) . "</pre>";
 }
-
 function errorAndDie($msg) {
     echo json_encode(array('error' => $msg));
     die();
 }
 ?>
-
