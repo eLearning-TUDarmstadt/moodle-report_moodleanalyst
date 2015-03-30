@@ -288,13 +288,15 @@ app.directive('newcourseform', function () {
                     $scope.password = "randompassword";
                 };
                 $scope.createNewCourse = function () {
-                    shortname = $scope.newcourse.shortname;
-                    fullname = $scope.newcourse.fullname;
-                    category = $scope.newcourse.category;
-                    password = "";
+                    var shortname = $scope.newcourse.shortname;
+                    var fullname = $scope.newcourse.fullname;
+                    var category = $scope.newcourse.category;
+                    var password = "";
                     if ($scope.password == "randompassword") {
                         console.log("RANDOM!");
                         password = generatePassword();
+                        console.log(password);
+                        console.log($scope.password);
                     }
                     if ($scope.password == "userpassword") {
                         console.log("userpassword");
@@ -793,16 +795,23 @@ var inactiveUsersDashboard = function (result, $scope) {
         $scope.userid = table.getDataTable().getFormattedValue(selection[0].row, 0);
         //console.log($scope.userid);
         $scope.didSelectAUser($scope.userid);
+        $scope.numberOfRowsShown = table.getDataTable().getNumberOfRows();
         $("html, body").animate({scrollTop: 0}, 800);
-    }
-    ;
+    };
+    
+    // Define what to do when changing the state on one of the slider range filters.
+    function stateChangeHandler() {
+        $scope.numberOfRowsShown = table.getDataTable().getNumberOfRows();
+        console.log(table.getDataTable().getNumberOfRows());
+    };
+    
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
     
-    google.visualization.events.addListener(dateOfLastAccessFilter, 'statechange', function() {
-        $scope.numberOfRowsShown = table.getDataTable().getNumberOfRows();
-        console.log(table.getDataTable().getNumberOfRows());
-    });
+    // Setup listeners for statechange in the slider range filters.
+    google.visualization.events.addListener(dateOfLastAccessFilter, 'statechange', stateChangeHandler);
+    google.visualization.events.addListener(timeSinceLastAccessFilter, 'statechange', stateChangeHandler);
+    
 };
 var coursesOfUserDashboard = function (result, $scope) {
     console.log(result);
