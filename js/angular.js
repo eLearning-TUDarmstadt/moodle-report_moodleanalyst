@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-wwwroot = document.getElementById("angularJSloader").getAttribute("wwwroot");
+var wwwroot = document.getElementById("angularJSloader").getAttribute("wwwroot");
 var app = angular.module('overview', []);
 
 /**********************
@@ -348,41 +348,37 @@ app.directive('newcourseform', function () {
                 $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/course/new/options')
                         .success(function (data) {
                             $scope.password = "randompassword";
-                            //console.log(data);
-                            $scope.newcourse = data;
                             $scope.allCategories = data.categories;
-                            //console.log($scope.allCategories);
                         });
+                        
+                // reset form
                 $scope.reset = function () {
-                    $scope.newcourse.shortname = null;
-                    $scope.newcourse.fullname = null;
-                    $scope.newcourse.category = null;
+                    $scope.shortname = null;
+                    $scope.fullname = null;
+                    $scope.category = null;
                     $scope.password = "randompassword";
                 };
+                
                 $scope.createNewCourse = function () {
-                    var shortname = $scope.newcourse.shortname;
-                    var fullname = $scope.newcourse.fullname;
-                    var category = $scope.newcourse.category;
                     var password = "";
+                    
                     if ($scope.password == "randompassword") {
                         console.log("RANDOM!");
                         password = generatePassword();
-                        console.log(password);
-                        console.log($scope.password);
                     }
                     if ($scope.password == "userpassword") {
                         console.log("userpassword");
-                        password = $scope.newcourse.userpassword;
+                        password = $scope.userpassword;
                     }
-                    params = {
-                        'shortname': shortname,
-                        'fullname': fullname,
-                        'category': category,
+                    
+                    var params = {
+                        'shortname': $scope.shortname,
+                        'fullname': $scope.fullname,
+                        'category': $scope.category,
                         'password': password
                     };
                     $http.post(wwwroot + '/report/moodleanalyst/rest/mastREST.php/course/new', params)
                             .success(function (data) {
-                                console.log(data);
                                 if (data.error) {
                                     alert(data.error);
                                 }
@@ -394,7 +390,7 @@ app.directive('newcourseform', function () {
                                     $('#myTabList a:first').tab('show');
                                 }
                             })
-                            .error(function (data) {
+                            .error(function () {
                                 alert("error occured");
                             });
                     /*
@@ -518,12 +514,12 @@ var activitiesInCourseDashboard = function (result, $scope) {
         var selection = table.getChart().getSelection()[0];
         selection = table.getDataTable().getTableRowIndex(selection.row);
 
-        id = data.getFormattedValue(selection, 0);
-        cm = data.getFormattedValue(selection, 5);
-        mod = data.getFormattedValue(selection, 4);
-        visible = data.getFormattedValue(selection, 6);
+        var id = data.getFormattedValue(selection, 0);
+        var cm = data.getFormattedValue(selection, 5);
+        var mod = data.getFormattedValue(selection, 4);
+        var visible = data.getFormattedValue(selection, 6);
 
-        scope = angular.element(document.getElementById("tabController")).scope();
+        var scope = angular.element(document.getElementById("tabController")).scope();
         scope.$apply(function () {
             scope.setActivity(id, cm, mod, visible);
         });
@@ -573,7 +569,7 @@ var usersInCourseDashboard = function (result, $scope) {
     $scope.setRoleFilterForUsersInCourseDashboard = function (rolestring) {
         roleCategoryPicker.setState({'selectedValues': [rolestring]});
         roleCategoryPicker.draw();
-        scope = angular.element($('#tabController')).scope();
+        var scope = angular.element($('#tabController')).scope();
         scope.tab = 1;
     };
 

@@ -128,20 +128,6 @@ function newCourseOptions() {
         $result['categories'][$id]['name'] = $string;
     }
     // end categories
-    $vocab = array();
-    $vocab['fullname'] = get_string('fullnamecourse');
-    $vocab['shortname'] = get_string('shortnamecourse');
-    $vocab['newcourse'] = get_string('newcourse');
-    $vocab['createnewcourse'] = get_string('createnewcourse');
-    $vocab['category'] = get_string('category');
-    $vocab['shortnametaken'] = get_string('shortnametaken');
-    $vocab['selfenrolment'] = get_string('pluginname', 'enrol_self');
-    $vocab['password'] = get_string('password', 'enrol_self');
-    $vocab['nopassword'] = get_string('nopassword', 'enrol_self');
-
-
-    $result['vocabulary'] = $vocab;
-
 
     //printArray($result);
     echo json_encode($result);
@@ -187,6 +173,15 @@ function getVocabulary() {
     $result['reset'] = get_string('reset');
     $result['refresh'] = get_string('refresh');
     $result['inactive'] = get_string('inactive');
+    $result['fullname'] = get_string('fullnamecourse');
+    $result['shortname'] = get_string('shortnamecourse');
+    $result['newcourse'] = get_string('newcourse');
+    $result['createnewcourse'] = get_string('createnewcourse');
+    $result['category'] = get_string('category');
+    $result['shortnametaken'] = get_string('shortnametaken');
+    $result['selfenrolment'] = get_string('pluginname', 'enrol_self');
+    $result['password'] = get_string('password', 'enrol_self');
+    $result['nopassword'] = get_string('nopassword', 'enrol_self');
 
     //echo "<pre>" . print_r($result, true) . "</pre>";
     echo json_encode($result);

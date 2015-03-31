@@ -4,33 +4,33 @@ This page contains a form to create a new course.
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h3>{{newcourse.vocabulary.newcourse}}</h3>
+        <h3>{{vocabulary.newcourse}}</h3>
     </div>
     
     <div class="panel-body">
         <form name="form" novalidate>
             <div class="row">
                 <div class="col-md-2">
-                    {{newcourse.vocabulary.shortname}}
+                    {{vocabulary.shortname}}
                 </div>
                 <div class="col-md-10">
-                    <input type="text" placeholder="{{newcourse.vocabulary.shortname}}" ng-model="newcourse.shortname" name="shortname" required="" />
+                    <input type="text" placeholder="{{vocabulary.shortname}}" ng-model="shortname" name="shortname" required="" />
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-2">
-                    {{newcourse.vocabulary.fullname}}
+                    {{vocabulary.fullname}}
                 </div>
                 <div class="col-md-10">
-                    <input type="text" placeholder="{{newcourse.vocabulary.fullname}}" ng-model="newcourse.fullname" name="fullname" required="" />
+                    <input type="text" placeholder="{{vocabulary.fullname}}" ng-model="fullname" name="fullname" required="" />
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-2">
-                    {{newcourse.vocabulary.category}}
+                    {{vocabulary.category}}
                 </div>
                 <div class="col-md-10">
-                    <select ng-model="newcourse.category">
+                    <select ng-model="category">
                         <option ng-repeat="category in allCategories | toArray | orderBy:'name'" value="{{category.id}}">{{category.name}}</option>
                     </select>
                 </div>
@@ -40,25 +40,25 @@ This page contains a form to create a new course.
     
             <div class="row">
                 <div class="col-md-12">
-                    <input type="radio" ng-model="password" value="nopassword" /> {{newcourse.vocabulary.nopassword}}
+                    <input type="radio" ng-model="password" value="nopassword" /> {{vocabulary.nopassword}}
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <input type="radio" ng-model="password" value="userpassword" />
-                    <input type="text" placeholder="{{newcourse.vocabulary.password}}" ng-model="newcourse.userpassword" name="password" required="" />
+                    <input type="text" placeholder="{{vocabulary.password}}" ng-model="userpassword" name="password" required="" />
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <input type="radio" ng-model="password" value="randompassword" /> Random {{newcourse.vocabulary.password}}
+                    <input type="radio" ng-model="password" value="randompassword" /> Random {{vocabulary.password}}
                 </div>
             </div>
     
             <p></p>
     
             <button type="button" class="btn btn-default" aria-label="newcourse.vocabulary.createnewcourse" ng-click="createNewCourse()">
-                <span class="glyphicon glyphicon-plus"></span> {{newcourse.vocabulary.createnewcourse}}
+                <span class="glyphicon glyphicon-plus"></span> {{vocabulary.createnewcourse}}
             </button>
             
             <button type="button" class="btn btn-default" aria-label="newcourse.vocabulary.reset" ng-click="reset()">
