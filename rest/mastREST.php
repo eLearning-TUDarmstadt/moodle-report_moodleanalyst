@@ -87,8 +87,6 @@ function newCourse() {
     }
     $course = create_course($data);
 
-
-
     // Changing password
     $instances = enrol_get_instances($course->id, false);
     $enrolinstance = new stdClass();
@@ -101,6 +99,7 @@ function newCourse() {
 
     // It seems as a self enrolment is not created by default => create it!
     if (!isset($enrolinstance->id)) {
+        global $CFG;
         require_once $CFG->dirroot . '/enrol/self/lib.php';
         $self = new enrol_self_plugin();
         $enrolinstance->id = $self->add_default_instance($course);
@@ -109,6 +108,7 @@ function newCourse() {
     $DB->update_record('enrol', $enrolinstance);
 
     echo json_encode(array('course' => $course->id, 'selfenrolinstance' => $enrolinstance->id));
+    //echo json_encode(array('course' => $course->id));
 }
 
 function newCourseOptions() {
