@@ -49,7 +49,7 @@ function setCourseVisibility($courseid, $visibility) {
 }
 
 function newCourse() {
-    global $DB;
+    global $DB, $CFG;
 
     $app = \Slim\Slim::getInstance();
 
@@ -85,6 +85,25 @@ function newCourse() {
     } else {
         $data->visible = $content->visible;
     }
+    
+    // Sets a course start date
+    require_once $CFG->dirroot . '/lib/coursecatlib.php';
+    $category = coursecat::get($data->category);
+    $categoryPath = $category->path;
+    $parentCategories = explode("/", $categoryPath);
+    
+    $possibleStartDate = 0;
+    foreach ($parentCategories as $categoryID) {
+        $category = coursecat::get($categoryID);
+        $name = $category->name;
+        
+        $possibleStartDate = semesterToCourseStartDate($name);
+        if($possibleStartDate != 0) {
+            $data->startdate = $possibleStartDate;
+            break;
+        }
+    }
+    
     $course = create_course($data);
 
     // Changing password
@@ -699,6 +718,40 @@ function printArray($array) {
 function errorAndDie($msg) {
     echo json_encode(array('error' => $msg));
     die();
+}
+
+/**
+ * Konvertiert ein Semester in einen Kursstarttermin
+ * 
+ * WiSe 2010/11 => 01.10.2010 (als Timestamp)
+ * SoSe 2011 => 01.04.2011 (als Timestamp)
+ *  
+ * @param String $semester beispielsweise "WiSe 2010/11" oder "SoSe 2011"
+ * @return int $timestamp Starttermin als UNIX-Timestamp, 0 falls kein vernünftiges Semester übergeben wurde
+ */
+function semesterToCourseStartDate($semester = "") {
+    $hour = 6;
+    $minute = 0;
+    $second = 0;
+    $month = 0;
+    $day = 1;
+    $year = 0;
+    if($pos = strpos($semester, "WiSe 20") === 0) {
+        // Wintersemester
+        $month = 10;
+        $year = (int) substr($semester, 5, 4);
+        
+    } elseif ($pos = strpos($semester, "SoSe 20") === 0) {
+        // Sommersemeste
+        $month = 4;
+        $year = (int) substr($semester, 5, 4);
+    } 
+    
+    if($year != 0) {
+        return mktime($hour, $minute, $second, $month, $day, $year);
+    } else {
+        return 0;
+    }
 }
 ?>
 
