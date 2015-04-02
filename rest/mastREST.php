@@ -85,25 +85,25 @@ function newCourse() {
     } else {
         $data->visible = $content->visible;
     }
-    
+
     // Sets a course start date
     require_once $CFG->dirroot . '/lib/coursecatlib.php';
     $category = coursecat::get($data->category);
     $categoryPath = $category->path;
     $parentCategories = explode("/", $categoryPath);
-    
+
     $possibleStartDate = 0;
     foreach ($parentCategories as $categoryID) {
         $category = coursecat::get($categoryID);
         $name = $category->name;
-        
+
         $possibleStartDate = semesterToCourseStartDate($name);
-        if($possibleStartDate != 0) {
+        if ($possibleStartDate != 0) {
             $data->startdate = $possibleStartDate;
             break;
         }
     }
-    
+
     $course = create_course($data);
 
     // Changing password
@@ -147,7 +147,6 @@ function newCourseOptions() {
         $result['categories'][$id]['name'] = $string;
     }
     // end categories
-
     //printArray($result);
     echo json_encode($result);
 }
@@ -507,7 +506,7 @@ function emptyCourses() {
 }
 
 function course($courseid) {
-    global $CFG;
+    global $CFG, $PAGE;
     require_once $CFG->dirroot . '/lib/coursecatlib.php';
     require_login();
     $course = get_course($courseid);
@@ -540,16 +539,31 @@ function course($courseid) {
     $data['personsInCourse'] = count_enrolled_users($context);
     $data['enrolmentmethods'] = getCourseEnrolmentMethods($courseid);
 
+
+    // Gets roles used in course
+
     $usedRoles = get_roles_used_in_context($context);
     //printArray($usedRoles);
     foreach ($usedRoles as $roleid => $role) {
         $count = count_role_users($roleid, $context);
         if ($count != 0) {
-            $data['rolesInCourse'][$roleid]['id'] = $roleid;
+            $data['rolesInCourse'][$roleid]['id'] = $role->id;
             $data['rolesInCourse'][$roleid]['name'] = $role->name;
             $data['rolesInCourse'][$roleid]['number'] = $count;
             $data['rolesInCourse'][$roleid]['sortorder'] = $role->sortorder;
         }
+    }
+
+    // Gets assignable roles in course
+    require_once $CFG->dirroot . '/enrol/locallib.php';
+    $manager = new course_enrolment_manager($PAGE, $course);
+    $usedRoles = $manager->get_assignable_roles();
+
+    //$usedRoles = get_roles_used_in_context($context);
+    //printArray($usedRoles);
+    foreach ($usedRoles as $roleid => $rolename) {
+        $data['assignableRoles'][$roleid]['id'] = $roleid;
+        $data['assignableRoles'][$roleid]['name'] = $rolename;
     }
     $result = array();
     $result['data'] = $data;
@@ -736,18 +750,17 @@ function semesterToCourseStartDate($semester = "") {
     $month = 0;
     $day = 1;
     $year = 0;
-    if($pos = strpos($semester, "WiSe 20") === 0) {
+    if ($pos = strpos($semester, "WiSe 20") === 0) {
         // Wintersemester
         $month = 10;
         $year = (int) substr($semester, 5, 4);
-        
     } elseif ($pos = strpos($semester, "SoSe 20") === 0) {
         // Sommersemeste
         $month = 4;
         $year = (int) substr($semester, 5, 4);
-    } 
-    
-    if($year != 0) {
+    }
+
+    if ($year != 0) {
         return mktime($hour, $minute, $second, $month, $day, $year);
     } else {
         return 0;
