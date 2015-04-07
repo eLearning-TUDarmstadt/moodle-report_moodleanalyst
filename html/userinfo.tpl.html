@@ -11,6 +11,7 @@ This page displays detailed Information about a user.
             2) a button group containing 2 buttons:
                 2.1) a button link to edit the user's settings
                 2.2) refresh button
+                2.2) close butto
         ======================================================
         -->
         <div class="panel-heading">
@@ -31,10 +32,17 @@ This page displays detailed Information about a user.
                             </button>
                         </a>
                     
-                        <!-- 2.1) refresh button -->
+                        <!-- 2.2) refresh button -->
                         <a title="{{vocabulary.refresh}}">
                             <button type="button" class="btn btn-default" aria-label="Refresh" ng-click="loadDataUserInfo()">
                                 <span class="glyphicon glyphicon-refresh"></span>
+                            </button>
+                        </a>
+                        
+                        <!-- 2.3) close button -->
+                        <a>
+                            <button type="button" class="btn btn-default" aria-label="Close" ng-click="userid = false;">
+                                <span class="glyphicon glyphicon-remove"></span>
                             </button>
                         </a>
                     </div> <!-- btn-group -->
@@ -54,7 +62,7 @@ This page displays detailed Information about a user.
             <loader ng-show="loadingUser"></loader>
             
             <!-- 1) directly enrol user in selected course (only visible when a course is selected) -->
-            <div class="panel panel-default" ng-show="course.data.id.v">
+            <div class="panel panel-default" ng-show="courseid">
                 <div class="row panel-body">
                     <div class="col-md-4">
                         <button ng-click="addUserToCourse(user.id.v, course.data.id.v, selectedRole);" type="button" class="btn btn-default" aria-label="">
