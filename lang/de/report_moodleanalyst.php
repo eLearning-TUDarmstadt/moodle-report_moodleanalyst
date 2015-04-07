@@ -24,9 +24,10 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die;
+$string['pluginname'] = 'Moodle AnalyST';
+$string['moodleanalyst'] = $string['pluginname'];
+$string['reportmoodleanalyst'] = 'reportmoodleanalyst';
 
-$plugin->version   = 2015012100;         // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2012050100;         // Requires this Moodle version
-$plugin->component = 'report_moodleanalyst'; // Full name of the plugin (used for diagnostics)
-
+$string['parentcategory'] = 'FB';
+$string['grandparentcategory'] = 'Semester';
+$string['course'] = 'Kurs';
