@@ -122,6 +122,9 @@ function newCourse() {
         require_once $CFG->dirroot . '/enrol/self/lib.php';
         $self = new enrol_self_plugin();
         $enrolinstance->id = $self->add_default_instance($course);
+        
+        // !!! 0 means enrolment method is active
+        $enrolinstance->status = 0;
     }
     $enrolinstance->password = $content->password;
     $DB->update_record('enrol', $enrolinstance);
