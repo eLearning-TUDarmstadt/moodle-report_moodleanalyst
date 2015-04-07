@@ -235,7 +235,7 @@ This page displays detailed Information about a course
 
                             <div class="panel-body">
                                 <div ng-repeat="enrol in course.data.enrolmentmethods">
-                                    <div class="row">
+                                    <div class="row"  ng-class="{'dimmed': enrol.visible == 0}">
                                         <div class="col-md-6">
                                             <a href="/enrol/{{enrol.enrol}}/edit.php?courseid={{course.data.id.v}}&id={{enrol.id}}" target="_blank">{{enrol.name}}</a>
                                         </div>

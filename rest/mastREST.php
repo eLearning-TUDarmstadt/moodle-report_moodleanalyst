@@ -12,8 +12,9 @@ require_once $CFG->dirroot . '/course/lib.php';
 require_once $CFG->dirroot . '/report/moodleanalyst/rest/lib.php';
 
 // GZIP Compression for output
-if (!ob_start("ob_gzhandler"))
+if (!ob_start("ob_gzhandler")) {
     ob_start();
+}
 
 //require_login();
 require_capability('report/moodleanalyst:view', context_system::instance());
@@ -219,7 +220,7 @@ function getCourseEnrolmentMethods($courseid) {
 
         $array['id'] = $instance->id;
         $array['enrol'] = $instance->enrol;
-        if (!enrol_is_enabled($instance->enrol) or $instance->status != ENROL_INSTANCE_ENABLED) {
+        if (!enrol_is_enabled($instance->enrol) || $instance->status == ENROL_INSTANCE_DISABLED) {
             $array['visible'] = 0;
         } else {
             $array['visible'] = 1;
