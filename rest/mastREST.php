@@ -17,8 +17,7 @@
 /**
  * Version details.
  *
- * @package    report
- * @subpackage report_moodleanalyst
+ * @package    report_moodleanalyst
  * @copyright  2015, Nils Muzzulini
  * @copyright  2015, Steffen Pegenau
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -32,7 +31,6 @@ require_once '../../../config.php';
 
 GLOBAL $CFG;
 require_once $CFG->dirroot . '/course/lib.php';
-//require_once '../../../course/lib.php';
 require_once $CFG->dirroot . '/report/moodleanalyst/rest/lib.php';
 
 // GZIP Compression for output
@@ -47,33 +45,54 @@ require_capability('report/moodleanalyst:view', context_system::instance());
 
 $app = new \Slim\Slim ();
 
-$app->map('/isUserLoggedIn', 'isUserLoggedIn')->via('GET');
-$app->map('/allCourses', 'allCourses')->via('GET');
-$app->map('/allUsers', 'allUsers')->via('GET');
-$app->map('/allUsersWithLastAccess', 'allUsersWithLastAccess')->via('GET');
-$app->map('/user/:id', 'user')->via('GET');
-$app->map('/course/:id', 'course')->via('GET');
-$app->map('/courses/getEmpty', 'emptyCourses')->via('GET');
-$app->map('/course/getPersons/:id', 'getPersonsInCourse')->via('GET');
-$app->map('/course/getActivities/:id', 'getActivitiesInCourse')->via('GET');
-$app->map('/course/new/options', 'newCourseOptions')->via('GET');
-$app->map('/course/new', 'newCourse')->via('POST');
+$app->map('/isUserLoggedIn', 'moodleanalyst_isUserLoggedIn')->via('GET');
+$app->map('/allCourses', 'moodleanalyst_allCourses')->via('GET');
+$app->map('/allUsers', 'moodleanalyst_allUsers')->via('GET');
+//$app->map('/allUsersWithLastAccess', 'moodleanalyst_allUsersWithLastAccess')->via('GET');
+$app->map('/user/:id', 'moodleanalyst_user')->via('GET');
+$app->map('/course/:id', 'moodleanalyst_course')->via('GET');
+$app->map('/courses/getEmpty', 'moodleanalyst_emptyCourses')->via('GET');
+$app->map('/course/getPersons/:id', 'moodleanalyst_getPersonsInCourse')->via('GET');
+$app->map('/course/getActivities/:id', 'moodleanalyst_getActivitiesInCourse')->via('GET');
+$app->map('/course/new/options', 'moodleanalyst_newCourseOptions')->via('GET');
+$app->map('/course/new', 'moodleanalyst_newCourse')->via('POST');
 //$app->map('/course/getEnrolmentMethods/:id', 'getCourseEnrolmentMethods')->via('GET');
-$app->map('/course/:id/setVisibility/:visibility', 'setCourseVisibility')->via('GET');
-$app->map('/vocabulary', 'getVocabulary')->via('GET');
-$app->map('/addUser/:userid/ToCourse/:courseid/withRole/:roleid', 'enrolUserToCourse')->via('GET');
+$app->map('/course/:id/setVisibility/:visibility', 'moodleanalyst_setCourseVisibility')->via('GET');
+$app->map('/vocabulary', 'moodleanalyst_getVocabulary')->via('GET');
+$app->map('/addUser/:userid/ToCourse/:courseid/withRole/:roleid', 'moodleanalyst_enrolUserToCourse')->via('GET');
 
 $app->run();
 
-function isUserLoggedIn() {
+/**
+ * if this function is callable, the user is logged in 
+ * and has the capability 'report/moodleanalyst:view'
+ */
+function moodleanalyst_isUserLoggedIn() {
     echo json_encode(true);
 }
 
-function setCourseVisibility($courseid, $visibility) {
-    echo json_encode(course_change_visibility($courseid, $visibility));
+/**
+ * Sets the visibility of a course
+ * 
+ * @param int $courseid
+ * @param bool $visibility
+ */
+function moodleanalyst_setCourseVisibility($courseid, $visibility) {
+    $wasSuccessful = course_change_visibility($courseid, $visibility);
+    echo json_encode($wasSuccessful);
 }
 
-function newCourse() {
+/**
+ * Creates a new course
+ * 
+ * REQUEST-Params:
+ * shortname Course shortname
+ * fullname Course fullname
+ * category Course parent category
+ * password password for self enrolment
+ * visible Course visibility 
+ */
+function moodleanalyst_newCourse() {
     global $DB, $CFG;
 
     $app = \Slim\Slim::getInstance();
@@ -81,28 +100,28 @@ function newCourse() {
     $data = new stdClass();
     $content = json_decode($app->request->getBody());
     if (!isset($content->shortname)) {
-        errorAndDie('shortname needs to be set!');
+        moodleanalyst_errorAndDie('shortname needs to be set!');
     } else {
         $data->shortname = $content->shortname;
         if ($DB->record_exists('course', array('shortname' => $data->shortname))) {
-            errorAndDie('shortnametaken');
+            moodleanalyst_errorAndDie('shortnametaken');
         }
     }
 
     if (!isset($content->fullname)) {
-        errorAndDie('fullname needs to be set!');
+        moodleanalyst_errorAndDie('fullname needs to be set!');
     } else {
         $data->fullname = $content->fullname;
     }
 
     if (!isset($content->category)) {
-        errorAndDie('category needs to be set!');
+        moodleanalyst_errorAndDie('category needs to be set!');
     } else {
         $data->category = $content->category;
     }
 
     if (!isset($content->password)) {
-        errorAndDie('password needs to be set!');
+        moodleanalyst_errorAndDie('password needs to be set!');
     }
 
     if (!isset($content->visible)) {
@@ -122,7 +141,7 @@ function newCourse() {
         $category = coursecat::get($categoryID);
         $name = $category->name;
 
-        $possibleStartDate = semesterToCourseStartDate($name);
+        $possibleStartDate = moodleanalyst_semesterToCourseStartDate($name);
         if ($possibleStartDate != 0) {
             $data->startdate = $possibleStartDate;
             break;
@@ -158,7 +177,10 @@ function newCourse() {
     //echo json_encode(array('course' => $course->id));
 }
 
-function newCourseOptions() {
+/**
+ * Provides the newCourse-Form with categories and their ids
+ */
+function moodleanalyst_newCourseOptions() {
     global $DB;
     // collecting all categories, with path and id
     // example: /grandparentcategoryname/parentcategoryname/categoryname
@@ -179,7 +201,10 @@ function newCourseOptions() {
     echo json_encode($result);
 }
 
-function getVocabulary() {
+/**
+ * Collects translations and makes it accessible for JavaScript-Operations
+ */
+function moodleanalyst_getVocabulary() {
     $result = array();
     $result['course'] = get_string('course');
     $result['user'] = get_string('user');
@@ -233,7 +258,13 @@ function getVocabulary() {
     echo json_encode($result);
 }
 
-function getCourseEnrolmentMethods($courseid) {
+/**
+ * Returns the enrolment methods of the given course
+ * 
+ * @param int $courseid 
+ * @return array with enrolment methods
+ */
+function moodleanalyst_getCourseEnrolmentMethods($courseid) {
     global $DB, $PAGE;
     $PAGE->set_context(context_system::instance());
     $instances = enrol_get_instances($courseid, false);
@@ -259,7 +290,14 @@ function getCourseEnrolmentMethods($courseid) {
     return $result;
 }
 
-function getActivitiesInCourse($courseid) {
+/**
+ * Returns a JSON with all activities in the given course
+ * 
+ * Formated in Google Charts Style
+ * 
+ * @param int $courseid
+ */
+function moodleanalyst_getActivitiesInCourse($courseid) {
     global $OUTPUT;
     $table = array();
     $table['cols'] = array();
@@ -306,7 +344,12 @@ function getActivitiesInCourse($courseid) {
     echo json_encode($table);
 }
 
-function getPersonsInCourse($courseid) {
+/**
+ * Returns the persons in course as JSON in Google Chart format
+ * 
+ * @param int $courseid
+ */
+function moodleanalyst_getPersonsInCourse($courseid) {
     // Preparing the return table
     $result = array();
     $result['cols'] = array();
@@ -336,7 +379,14 @@ function getPersonsInCourse($courseid) {
     //printArray($result);
 }
 
-function enrolUserToCourse($userid, $courseid, $roleid) {
+/**
+ * Enrols an user to a course with a certain role
+ * 
+ * @param int $userid
+ * @param int $courseid
+ * @param int $roleid if invalid, the student role is chosen
+ */
+function moodleanalyst_enrolUserToCourse($userid, $courseid, $roleid) {
     global $DB, $CFG;
     require_once '../../../enrol/manual/externallib.php';
 
@@ -351,7 +401,12 @@ function enrolUserToCourse($userid, $courseid, $roleid) {
     enrol_manual_external::enrol_users($enrolments);
 }
 
-function user($userid) {
+/**
+ * Returns information about an user as JSON in Google charts format
+ * 
+ * @param int $userid
+ */
+function moodleanalyst_user($userid) {
     require_once '../../../user/lib.php';
     require_once '../../../lib/coursecatlib.php';
     $user = user_get_users_by_id(array($userid));
@@ -491,7 +546,12 @@ function user($userid) {
     echo json_encode($ret);
 }
 
-function emptyCourses() {
+/**
+ * Returns a JSON-List of empty courses
+ * 
+ * FUNCTION TOO SLOW => currently deactivated
+ */
+function moodleanalyst_emptyCourses() {
     global $DB;
     //$courses = get_courses("all", "c.sortorder DESC", 'c.*, c.category as parentcategory');
     $courses = get_courses("all", "c.sortorder DESC", 'c.id, c.fullname, c.shortname, c.category as parentcategory, c.visible');
@@ -533,7 +593,12 @@ function emptyCourses() {
     //printArray($result);
 }
 
-function course($courseid) {
+/**
+ * Returns information about a course as JSON in Google charts format
+ * 
+ * @param int $courseid
+ */
+function moodleanalyst_course($courseid) {
     global $CFG, $PAGE;
     require_once $CFG->dirroot . '/lib/coursecatlib.php';
     require_login();
@@ -565,7 +630,7 @@ function course($courseid) {
     $data['roles']['string'] = get_string('roles');
     $data['roles']['v'] = role_get_names($context);
     $data['personsInCourse'] = count_enrolled_users($context);
-    $data['enrolmentmethods'] = getCourseEnrolmentMethods($courseid);
+    $data['enrolmentmethods'] = moodleanalyst_getCourseEnrolmentMethods($courseid);
 
 
     // Gets roles used in course
@@ -599,7 +664,10 @@ function course($courseid) {
     echo json_encode($result);
 }
 
-function allUsers() {
+/**
+ * Returns a list of all users as JSON in Google Charts format
+ */
+function moodleanalyst_allUsers() {
     /*
      * @param bool $get If false then only a count of the records is returned
      * @param string $search A simple string to search for
@@ -658,63 +726,10 @@ function allUsers() {
     echo json_encode($result);
 }
 
-function allUsersWithLastAccess() {
-    /*
-     * @param bool $get If false then only a count of the records is returned
-     * @param string $search A simple string to search for
-     * @param bool $confirmed A switch to allow/disallow unconfirmed users
-     * @param array $exceptions A list of IDs to ignore, eg 2,4,5,8,9,10
-     * @param string $sort A SQL snippet for the sorting criteria to use
-     * @param string $firstinitial Users whose first name starts with $firstinitial
-     * @param string $lastinitial Users whose last name starts with $lastinitial
-     * @param string $page The page or records to return
-     * @param string $recordsperpage The number of records to return per page
-     * @param string $fields A comma separated list of fields to be returned from the chosen table.
-     * @return array|int|bool  {@link $USER} records unless get is false in which case the integer count of the records found is returned.
-     *                        False is returned if an error is encountered.
-     */
-    $get = true;
-    $search = '';
-    $confirmed = false;
-    $exceptions = null;
-    $sort = 'lastaccess ASC';
-    $firstinitial = '';
-    $lastinitial = '';
-    $page = '';
-    $recordsperpage = '100000000';
-    $fields = 'id, username, firstname, lastname, email, lastaccess';
-    $users = get_users($get, $search, $confirmed, $exceptions, $sort, $firstinitial, $lastinitial, $page, $recordsperpage, $fields);
-
-    // Preparing the return table
-    $result = array();
-    $result['cols'] = array();
-    $result['cols'][] = array('label' => 'ID', 'type' => 'number');
-    $result['cols'][] = array('label' => get_string('username'), 'type' => 'string');
-    $result['cols'][] = array('label' => get_string('firstname'), 'type' => 'string');
-    $result['cols'][] = array('label' => get_string('lastname'), 'type' => 'string');
-    $result['cols'][] = array('label' => get_string('email'), 'type' => 'string');
-    $result['cols'][] = array('label' => get_string('lastaccess'), 'type' => 'date');
-    $result['cols'][] = array('label' => get_string('fullname'), 'type' => 'string');
-    $result['rows'] = array();
-
-    foreach ($users as $userid => $user) {
-        $result['rows'][] = [
-            'c' => array(
-                ['v' => $user->id],
-                array('v' => $user->username),
-                array('v' => $user->firstname),
-                array('v' => $user->lastname),
-                array('v' => $user->email),
-                array('v' => date('D M d Y H:i:s O', $user->lastaccess)),
-                array('v' => $user->firstname . ' ' . $user->lastname)
-            )
-        ];
-    }
-    //printArray($result);
-    echo json_encode($result);
-}
-
-function allCourses() {
+/**
+ * Returns a list of all courses as JSON in Google Charts format
+ */
+function moodleanalyst_allCourses() {
     global $DB;
     $courses = get_courses("all", "c.sortorder DESC", 'c.id, c.fullname, c.shortname, c.category as parentcategory, c.visible');
     $categories = $DB->get_records('course_categories', null, null, 'id, name, parent, visible');
@@ -753,25 +768,35 @@ function allCourses() {
     //printArray($result);
 }
 
-function printArray($array) {
-    echo "<pre>" . print_r($array, true) . "</pre>";
+/**
+ * Helper function that displays a variable preformated for debugging
+ * 
+ * @param variable $var variable to be displayed
+ */
+function moodleanalyst_printArray($var) {
+    echo "<pre>" . print_r($var, true) . "</pre>";
 }
 
-function errorAndDie($msg) {
+/**
+ * Die with an error message
+ * 
+ * @param String $msg
+ */
+function moodleanalyst_errorAndDie($msg) {
     echo json_encode(array('error' => $msg));
     die();
 }
 
 /**
- * Konvertiert ein Semester in einen Kursstarttermin
+ * Converts a term into a course start date
  * 
- * WiSe 2010/11 => 01.10.2010 (als Timestamp)
- * SoSe 2011 => 01.04.2011 (als Timestamp)
+ * WiSe 2010/11 => 01.10.2010 (as Unix-Timestamp)
+ * SoSe 2011 => 01.04.2011 (as Unix-Timestamp)
  *  
- * @param String $semester beispielsweise "WiSe 2010/11" oder "SoSe 2011"
- * @return int $timestamp Starttermin als UNIX-Timestamp, 0 falls kein vernünftiges Semester übergeben wurde
+ * @param String $semester for example "WiSe 2010/11" or "SoSe 2011"
+ * @return int $timestamp UNIX-Timestamp, 0 if no reasonable param was given
  */
-function semesterToCourseStartDate($semester = "") {
+function moodleanalyst_semesterToCourseStartDate($semester = "") {
     $hour = 6;
     $minute = 0;
     $second = 0;
@@ -783,7 +808,7 @@ function semesterToCourseStartDate($semester = "") {
         $month = 10;
         $year = (int) substr($semester, 5, 4);
     } elseif ($pos = strpos($semester, "SoSe 20") === 0) {
-        // Sommersemeste
+        // Sommersemester
         $month = 4;
         $year = (int) substr($semester, 5, 4);
     }

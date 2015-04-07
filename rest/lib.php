@@ -17,11 +17,17 @@
 /**
  * Version details.
  *
- * @package    report
- * @subpackage report_moodleanalyst
+ * @package    report_moodleanalyst
  * @copyright  2015, Nils Muzzulini
  * @copyright  2015, Steffen Pegenau
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+/**
+ * Converts a Unix-timestamp into a JavaScript Date
+ * 
+ * @param int $timestamp
+ * @return Date
  */
 function createDateForJavaScript($timestamp) {
     $formatPrefix = "Y,";
