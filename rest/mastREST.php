@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -22,7 +23,6 @@
  * @copyright  2015, Steffen Pegenau
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 //ini_set('display_errors', 'On');
 //error_reporting(E_ALL | E_STRICT);
 
@@ -60,6 +60,7 @@ $app->map('/course/new', 'moodleanalyst_newCourse')->via('POST');
 $app->map('/course/:id/setVisibility/:visibility', 'moodleanalyst_setCourseVisibility')->via('GET');
 $app->map('/vocabulary', 'moodleanalyst_getVocabulary')->via('GET');
 $app->map('/addUser/:userid/ToCourse/:courseid/withRole/:roleid', 'moodleanalyst_enrolUserToCourse')->via('GET');
+$app->map('/files', 'moodleanalyst_getFiles')->via('GET');
 
 $app->run();
 
@@ -166,7 +167,7 @@ function moodleanalyst_newCourse() {
         require_once $CFG->dirroot . '/enrol/self/lib.php';
         $self = new enrol_self_plugin();
         $enrolinstance->id = $self->add_default_instance($course);
-        
+
         // !!! 0 means enrolment method is active
         $enrolinstance->status = 0;
     }
@@ -818,6 +819,52 @@ function moodleanalyst_semesterToCourseStartDate($semester = "") {
     } else {
         return 0;
     }
+}
+
+/**
+ * Gets all files on moodle site
+ */
+function moodleanalyst_getFiles() {
+    global $CFG, $DB, $PAGE;
+
+    // Gets the moodle internal id for mods of type 'resource'
+    $mods = $DB->get_records('modules', array('name' => 'resource'));
+    $mod_resource = reset($mods);
+    $id_mod_resource = $mod_resource->id;
+
+    // Gets all cm's of resource
+    $cms = $DB->get_records('course_modules', array('module' => $id_mod_resource));
+    $resources = $DB->get_records('resource');
+    
+    $file_browser = new file_browser();
+    $file_infos = $file_browser->get_file_info();
+
+    $res = $resources;
+
+    require_once $CFG->dirroot . '/mod/resource/locallib.php';
+    foreach ($cms as $cmid => $cm) {
+        $details = resource_get_optional_details($resources[$cm->instance], $cm);
+        moodleanalyst_printArray($details);
+    }
+    
+    /*
+      foreach ($cms as $cmid => $cm) {
+      //$context = context_module::instance($cm->id);
+      $context = context_course::instance($cm->course);
+      $file_info = $file_browser->get_file_info($context);
+
+      $array = [
+      $cm->course => $file_info->count_non_empty_children(),
+      'mimetype' => $file_info->get_mimetype(),
+      'filesize' => $file_info->get_filesize()
+      ];
+      moodleanalyst_printArray($array);
+      //moodleanalyst_printArray($file_info->get_filesize());
+      }
+
+      $resources = $DB->get_records('resource');
+     */
+    //moodleanalyst_printArray($res);
 }
 ?>
 
