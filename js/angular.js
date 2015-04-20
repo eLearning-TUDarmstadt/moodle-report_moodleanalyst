@@ -565,7 +565,7 @@ var usersInCourseDashboard = function (result, $scope) {
             filterColumnIndex: 5,
             matchType: 'any',
             ui: {
-                label: $scope.vocabulary.fullname
+                label: $scope.vocabulary.fullnameuser
             }
         }
     });
@@ -828,7 +828,7 @@ var userSearchDashboard = function (result, $scope) {
             filterColumnIndex: 5,
             matchType: 'any',
             ui: {
-                label: $scope.vocabulary.fullname
+                label: $scope.vocabulary.fullnameuser
             }
         }
     });
