@@ -22,18 +22,23 @@ We would like to hear all about your experiences, bugs you have found and
 all kind of suggestions! :)
 
 
+Server requirements
+===================
+Minimum PHP version: PHP 5.4.x
+
+
 Installation
 =============
 - Put all files into /report/moodleanalyst in your moodle directory
-- open the moodle administration page to install plugin
-- you find the plugin in tht site reports: 
+- open the moodle administration page to install the plugin
+- you find the plugin in the site reports: 
     Administration -> Site administration -> Reports -> Moodle AnalyST
     (user needs to be at least 'course creator')
 
 
 Idea
 =====
-Moodle makes (for good reasons) only very conservately use of JavaScript. 
+Moodle makes (for good reasons) only very conservatively use of JavaScript. 
 For the reasons see [1], [2] and [3].
 In consequence many full page reloads are necessary to perform even simple tasks.
 
@@ -42,8 +47,7 @@ a high speed support/administration tool, realised under heavy JavaScript usage.
 
 Libraries we used:
 - AngularJS, [4]
-- Google Charts, [5] at the moment (february 2015) used for
-    the tables, and filters (dashboards)
+- Google Charts, [5] used for the tables, and filters (dashboards)
 - Slim, [6] "a micro framework for PHP" to realise a simple API to get
     the needed data as JSON
 
