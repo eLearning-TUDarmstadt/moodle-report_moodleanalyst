@@ -827,7 +827,105 @@ function moodleanalyst_semesterToCourseStartDate($semester = "") {
  */
 function moodleanalyst_getFiles() {
     global $CFG, $DB, $PAGE;
+    
+    // Getting all contexts in a single request
+    $sql = "SELECT * FROM {context} WHERE contextlevel=" . CONTEXT_MODULE;
+    $contexts = $DB->get_records_sql($sql);
+    
+    $cmid2contextid = array();
+    foreach ($contexts as $id => $context) {
+        $cmid2contextid[$context->instanceid] = $id;
+    }
+    
+    // Getting all folders
+    $sql = "SELECT id, course, name FROM {folder}";
+    $folders = $DB->get_records_sql($sql);
+    
+    // Getting all resources
+    $sql = "SELECT id, course, name FROM {resource}";
+    $resources = $DB->get_records_sql($sql);
 
+    //$sql = "SELECT id, contextid, component, filearea, filepath, filename, filesize, mimetype FROM {files} WHERE filesize != 0 AND component IN ('course', 'mod_resource', 'mod_folder')";
+    $sql = "SELECT id, filename, filesize, mimetype, contextid FROM {files} WHERE filesize != 0";
+    $files = $DB->get_records_sql($sql);
+    
+    $contextid2file = array();
+    foreach ($files as $id => $data) {
+        //moodleanalyst_printArray($data);
+        $contextid2file[$data->contextid] = $data;
+    }
+    
+    $sql = "SELECT id, course, instance FROM {course_modules} WHERE module IN (SELECT id FROM {modules} WHERE name IN ('resource'))";
+    $mod_resources = $DB->get_records_sql($sql);
+    
+    
+    $result = array();
+    
+    // Add all resources to result array
+    foreach ($mod_resources as $modid => $cm) {
+        $tmp = array();
+        
+        $tmp["course"] = $cm->course;
+        $tmp["name"] = $resources[$cm->instance]->name;
+        
+        $contextid = $cmid2contextid[$modid];
+        if(isset($contextid2file[$contextid])) {
+            $file =  $contextid2file[$contextid];
+            $tmp["filename"] = $file->filename; 
+            $tmp["filesize"] = $file->filesize;
+            $tmp["mimetype"] = $file->mimetype;
+            
+            // Add to result
+            $result[] = $tmp;
+        } else {
+            unset($mod_resources[$modid]);
+        }
+    }
+    
+    $sql = "SELECT id, course, instance FROM {course_modules} WHERE module IN (SELECT id FROM {modules} WHERE name IN ('folder'))";
+    $mod_folders = $DB->get_records_sql($sql);
+    
+    // Add folders to result array
+    foreach ($mod_folders as $modid => $cm) {
+        $contextid = $cmid2contextid[$modid];
+        
+        $filesInFolder = $DB->get_records_sql("SELECT id, filename, filesize, mimetype, contextid FROM {files} WHERE filesize != 0 AND contextid=".$contextid);
+        foreach ($filesInFolder as $fileid => $file) {
+            $tmp = array();
+            $tmp["course"] = $cm->course;
+            $tmp["name"] = $file->filename;
+            $tmp["filename"] = $file->filename; 
+            $tmp["filesize"] = $file->filesize;
+            $tmp["mimetype"] = $file->mimetype;
+            $result[] = $tmp;
+        }
+    }
+    
+    $table['cols'] = array();
+    $table['cols'][] = array('label' => get_string('course'), 'type' => 'number');
+    $table['cols'][] = array('label' => get_string('name'), 'type' => 'string');
+    $table['cols'][] = array('label' => 'filename', 'type' => 'string');
+    $table['cols'][] = array('label' => 'filesize', 'type' => 'number');
+    $table['cols'][] = array('label' => 'mimetype', 'type' => 'boolean');
+
+    $table['rows'] = array();
+    
+    foreach ($result as $key => $value) {
+        //moodleanalyst_printArray($value);
+        
+        $table['rows'][] = ['c' => 
+                array('v' => $value["course"]),
+                array('v' => $value["name"]),
+                array('v' => $value["filename"]),
+                array('v' => $value["filesize"]),
+                array('v' => $value["mimetype"])];
+         
+    }
+    
+    echo json_encode($table);
+    
+    
+    /*
     // Gets the moodle internal id for mods of type 'resource'
     $mods = $DB->get_records('modules', array('name' => 'resource'));
     $mod_resource = reset($mods);
@@ -865,7 +963,9 @@ function moodleanalyst_getFiles() {
 
       $resources = $DB->get_records('resource');
      */
+    
     //moodleanalyst_printArray($res);
 }
+
 ?>
 
