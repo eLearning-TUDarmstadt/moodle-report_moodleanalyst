@@ -905,20 +905,19 @@ function moodleanalyst_getFiles() {
     $table['cols'][] = array('label' => get_string('course'), 'type' => 'number');
     $table['cols'][] = array('label' => get_string('name'), 'type' => 'string');
     $table['cols'][] = array('label' => 'filename', 'type' => 'string');
-    $table['cols'][] = array('label' => 'filesize', 'type' => 'number');
-    $table['cols'][] = array('label' => 'mimetype', 'type' => 'boolean');
+    $table['cols'][] = array('label' => 'filesize (KB)', 'type' => 'number');
+    $table['cols'][] = array('label' => 'mimetype', 'type' => 'string');
 
     $table['rows'] = array();
     
     foreach ($result as $key => $value) {
-        //moodleanalyst_printArray($value);
-        
-        $table['rows'][] = ['c' => 
+        $filesize = round($value["filesize"] / 1024, 2);
+        $table['rows'][] = ['c' => array(
                 array('v' => $value["course"]),
                 array('v' => $value["name"]),
                 array('v' => $value["filename"]),
-                array('v' => $value["filesize"]),
-                array('v' => $value["mimetype"])];
+                array('v' => $filesize),
+                array('v' => $value["mimetype"]))];
          
     }
     

@@ -128,13 +128,14 @@ app.controller('CourseDetailTabController', ['$scope', function ($scope) {
             }
             else {
                 $scope.activity.resourceyesorno = false;
-            };
+            }
+            ;
         };
 
         this.setTab = function (newValue) {
             $scope.tab = newValue;
         };
-        
+
         $scope.setCourseDetailTab = function (newValue) {
             $scope = newValue;
         };
@@ -143,6 +144,21 @@ app.controller('CourseDetailTabController', ['$scope', function ($scope) {
             return $scope.tab === tabName;
         };
     }]);
+
+
+app.controller('FilesController', ['$scope', '$http', function ($scope, $http) {
+        $scope.gotAllFiles = false;
+        
+        
+        $scope.getAllFiles = function () {
+            $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/files')
+                    .success(function (result) {
+                        $scope.gotAllFiles = true;
+                        filesDashboard(result, $scope);
+                    });
+        };
+    }]);
+
 
 /***********************
  ** Directive: LOADER **
@@ -178,17 +194,17 @@ app.directive('coursesearch', function () {
                                 $scope.gotAllCourses = true;
                                 // initialize course search dashboard
                                 courseSearchDashboard(result, $scope);
-                                
+
                                 /* commented out for performance reasons */
                                 /*
-                                // load all empty courses from database
-                                $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/courses/getEmpty')
-                                        .success(function (result) {
-                                            $scope.gotAllEmptyCourses = true;
-                                            // draw empty courses dashboard
-                                            emptyCoursesDashboard(result, $scope);
-                                        });
-                                */
+                                 // load all empty courses from database
+                                 $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/courses/getEmpty')
+                                 .success(function (result) {
+                                 $scope.gotAllEmptyCourses = true;
+                                 // draw empty courses dashboard
+                                 emptyCoursesDashboard(result, $scope);
+                                 });
+                                 */
                             });
                 };
                 //initial load
@@ -275,7 +291,7 @@ app.directive('courseinfo', function () {
                     // initial load
                     $scope.loadDataCourseInfo();
                 };
-                
+
                 // function to change visibility of the selected course
                 $scope.changeVisibility = function (courseid, visibility) {
                     $scope.loadingCourse = true;
@@ -319,7 +335,7 @@ app.directive('userinfo', function () {
                     // initial load
                     $scope.loadDataUserInfo();
                 };
-                
+
                 // function to add user to a course
                 $scope.addUserToCourse = function (userid, courseid, roleid) {
                     $scope.loadingCourse = true;
@@ -369,7 +385,7 @@ app.directive('newcourseform', function () {
                             $scope.password = "randompassword";
                             $scope.allCategories = data.categories;
                         });
-                        
+
                 // reset form
                 $scope.reset = function () {
                     $scope.shortname = null;
@@ -377,10 +393,10 @@ app.directive('newcourseform', function () {
                     $scope.category = null;
                     $scope.password = "randompassword";
                 };
-                
+
                 $scope.createNewCourse = function () {
                     var password = "";
-                    
+
                     if ($scope.password == "randompassword") {
                         console.log("RANDOM!");
                         password = generatePassword();
@@ -389,7 +405,7 @@ app.directive('newcourseform', function () {
                         console.log("userpassword");
                         password = $scope.userpassword;
                     }
-                    
+
                     var params = {
                         'shortname': $scope.shortname,
                         'fullname': $scope.fullname,
@@ -452,10 +468,10 @@ var activitiesInCourseDashboard = function (result, $scope) {
     $scope.activityIsSelected = false;
 
     var data = new google.visualization.DataTable(result);
-    
+
     // Create a dashboard.
     var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardActivitiesInCourse'));
-    
+
     // Create a search box to search for the activity name.
     var nameFilter = new google.visualization.ControlWrapper({
         controlType: 'StringFilter',
@@ -482,7 +498,7 @@ var activitiesInCourseDashboard = function (result, $scope) {
             }
         }
     });
-    
+
     // Create a category picker to filter by activity.
     var typeCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
@@ -496,7 +512,7 @@ var activitiesInCourseDashboard = function (result, $scope) {
             }
         }
     });
-    
+
     // Create the table to display.
     var table = new google.visualization.ChartWrapper({
         chartType: 'Table',
@@ -521,10 +537,10 @@ var activitiesInCourseDashboard = function (result, $scope) {
             columns: [1, 2, 3, 6]
         }
     });
-    
+
     // Establish dependencies.
     dashboard.bind([nameFilter, sectionCategoryPicker, typeCategoryPicker], [table]);
-    
+
     // Draw the dashboard.
     dashboard.draw(data);
 
@@ -542,7 +558,8 @@ var activitiesInCourseDashboard = function (result, $scope) {
         scope.$apply(function () {
             scope.setActivity(id, cm, mod, visible);
         });
-    };
+    }
+    ;
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
@@ -553,10 +570,10 @@ var activitiesInCourseDashboard = function (result, $scope) {
  ********************************/
 var usersInCourseDashboard = function (result, $scope) {
     var data = new google.visualization.DataTable(result);
-    
+
     // Create a dashboard.
     var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardUsersInCourse'));
-    
+
     // Create a search box to search for the users full name.
     var nameFilter = new google.visualization.ControlWrapper({
         controlType: 'StringFilter',
@@ -583,7 +600,7 @@ var usersInCourseDashboard = function (result, $scope) {
             }
         }
     });
-    
+
     // helper function to set role filter and change tab to enrolled users
     $scope.setRoleFilterForUsersInCourseDashboard = function (rolestring) {
         roleCategoryPicker.setState({'selectedValues': [rolestring]});
@@ -614,13 +631,13 @@ var usersInCourseDashboard = function (result, $scope) {
             columns: [0, 1, 2, 3, 4]
         }
     });
-    
+
     // Establish dependencies.
     dashboard.bind([nameFilter, roleCategoryPicker], [table]);
-    
+
     // Draw the dashboard.
     dashboard.draw(data);
-    
+
     // Define what to do when selecting a table row.
     function selectHandler() {
         $scope.loadingUser = true;
@@ -629,8 +646,9 @@ var usersInCourseDashboard = function (result, $scope) {
         $scope.userid = table.getDataTable().getFormattedValue(selection[0].row, 0);
         $scope.didSelectAUser($scope.userid);
         $("html, body").animate({scrollTop: 0}, 800);
-    };
-    
+    }
+    ;
+
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
 };
@@ -640,10 +658,10 @@ var usersInCourseDashboard = function (result, $scope) {
  ******************************/
 var courseSearchDashboard = function (result, $scope) {
     var data = new google.visualization.DataTable(result);
-    
+
     // Create a dashboard
     var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardCourseSearch'));
-    
+
     // Create a search box to search for the course name.
     var nameFilter = new google.visualization.ControlWrapper({
         controlType: 'StringFilter',
@@ -656,7 +674,7 @@ var courseSearchDashboard = function (result, $scope) {
             }
         }
     });
-    
+
     // Create a category picker to filter by grandparent category.
     var grandparentCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
@@ -670,7 +688,7 @@ var courseSearchDashboard = function (result, $scope) {
             }
         }
     });
-    
+
     // Create a category picker to filter by parentcategory.
     var parentCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
@@ -684,7 +702,7 @@ var courseSearchDashboard = function (result, $scope) {
             }
         }
     });
-    
+
     // Create the table to display.
     var table = new google.visualization.ChartWrapper({
         chartType: 'Table',
@@ -706,13 +724,13 @@ var courseSearchDashboard = function (result, $scope) {
             columns: [0, 1, 2, 3, 4]
         }
     });
-    
+
     // Establish dependencies.
     dashboard.bind([nameFilter, grandparentCategoryPicker, parentCategoryPicker], [table]);
-    
+
     // Draw the dashboard.
     dashboard.draw(data);
-    
+
     // Define what to do when selecting a table row.
     function selectHandler() {
         var selection = table.getChart().getSelection();
@@ -721,8 +739,9 @@ var courseSearchDashboard = function (result, $scope) {
         $scope.courseid = table.getDataTable().getFormattedValue(selection[0].row, 0);
         $scope.didSelectACourse($scope.courseid);
         $("html, body").animate({scrollTop: 0}, 800);
-    };
-    
+    }
+    ;
+
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
 };
@@ -732,10 +751,10 @@ var courseSearchDashboard = function (result, $scope) {
  ******************************/
 var emptyCoursesDashboard = function (result, $scope) {
     var data = new google.visualization.DataTable(result);
-    
+
     // Create a dashboard.
     var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardEmptyCourses'));
-    
+
     // Create a search box to search for the course name.
     var nameFilter = new google.visualization.ControlWrapper({
         controlType: 'StringFilter',
@@ -748,7 +767,7 @@ var emptyCoursesDashboard = function (result, $scope) {
             }
         }
     });
-    
+
     // Create a category picker to filter by grandparent category.
     var grandparentCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
@@ -762,7 +781,7 @@ var emptyCoursesDashboard = function (result, $scope) {
             }
         }
     });
-    
+
     // Create a category picker to filter by parent category.
     var parentCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
@@ -776,7 +795,7 @@ var emptyCoursesDashboard = function (result, $scope) {
             }
         }
     });
-    
+
     // Create the table to display.
     var table = new google.visualization.ChartWrapper({
         chartType: 'Table',
@@ -790,13 +809,13 @@ var emptyCoursesDashboard = function (result, $scope) {
             sortAscending: false
         }
     });
-    
+
     // Establish dependencies.
     dashboard.bind([nameFilter, grandparentCategoryPicker, parentCategoryPicker], [table]);
-    
+
     // Draw the dashboard.
     dashboard.draw(data);
-    
+
     // Define what to do when selecting a table row.
     function selectHandler() {
         var selection = table.getChart().getSelection();
@@ -805,8 +824,9 @@ var emptyCoursesDashboard = function (result, $scope) {
         $scope.courseid = table.getDataTable().getFormattedValue(selection[0].row, 0);
         $scope.didSelectACourse($scope.courseid);
         $("html, body").animate({scrollTop: 0}, 800);
-    };
-    
+    }
+    ;
+
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
 };
@@ -816,10 +836,10 @@ var emptyCoursesDashboard = function (result, $scope) {
  ****************************/
 var userSearchDashboard = function (result, $scope) {
     var data = new google.visualization.DataTable(result);
-    
+
     // Create a dashboard
     var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardUserSearch'));
-    
+
     // Create a search box to search for the user's full name.
     var userNameFilter = new google.visualization.ControlWrapper({
         controlType: 'StringFilter',
@@ -832,7 +852,7 @@ var userSearchDashboard = function (result, $scope) {
             }
         }
     });
-    
+
     // Create the table to display.
     var table = new google.visualization.ChartWrapper({
         chartType: 'Table',
@@ -852,13 +872,13 @@ var userSearchDashboard = function (result, $scope) {
             columns: [1, 2, 3, 4]
         }
     });
-    
+
     // Establish dependencies.
     dashboard.bind([userNameFilter], [table]);
-    
+
     // Draw the dashboard.
     dashboard.draw(data);
-    
+
     // Define what to do when selecting a table row.
     function selectHandler() {
         $scope.loadingUser = true;
@@ -867,8 +887,9 @@ var userSearchDashboard = function (result, $scope) {
         $scope.userid = table.getDataTable().getFormattedValue(selection[0].row, 0);
         $scope.didSelectAUser($scope.userid);
         $("html, body").animate({scrollTop: 0}, 800);
-    };
-    
+    }
+    ;
+
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
 };
@@ -878,10 +899,10 @@ var userSearchDashboard = function (result, $scope) {
  *******************************/
 var inactiveUsersDashboard = function (result, $scope) {
     var data = new google.visualization.DataTable(result);
-    
+
     // Create a dashboard
     var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardInactiveUsers_div'));
-    
+
     // Create a search box to search for the user name.
     var dateOfLastAccessFilter = new google.visualization.ControlWrapper({
         controlType: 'DateRangeFilter',
@@ -898,7 +919,7 @@ var inactiveUsersDashboard = function (result, $scope) {
             filterColumnIndex: 7
         }
     });
-    
+
     // Create the table to display.
     var table = new google.visualization.ChartWrapper({
         chartType: 'Table',
@@ -928,13 +949,13 @@ var inactiveUsersDashboard = function (result, $scope) {
             columns: [1, 2, 3, 4, 6, 7]
         }
     });
-    
+
     // Establish dependencies.
     dashboard.bind([dateOfLastAccessFilter, timeSinceLastAccessFilter], [table]);
-    
+
     // Draw the dashboard.
     dashboard.draw(data);
-    
+
     // Define what to do when selecting a table row.
     function selectHandler() {
         $scope.loadingUser = true;
@@ -944,17 +965,19 @@ var inactiveUsersDashboard = function (result, $scope) {
         $scope.didSelectAUser($scope.userid);
         $scope.numberOfRowsShown = table.getDataTable().getNumberOfRows();
         $("html, body").animate({scrollTop: 0}, 800);
-    };
-    
+    }
+    ;
+
     // Define what to do when changing the state on one of the slider range filters.
     function stateChangeHandler() {
         $scope.numberOfRowsShown = table.getDataTable().getNumberOfRows();
         console.log(table.getDataTable().getNumberOfRows());
-    };
-    
+    }
+    ;
+
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
-    
+
     // Setup listeners for statechange in the slider range filters.
     google.visualization.events.addListener(dateOfLastAccessFilter, 'statechange', stateChangeHandler);
     google.visualization.events.addListener(timeSinceLastAccessFilter, 'statechange', stateChangeHandler);
@@ -965,10 +988,10 @@ var inactiveUsersDashboard = function (result, $scope) {
  ********************************/
 var coursesOfUserDashboard = function (result, $scope) {
     var data = new google.visualization.DataTable(result);
-    
+
     // Create a dashboard
     var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardCoursesOfUser'));
-    
+
     // Create a search box to search for a course name.
     var nameFilter = new google.visualization.ControlWrapper({
         controlType: 'StringFilter',
@@ -981,7 +1004,7 @@ var coursesOfUserDashboard = function (result, $scope) {
             }
         }
     });
-    
+
     // Create a category picker to filter by grandparent category.
     var grandparentCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
@@ -995,7 +1018,7 @@ var coursesOfUserDashboard = function (result, $scope) {
             }
         }
     });
-    
+
     // Create a category picker to filter parent category.
     var parentCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
@@ -1009,7 +1032,7 @@ var coursesOfUserDashboard = function (result, $scope) {
             }
         }
     });
-    
+
     // Create a category picker to filter by role.
     var roleCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
@@ -1023,7 +1046,7 @@ var coursesOfUserDashboard = function (result, $scope) {
             }
         }
     });
-    
+
     // Create the table to display.
     var table = new google.visualization.ChartWrapper({
         chartType: 'Table',
@@ -1046,13 +1069,13 @@ var coursesOfUserDashboard = function (result, $scope) {
             columns: [0, 1, 2, 3, 4, 5]
         }
     });
-    
+
     // Establish dependencies.
     dashboard.bind([nameFilter, grandparentCategoryPicker, parentCategoryPicker, roleCategoryPicker], [table]);
-    
+
     // Draw the dashboard.
     dashboard.draw(data);
-    
+
     // Define what to do when selecting a table row.
     function selectHandler() {
         $scope.loadingCourse = true;
@@ -1061,8 +1084,158 @@ var coursesOfUserDashboard = function (result, $scope) {
         $scope.courseid = table.getDataTable().getFormattedValue(selection[0].row, 0);
         $scope.didSelectACourse($scope.courseid);
         $("html, body").animate({scrollTop: 0}, 800);
-    };
+    }
+    ;
+
+    // Setup listener to listen for clicks on table rows and process the selectHandler.
+    google.visualization.events.addListener(table, 'select', selectHandler);
+};
+
+/********************************
+ ** Dashboard: Files **
+ ********************************/
+var filesDashboard = function (result, $scope) {
+    var data = new google.visualization.DataTable(result);
+
+    // Create a dashboard
+    var dashboard = new google.visualization.Dashboard(document.getElementById('Files'));
+
+    // Create a search box to search for a course name.
+    var nameFilter = new google.visualization.ControlWrapper({
+        controlType: 'StringFilter',
+        containerId: 'files_name_filter_div',
+        options: {
+            filterColumnIndex: 1,
+            matchType: 'any',
+            ui: {
+                //label: $scope.vocabulary.name
+            }
+        }
+    });
     
+    // Create a search box to search for a course name.
+    var filenameFilter = new google.visualization.ControlWrapper({
+        controlType: 'StringFilter',
+        containerId: 'files_filename_filter_div',
+        options: {
+            filterColumnIndex: 2,
+            matchType: 'any',
+            ui: {
+                //label: $scope.vocabulary.name
+            }
+        }
+    });
+    
+    var fileSizeFilter = new google.visualization.ControlWrapper({
+        controlType: 'NumberRangeFilter',
+        containerId: 'files_filesize_filter_div',
+        options: {
+            filterColumnIndex: 3
+        }
+    });
+    
+    // Create a category picker to filter by parent category.
+    var mimeTypePicker = new google.visualization.ControlWrapper({
+        'controlType': 'CategoryFilter',
+        'containerId': 'files_mimetype_filter_div',
+        options: {
+            filterColumnIndex: 4,
+            /*
+            ui: {
+                caption: $scope.vocabulary.parentcategory,
+                label: '',
+                allowTyping: false
+            }
+            */
+        }
+    });
+
+/*
+    // Create a category picker to filter by grandparent category.
+    var grandparentCategoryPicker = new google.visualization.ControlWrapper({
+        'controlType': 'CategoryFilter',
+        'containerId': 'coursesOfUser_grandparentcategory_filter_div',
+        options: {
+            filterColumnIndex: 1,
+            ui: {
+                caption: $scope.vocabulary.grandparentcategory,
+                label: '',
+                allowTyping: false
+            }
+        }
+    });
+
+    // Create a category picker to filter parent category.
+    var parentCategoryPicker = new google.visualization.ControlWrapper({
+        'controlType': 'CategoryFilter',
+        'containerId': 'coursesOfUser_parentcategory_filter_div',
+        options: {
+            filterColumnIndex: 2,
+            ui: {
+                caption: $scope.vocabulary.parentcategory,
+                label: '',
+                allowTyping: false
+            }
+        }
+    });
+
+    // Create a category picker to filter by role.
+    var roleCategoryPicker = new google.visualization.ControlWrapper({
+        'controlType': 'CategoryFilter',
+        'containerId': 'coursesOfUser_role_filter_div',
+        options: {
+            filterColumnIndex: 4,
+            ui: {
+                caption: $scope.vocabulary.role,
+                label: '',
+                allowTyping: false
+            }
+        }
+    });
+    */
+    // Create the table to display.
+    var table = new google.visualization.ChartWrapper({
+        chartType: 'Table',
+        containerId: 'files_table_div',
+        options: {
+            //showRowNumber: false,
+            //page: 'enable',
+            //pageSize: 25,
+            allowHtml: true,
+            //sortColumn: 2,
+            //sortAscending: true
+        },
+        view: {
+            // 0: id
+            // 1: grandparent category
+            // 2: parent category
+            // 3: course name
+            // 4: user's role in course
+            // 5: visibility
+            //columns: [0, 1, 2, 3, 4, 5]
+        }
+    });
+
+    // Establish dependencies.
+    dashboard.bind([nameFilter, filenameFilter, fileSizeFilter, mimeTypePicker], [table]);
+
+    // Draw the dashboard.
+    dashboard.draw(data);
+
+    // Define what to do when selecting a table row.
+    function selectHandler() {
+        /*
+        $scope.loadingCourse = true;
+        $scope.ucourse = null;
+        var selection = table.getChart().getSelection();
+        $scope.courseid = table.getDataTable().getFormattedValue(selection[0].row, 0);
+        $scope.didSelectACourse($scope.courseid);
+        $("html, body").animate({scrollTop: 0}, 800);
+        */
+       console.log(result);
+    }
+    ;
+
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
 };
@@ -1079,4 +1252,5 @@ function generatePassword() {
         retVal += charset.charAt(Math.floor(Math.random() * n));
     }
     return retVal;
-};
+}
+;
