@@ -1150,57 +1150,14 @@ var filesDashboard = function (result, $scope) {
         }
     });
 
-/*
-    // Create a category picker to filter by grandparent category.
-    var grandparentCategoryPicker = new google.visualization.ControlWrapper({
-        'controlType': 'CategoryFilter',
-        'containerId': 'coursesOfUser_grandparentcategory_filter_div',
-        options: {
-            filterColumnIndex: 1,
-            ui: {
-                caption: $scope.vocabulary.grandparentcategory,
-                label: '',
-                allowTyping: false
-            }
-        }
-    });
-
-    // Create a category picker to filter parent category.
-    var parentCategoryPicker = new google.visualization.ControlWrapper({
-        'controlType': 'CategoryFilter',
-        'containerId': 'coursesOfUser_parentcategory_filter_div',
-        options: {
-            filterColumnIndex: 2,
-            ui: {
-                caption: $scope.vocabulary.parentcategory,
-                label: '',
-                allowTyping: false
-            }
-        }
-    });
-
-    // Create a category picker to filter by role.
-    var roleCategoryPicker = new google.visualization.ControlWrapper({
-        'controlType': 'CategoryFilter',
-        'containerId': 'coursesOfUser_role_filter_div',
-        options: {
-            filterColumnIndex: 4,
-            ui: {
-                caption: $scope.vocabulary.role,
-                label: '',
-                allowTyping: false
-            }
-        }
-    });
-    */
     // Create the table to display.
     var table = new google.visualization.ChartWrapper({
         chartType: 'Table',
         containerId: 'files_table_div',
         options: {
-            //showRowNumber: false,
-            //page: 'enable',
-            //pageSize: 25,
+            showRowNumber: false,
+            page: 'enable',
+            pageSize: 100,
             allowHtml: true,
             //sortColumn: 2,
             //sortAscending: true
