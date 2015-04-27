@@ -52,6 +52,7 @@ $app->map('/allUsers', 'moodleanalyst_allUsers')->via('GET');
 $app->map('/user/:id', 'moodleanalyst_user')->via('GET');
 $app->map('/course/:id', 'moodleanalyst_course')->via('GET');
 $app->map('/courses/getEmpty', 'moodleanalyst_emptyCourses')->via('GET');
+$app->map('/courses/withNumberOfActivities', 'moodleanalyst_courseswithnoofactivities')->via('GET');
 $app->map('/course/getPersons/:id', 'moodleanalyst_getPersonsInCourse')->via('GET');
 $app->map('/course/getActivities/:id', 'moodleanalyst_getActivitiesInCourse')->via('GET');
 $app->map('/course/new/options', 'moodleanalyst_newCourseOptions')->via('GET');
@@ -827,20 +828,20 @@ function moodleanalyst_semesterToCourseStartDate($semester = "") {
  */
 function moodleanalyst_getFiles() {
     global $CFG, $DB, $PAGE;
-    
+
     // Getting all contexts in a single request
     $sql = "SELECT * FROM {context} WHERE contextlevel=" . CONTEXT_MODULE;
     $contexts = $DB->get_records_sql($sql);
-    
+
     $cmid2contextid = array();
     foreach ($contexts as $id => $context) {
         $cmid2contextid[$context->instanceid] = $id;
     }
-    
+
     // Getting all folders
     $sql = "SELECT id, course, name FROM {folder}";
     $folders = $DB->get_records_sql($sql);
-    
+
     // Getting all resources
     $sql = "SELECT id, course, name FROM {resource}";
     $resources = $DB->get_records_sql($sql);
@@ -848,59 +849,59 @@ function moodleanalyst_getFiles() {
     //$sql = "SELECT id, contextid, component, filearea, filepath, filename, filesize, mimetype FROM {files} WHERE filesize != 0 AND component IN ('course', 'mod_resource', 'mod_folder')";
     $sql = "SELECT id, filename, filesize, mimetype, contextid FROM {files} WHERE filesize != 0";
     $files = $DB->get_records_sql($sql);
-    
+
     $contextid2file = array();
     foreach ($files as $id => $data) {
         //moodleanalyst_printArray($data);
         $contextid2file[$data->contextid] = $data;
     }
-    
+
     $sql = "SELECT id, course, instance FROM {course_modules} WHERE module IN (SELECT id FROM {modules} WHERE name IN ('resource'))";
     $mod_resources = $DB->get_records_sql($sql);
-    
-    
+
+
     $result = array();
-    
+
     // Add all resources to result array
     foreach ($mod_resources as $modid => $cm) {
         $tmp = array();
-        
+
         $tmp["course"] = $cm->course;
         $tmp["name"] = $resources[$cm->instance]->name;
-        
+
         $contextid = $cmid2contextid[$modid];
-        if(isset($contextid2file[$contextid])) {
-            $file =  $contextid2file[$contextid];
-            $tmp["filename"] = $file->filename; 
+        if (isset($contextid2file[$contextid])) {
+            $file = $contextid2file[$contextid];
+            $tmp["filename"] = $file->filename;
             $tmp["filesize"] = $file->filesize;
             $tmp["mimetype"] = $file->mimetype;
-            
+
             // Add to result
             $result[] = $tmp;
         } else {
             unset($mod_resources[$modid]);
         }
     }
-    
+
     $sql = "SELECT id, course, instance FROM {course_modules} WHERE module IN (SELECT id FROM {modules} WHERE name IN ('folder'))";
     $mod_folders = $DB->get_records_sql($sql);
-    
+
     // Add folders to result array
     foreach ($mod_folders as $modid => $cm) {
         $contextid = $cmid2contextid[$modid];
-        
-        $filesInFolder = $DB->get_records_sql("SELECT id, filename, filesize, mimetype, contextid FROM {files} WHERE filesize != 0 AND contextid=".$contextid);
+
+        $filesInFolder = $DB->get_records_sql("SELECT id, filename, filesize, mimetype, contextid FROM {files} WHERE filesize != 0 AND contextid=" . $contextid);
         foreach ($filesInFolder as $fileid => $file) {
             $tmp = array();
             $tmp["course"] = $cm->course;
             $tmp["name"] = $file->filename;
-            $tmp["filename"] = $file->filename; 
+            $tmp["filename"] = $file->filename;
             $tmp["filesize"] = $file->filesize;
             $tmp["mimetype"] = $file->mimetype;
             $result[] = $tmp;
         }
     }
-    
+
     $table['cols'] = array();
     $table['cols'][] = array('label' => get_string('course'), 'type' => 'number');
     $table['cols'][] = array('label' => get_string('name'), 'type' => 'string');
@@ -909,7 +910,7 @@ function moodleanalyst_getFiles() {
     $table['cols'][] = array('label' => 'mimetype', 'type' => 'string');
 
     $table['rows'] = array();
-    
+
     foreach ($result as $key => $value) {
         $filesize = round($value["filesize"] / 1024, 2);
         $table['rows'][] = ['c' => array(
@@ -918,34 +919,33 @@ function moodleanalyst_getFiles() {
                 array('v' => $value["filename"]),
                 array('v' => $filesize),
                 array('v' => $value["mimetype"]))];
-         
     }
-    
+
     echo json_encode($table);
-    
-    
+
+
     /*
-    // Gets the moodle internal id for mods of type 'resource'
-    $mods = $DB->get_records('modules', array('name' => 'resource'));
-    $mod_resource = reset($mods);
-    $id_mod_resource = $mod_resource->id;
+      // Gets the moodle internal id for mods of type 'resource'
+      $mods = $DB->get_records('modules', array('name' => 'resource'));
+      $mod_resource = reset($mods);
+      $id_mod_resource = $mod_resource->id;
 
-    // Gets all cm's of resource
-    $cms = $DB->get_records('course_modules', array('module' => $id_mod_resource));
-    $resources = $DB->get_records('resource');
-    
-    $file_browser = new file_browser();
-    $file_infos = $file_browser->get_file_info();
+      // Gets all cm's of resource
+      $cms = $DB->get_records('course_modules', array('module' => $id_mod_resource));
+      $resources = $DB->get_records('resource');
 
-    $res = $resources;
+      $file_browser = new file_browser();
+      $file_infos = $file_browser->get_file_info();
 
-    require_once $CFG->dirroot . '/mod/resource/locallib.php';
-    foreach ($cms as $cmid => $cm) {
-        $details = resource_get_optional_details($resources[$cm->instance], $cm);
-        moodleanalyst_printArray($details);
-    }
-    
-    /*
+      $res = $resources;
+
+      require_once $CFG->dirroot . '/mod/resource/locallib.php';
+      foreach ($cms as $cmid => $cm) {
+      $details = resource_get_optional_details($resources[$cm->instance], $cm);
+      moodleanalyst_printArray($details);
+      }
+
+      /*
       foreach ($cms as $cmid => $cm) {
       //$context = context_module::instance($cm->id);
       $context = context_course::instance($cm->course);
@@ -962,9 +962,65 @@ function moodleanalyst_getFiles() {
 
       $resources = $DB->get_records('resource');
      */
-    
+
     //moodleanalyst_printArray($res);
 }
 
+/**
+ * Returns a table of all courses with the number of activities in each course
+ * as JSON for a google charts table
+ */
+function moodleanalyst_courseswithnoofactivities() {
+    global $DB;
+    $courses = get_courses("all", "c.sortorder DESC", 'c.id, c.fullname, c.shortname, c.category as parentcategory, c.visible');
+    $categories = $DB->get_records('course_categories', null, null, 'id, name, parent, visible');
+    
+    $activities = $DB->get_records_sql("SELECT course, COUNT(course) as countedactivities FROM {course_modules} GROUP BY course");
+
+    // Preparing the return table
+    $result = array();
+    $result['cols'] = array();
+    $result['cols'][] = array('label' => 'ID', 'type' => 'number');
+    $result['cols'][] = array('label' => get_string('grandparentcategory', 'report_moodleanalyst'), 'type' => 'string');
+    $result['cols'][] = array('label' => get_string('parentcategory', 'report_moodleanalyst'), 'type' => 'string');
+    $result['cols'][] = array('label' => get_string('course', 'report_moodleanalyst'), 'type' => 'string');
+    $result['cols'][] = array('label' => get_string('activities'), 'type' => 'number');
+    $result['cols'][] = array('label' => get_string('visible'), 'type' => 'boolean');
+
+    $result['rows'] = array();
+    
+    $yes = get_string('yes');
+    $no = get_String('no');
+
+    foreach ($courses as $courseid => $data) {
+        if(isset($activities[$courseid])) {
+            $data->numberOfActivities = $activities[$courseid]->countedactivities;
+        } else {
+            $data->numberOfActivities = 0;
+        }
+        
+        if ($data->parentcategory != 0) {
+            $data->parentcategoryname = $categories[$data->parentcategory]->name;
+            $data->grandparentcategory = $categories[$data->parentcategory]->parent;
+            if ($data->grandparentcategory != 0) {
+                $data->grandparentcategoryname = $categories[$data->grandparentcategory]->name;
+            } else {
+                $data->grandparentcategoryname = "";
+            }
+        } else {
+            $data->parentcategoryname = "";
+            $data->grandparentcategory = "";
+            $data->grandparentcategoryname = "";
+        }
+        $coursename = $data->fullname;
+        // Filling the return table
+        $data->visible = ($data->visible) ? true : false;
+        $data->visibleReadable = ($data->visible) ? $yes : $no;
+        
+        $number = (int) $data->numberOfActivities;
+        $result['rows'][] = ['c' => array(['v' => $data->id], array('v' => $data->grandparentcategoryname), array('v' => $data->parentcategoryname), array('v' => $coursename), array('v' => $number), array('v' => $data->visible, 'f' => $data->visibleReadable))];
+    }
+    echo json_encode($result);
+}
 ?>
 

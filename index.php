@@ -97,6 +97,7 @@ echo '<html>
                                         <li role="presentation"><a id="tablink_inactiveusers" href="#tabs-4" role="tab" data-toggle="tab">{{vocabulary.users}} ({{vocabulary.inactive}})</a></li>
                                         <li role="presentation"><a id="tablink_emptycourses" href="#tabs-5" role="tab" data-toggle="tab">Empty courses</a></li>
                                         <li role="presentation"><a id="tablink_files" href="#tabs-6" role="tab" data-toggle="tab" ng-controller="FilesController" ng-click="getAllFiles();">Files</a></li>
+                                        <li role="presentation"><a id="tablink_courseswithactivities" href="#tabs-7" role="tab" data-toggle="tab" ng-controller="CoursesWithActivitiesController" ng-click="getData();">Courses with Activities</a></li>
                                     </ul>
                                 </li>
                                 <!--
@@ -128,6 +129,9 @@ echo '<html>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="tabs-6">
                         <div ng-include="\'' . $wwwroot . '/report/moodleanalyst/html/files.tpl.html\'"></div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="tabs-7">
+                        <div ng-include="\'' . $wwwroot . '/report/moodleanalyst/html/courseswithactivities.tpl.html\'"></div>
                     </div>
                 </div> <!-- tab-content -->
                 

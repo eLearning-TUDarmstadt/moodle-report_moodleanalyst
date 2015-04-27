@@ -148,8 +148,8 @@ app.controller('CourseDetailTabController', ['$scope', function ($scope) {
 
 app.controller('FilesController', ['$scope', '$http', function ($scope, $http) {
         $scope.gotAllFiles = false;
-        
-        
+
+
         $scope.getAllFiles = function () {
             $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/files')
                     .success(function (result) {
@@ -159,6 +159,19 @@ app.controller('FilesController', ['$scope', '$http', function ($scope, $http) {
         };
     }]);
 
+app.controller('CoursesWithActivitiesController', ['$scope', '$http', function ($scope, $http) {
+        $scope.gotAllCoursesWithAcitivities = false;
+
+
+        $scope.getData = function () {
+            var url = wwwroot + '/report/moodleanalyst/rest/mastREST.php/courses/withNumberOfActivities';
+            $http.get(url)
+                    .success(function (result) {
+                        $scope.gotAllCoursesWithAcitivities = true;
+                        coursesWithActivitiesDashboard(result, $scope, url);
+                    });
+        };
+    }]);
 
 /***********************
  ** Directive: LOADER **
@@ -1112,7 +1125,7 @@ var filesDashboard = function (result, $scope) {
             }
         }
     });
-    
+
     // Create a search box to search for a course name.
     var filenameFilter = new google.visualization.ControlWrapper({
         controlType: 'StringFilter',
@@ -1125,7 +1138,7 @@ var filesDashboard = function (result, $scope) {
             }
         }
     });
-    
+
     var fileSizeFilter = new google.visualization.ControlWrapper({
         controlType: 'NumberRangeFilter',
         containerId: 'files_filesize_filter_div',
@@ -1133,7 +1146,7 @@ var filesDashboard = function (result, $scope) {
             filterColumnIndex: 3
         }
     });
-    
+
     // Create a category picker to filter by parent category.
     var mimeTypePicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
@@ -1141,12 +1154,12 @@ var filesDashboard = function (result, $scope) {
         options: {
             filterColumnIndex: 4,
             /*
-            ui: {
-                caption: $scope.vocabulary.parentcategory,
-                label: '',
-                allowTyping: false
-            }
-            */
+             ui: {
+             caption: $scope.vocabulary.parentcategory,
+             label: '',
+             allowTyping: false
+             }
+             */
         }
     });
 
@@ -1182,14 +1195,111 @@ var filesDashboard = function (result, $scope) {
     // Define what to do when selecting a table row.
     function selectHandler() {
         /*
-        $scope.loadingCourse = true;
-        $scope.ucourse = null;
+         $scope.loadingCourse = true;
+         $scope.ucourse = null;
+         var selection = table.getChart().getSelection();
+         $scope.courseid = table.getDataTable().getFormattedValue(selection[0].row, 0);
+         $scope.didSelectACourse($scope.courseid);
+         $("html, body").animate({scrollTop: 0}, 800);
+         */
+        console.log(result);
+    }
+    ;
+
+    // Setup listener to listen for clicks on table rows and process the selectHandler.
+    google.visualization.events.addListener(table, 'select', selectHandler);
+};
+
+var coursesWithActivitiesDashboard = function (result, $scope, url) {
+    var data = new google.visualization.DataTable(result);
+
+    // Create a dashboard
+    var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardcourseswithactivities'));
+
+    // Create a category picker to filter by parent category.
+    var grandparentFilter = new google.visualization.ControlWrapper({
+        'controlType': 'CategoryFilter',
+        'containerId': 'courseswithactivities_grandparent_filter_div',
+        options: {
+            filterColumnIndex: 1,
+        }
+    });
+
+    var parentFilter = new google.visualization.ControlWrapper({
+        'controlType': 'CategoryFilter',
+        'containerId': 'courseswithactivities_parent_filter_div',
+        options: {
+            filterColumnIndex: 2,
+        }
+    });
+
+    // Create a search box to search for a course name.
+    var nameFilter = new google.visualization.ControlWrapper({
+        controlType: 'StringFilter',
+        containerId: 'courseswithactivities_name_filter_div',
+        options: {
+            filterColumnIndex: 3,
+            matchType: 'any',
+            ui: {
+                //label: $scope.vocabulary.name
+            }
+        }
+    });
+
+    var numberFilter = new google.visualization.ControlWrapper({
+        controlType: 'NumberRangeFilter',
+        containerId: 'courseswithactivities_number_filter_div',
+        options: {
+            filterColumnIndex: 4
+        }
+    });
+
+    var visibilityFilter = new google.visualization.ControlWrapper({
+        controlType: 'CategoryFilter',
+        containerId: 'courseswithactivities_visibility_filter_div',
+        options: {
+            filterColumnIndex: 5
+        }
+    });
+
+    // Create the table to display.
+    var table = new google.visualization.ChartWrapper({
+        chartType: 'Table',
+        containerId: 'courseswithactivities_table_div',
+        options: {
+            showRowNumber: false,
+            page: 'enable',
+            pageSize: 100,
+            allowHtml: true,
+            sortColumn: 0,
+            sortAscending: false
+        },
+        view: {
+            // 0: id
+            // 1: grandparent category
+            // 2: parent category
+            // 3: course name
+            // 4: user's role in course
+            // 5: visibility
+            //columns: [0, 1, 2, 3, 4, 5]
+        }
+    });
+
+    // Establish dependencies.
+    dashboard.bind([grandparentFilter, parentFilter, nameFilter, numberFilter, visibilityFilter], [table]);
+
+    // Draw the dashboard.
+    dashboard.draw(data);
+
+    // Define what to do when selecting a table row.
+    function selectHandler() {
         var selection = table.getChart().getSelection();
+        $scope.loadingCourse = true;
+        $scope.course = null;
         $scope.courseid = table.getDataTable().getFormattedValue(selection[0].row, 0);
         $scope.didSelectACourse($scope.courseid);
+        $('#myTabList a:first').tab('show');
         $("html, body").animate({scrollTop: 0}, 800);
-        */
-       console.log(result);
     }
     ;
 
