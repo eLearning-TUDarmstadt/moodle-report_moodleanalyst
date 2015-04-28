@@ -256,6 +256,8 @@ function moodleanalyst_getVocabulary() {
     $result['password'] = get_string('password', 'enrol_self');
     $result['nopassword'] = get_string('nopassword', 'enrol_self');
     $result['fullnameuser'] = get_string('fullnameuser');
+    $result['allfiles'] = get_string('allfiles');
+    $result['files'] = get_string('files');
 
     //echo "<pre>" . print_r($result, true) . "</pre>";
     echo json_encode($result);

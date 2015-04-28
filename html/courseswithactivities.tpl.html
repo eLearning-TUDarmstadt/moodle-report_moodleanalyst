@@ -28,22 +28,39 @@ This page lists all users with the option of filtering by inactivity.
 Detailed information is shown on the right hand side of the screen after clicking on a user.
 -->
 
-<div class="panel panel-default" ng-controller="CoursesWithActivitiesController" id="dashboardcourseswithactivities">
+<div class="panel panel-default" ng-controller="CoursesWithActivitiesController" id="dashboardcourseswithactivities_div">
     <div class="panel-heading">
         <h3>Courses with number of activities</h3>
-        <div class="row">
-            <div class="col-md-4" id="courseswithactivities_grandparent_filter_div"></div>
-            <div class="col-md-4" id="courseswithactivities_parent_filter_div"></div>
-            <div class="col-md-4" id="courseswithactivities_name_filter_div"></div>
-        </div>
-        <div class="row">
-            <div class="col-md-4" id="courseswithactivities_number_filter_div"></div>
-            <div class="col-md-4" id="courseswithactivities_visibility_filter_div"></div>
-            <div class="col-md-4" id="courseswithactivities_toolbar_div"></div>
-        </div>
     </div>
+    
     <div class="panel-body">
-        <loader ng-show="gotAllCoursesWithAcitivities"></loader>
-        <div id="courseswithactivities_table_div"></div>
-    </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-md-6" id="courseswithactivities_name_filter_div"></div>
+                            <div class="col-md-6" id="courseswithactivities_visibility_filter_div"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6" id="courseswithactivities_grandparent_filter_div"></div>
+                            <div class="col-md-6" id="courseswithactivities_number_filter_div"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6" id="courseswithactivities_parent_filter_div"></div>
+                            <div class="col-md-6" id="courseswithactivities_toolbar_div"></div>
+                        </div>
+                    </div> <!-- panel-heading -->
+            
+                    <div class="panel-body" id="courseswithactivities_table_div">
+                        <loader ng-hide="gotAllCoursesWithAcitivities"></loader>
+                    </div>
+                </div> <!-- panel panel-info -->
+            </div> <!-- col-md-6 -->
+            
+            <div class="col-md-6">
+                <!--<courseinfo ng-show="courseid"></courseinfo>-->
+            </div>
+        </div> <!-- row -->
+    </div> <!-- panel-body -->
 </div> <!-- panel panel-default -->
