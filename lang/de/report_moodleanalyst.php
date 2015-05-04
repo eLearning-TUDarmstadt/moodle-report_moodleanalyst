@@ -27,6 +27,6 @@ $string['pluginname'] = 'Moodle AnalyST';
 $string['moodleanalyst'] = $string['pluginname'];
 $string['reportmoodleanalyst'] = 'reportmoodleanalyst';
 
-$string['parentcategory'] = 'FB';
+$string['parentcategory'] = 'Fachbereich';
 $string['grandparentcategory'] = 'Semester';
 $string['course'] = 'Kurs';
