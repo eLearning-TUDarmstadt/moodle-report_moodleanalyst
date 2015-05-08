@@ -55,7 +55,7 @@ This page displays detailed Information about a user.
                         <!-- 2.1) "edit user" button -->
                         <a href="<?php $wwwroot ?>/user/editadvanced.php?id={{user.id.v}}" target="_blank" title="{{vocabulary.edit}}">
                             <button type="button" class="btn btn-default" aria-label="Edit User">
-                                <span><img src="<?php $wwwroot ?>/pix/t/editstring.svg"></span>
+                                <span><img src="<?php $wwwroot ?>/pix/t/editstring.png"></span>
                             </button>
                         </a>
                     
@@ -63,7 +63,7 @@ This page displays detailed Information about a user.
                         <!--
                         <a title="{{vocabulary.refresh}}">
                             <button type="button" class="btn btn-default" aria-label="Refresh" ng-click="loadDataUserInfo()">
-                                <span><img src="/pix/i/reload.svg"></span>
+                                <span><img src="/pix/i/reload.png"></span>
                             </button>
                         </a>
                         -->
@@ -71,7 +71,7 @@ This page displays detailed Information about a user.
                         <!-- 2.3) close button -->
                         <a title="{{vocabulary.hidesection}}">
                             <button type="button" class="btn btn-default" aria-label="Close" ng-click="userid = false;">
-                                <span><img src="<?php $wwwroot ?>/pix/t/switch_minus.svg"></span>
+                                <span><img src="<?php $wwwroot ?>/pix/t/switch_minus.png"></span>
                             </button>
                         </a>
                     </div> <!-- btn-group -->
@@ -95,7 +95,7 @@ This page displays detailed Information about a user.
                 <div class="row panel-body">
                     <div class="col-md-4">
                         <button ng-click="addUserToCourse(user.id.v, course.data.id.v, selectedRole);" type="button" class="btn btn-default" aria-label="">
-                            <span><img src="<?php $wwwroot ?>/pix/t/left.svg"></span> {{vocabulary.enrol}}
+                            <span><img src="<?php $wwwroot ?>/pix/t/left.png"></span> {{vocabulary.enrol}}
                         </button>
                     </div>
                     <div class="col-md-8">
@@ -118,7 +118,7 @@ This page displays detailed Information about a user.
                         <!-- refresh button -->
                         <div class="col-md-3">
                             <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataUserInfo()" title="{{vocabulary.refresh}}">
-                                <span><img src="<?php $wwwroot ?>/pix/i/reload.svg"></span>
+                                <span><img src="<?php $wwwroot ?>/pix/i/reload.png"></span>
                             </button>
                         </div>
                     </div> <!-- row -->
@@ -191,7 +191,7 @@ This page displays detailed Information about a user.
                             <!-- refresh button -->
                             <div class="col-md-3">
                                 <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataUserInfo()" title="{{vocabulary.refresh}}">
-                                    <span><img src="<?php $wwwroot ?>/pix/i/reload.svg"></span>
+                                    <span><img src="<?php $wwwroot ?>/pix/i/reload.png"></span>
                                 </button>
                             </div>
                         </div> <!-- row -->

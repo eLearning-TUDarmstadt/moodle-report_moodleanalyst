@@ -40,7 +40,7 @@ Selecting a user will load the userinfo page.
                 <div class="col-md-3">
                     <!-- refresh button -->
                     <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataUserSearch()" title="{{vocabulary.refresh}}">
-                        <span><img src="<?php $wwwroot ?>/pix/i/reload.svg"></span>
+                        <span><img src="<?php $wwwroot ?>/pix/i/reload.png"></span>
                     </button>
                 </div>
             </div> <!-- row -->

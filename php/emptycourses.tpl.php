@@ -51,7 +51,7 @@ appears on the left half.
                                 <div class="col-md-3">
                                     <!-- refresh button -->
                                     <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataCourseSearch()" title="{{vocabulary.refresh}}">
-                                        <span><img src="<?php $wwwroot ?>/pix/i/reload.svg"></span>
+                                        <span><img src="<?php $wwwroot ?>/pix/i/reload.png"></span>
                                     </button>
                                 </div>
                             </div> <!-- row -->
