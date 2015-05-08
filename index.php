@@ -171,8 +171,6 @@ echo '<html>
         <!-- Include custom JS -->
         <script id="angularJSloader" src="' . $wwwroot . '/report/moodleanalyst/js/angular.js" wwwroot="' . $wwwroot . '"></script>
         
-        
-        
         <!-- Bootstrap core JS -->
         <script src="' . $wwwroot . '/report/moodleanalyst/js/bootstrap.min.js"></script>
         
