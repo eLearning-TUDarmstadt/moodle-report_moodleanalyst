@@ -33,7 +33,12 @@ Selecting a course will load the courseinfo page.
         <div class="panel-heading">
             <div class="row">
                 <div class="col-md-9">
-                    <div id="courses_name_filter_div"></div>
+                    <div id="courses_name_filter">
+                        <div id="courses_name_filter_div"></div>
+                        <button type="button" class="btn btn-default" aria-label="Left Align">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </button>
+                    </div>
                     <div id="courses_grandparentcategory_filter_div"></div>
                     <div id="courses_parentcategory_filter_div"></div>
                 </div>
@@ -45,7 +50,7 @@ Selecting a course will load the courseinfo page.
                 </div>
             </div> <!-- row -->
         </div> <!-- panel-heading -->
-        
+
         <div class="panel-body" id="courses_table_div">
             <loader ng-hide="gotAllCourses"></loader>
         </div>

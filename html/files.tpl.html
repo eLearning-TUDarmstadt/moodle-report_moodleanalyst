@@ -30,14 +30,20 @@ Detailed information is shown on the right hand side of the screen after clickin
 
 <div class="panel panel-default" ng-controller="FilesController" id="dashboardFiles">
     <div class="panel-heading">
-        <h3>Files</h3>
-        <div id="files_name_filter_div"></div>
-        <div id="files_filename_filter_div"></div>
-        <div id="files_filesize_filter_div"></div>
-        <div id="files_mimetype_filter_div"></div>
+        <h3>{{vocabulary.allfiles}}</h3>
     </div>
+    
     <div class="panel-body">
-        <loader ng-show="gotAllFiles"></loader>
-        <div id="files_table_div"></div>
-    </div>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div id="files_name_filter_div"></div>
+                <div id="files_filename_filter_div"></div>
+                <div id="files_filesize_filter_div"></div>
+                <div id="files_mimetype_filter_div"></div>
+            </div> <!-- panel-heading -->
+            <div class="panel-body" id="files_table_div">
+                <loader ng-hide="gotAllFiles"></loader>
+            </div>
+        </div> <!-- panel panel-info -->
+    </div> <!-- panel-body -->
 </div> <!-- panel panel-default -->
