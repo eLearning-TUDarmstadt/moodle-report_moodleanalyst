@@ -34,6 +34,8 @@ on one page.
 It will also show an error message if the user is not logged into moodle with the proper rights (at least course creator).
 -->
 
+<?php $wwwroot = $CFG->wwwroot; ?>
+
 <modal title="Error" visible="showModal">
     <form role="form">
         <div class="alert alert-danger" role="alert"><strong>Login Error</strong></div>

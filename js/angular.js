@@ -73,14 +73,14 @@ app.directive('modal', function () {
 /*************************
  ** Directive: OVERVIEW **
  *************************
- * - initializes overview template html
+ * - initializes overview template
  * - checks if user is logged in
  * - initializes vocabulary
  */
 app.directive('overview', function () {
     return {
         restrict: 'E',
-        templateUrl: wwwroot + '/report/moodleanalyst/html/overview.tpl.html',
+        templateUrl: wwwroot + '/report/moodleanalyst/php/overview.tpl.php',
         controller: [
             '$http', '$scope', function ($http, $scope) {
                 $scope.showModal = false;
@@ -189,21 +189,21 @@ app.controller('CoursesWithActivitiesController', ['$scope', '$http', function (
 app.directive('loader', function () {
     return {
         restrict: 'E',
-        template: '<img style="display: block; margin-left: auto; margin-right: auto;" src="/report/moodleanalyst/pix/ajax-loader.gif">'
+        template: '<img style="display: block; margin-left: auto; margin-right: auto;" src="' + wwwroot + '/report/moodleanalyst/pix/ajax-loader.gif">'
     };
 });
 
 /******************************
  ** Directive: COURSE SEARCH **
  ******************************
- * - initializes course search template html
+ * - initializes course search template
  * - loads all courses and draws dashboard
  * - loads all empty courses and draws dashboard
  */
 app.directive('coursesearch', function () {
     return {
         restrict: 'E',
-        templateUrl: wwwroot + '/report/moodleanalyst/html/coursesearch.tpl.html',
+        templateUrl: wwwroot + '/report/moodleanalyst/php/coursesearch.tpl.php',
         controller: [
             '$http', '$scope', function ($http, $scope) {
                 $scope.loadDataCourseSearch = function () {
@@ -239,14 +239,14 @@ app.directive('coursesearch', function () {
 /****************************
  ** Directive: USER SEARCH **
  ****************************
- * - initializes user search template html
+ * - initializes user search template
  * - loads all users and draws user search dashboard
  * - draws inactive users dashboard
  */
 app.directive('usersearch', function () {
     return {
         restrict: 'E',
-        templateUrl: wwwroot + '/report/moodleanalyst/html/usersearch.tpl.html',
+        templateUrl: wwwroot + '/report/moodleanalyst/php/usersearch.tpl.php',
         controller: [
             '$http', '$scope', function ($http, $scope) {
                 $scope.loadDataUserSearch = function () {
@@ -272,7 +272,7 @@ app.directive('usersearch', function () {
 /****************************
  ** Directive: COURSE INFO **
  ****************************
- * - initializes course info template html
+ * - initializes course info template
  * - displays detailed information about a selected course
  *      including users and activities in the course
  * - includes function to change visibility of the course
@@ -280,7 +280,7 @@ app.directive('usersearch', function () {
 app.directive('courseinfo', function () {
     return {
         restrict: 'E',
-        templateUrl: wwwroot + '/report/moodleanalyst/html/courseinfo.tpl.html',
+        templateUrl: wwwroot + '/report/moodleanalyst/php/courseinfo.tpl.php',
         controller: [
             '$http', '$scope', function ($http, $scope) {
                 $scope.isActivitySelected = false;
@@ -332,14 +332,14 @@ app.directive('courseinfo', function () {
 /**************************
  ** Directive: USER INFO **
  **************************
- * - initializes user info template html
+ * - initializes user info template
  * - displays detailed information about a selected user
  * - includes a function to add a user to a course
  */
 app.directive('userinfo', function () {
     return {
         restrict: 'E',
-        templateUrl: wwwroot + '/report/moodleanalyst/html/userinfo.tpl.html',
+        templateUrl: wwwroot + '/report/moodleanalyst/php/userinfo.tpl.php',
         controller: [
             '$http', '$scope', function ($http, $scope) {
                 $scope.didSelectAUser = function (userid) {
@@ -399,7 +399,7 @@ app.filter('toArray', function () {
 app.directive('newcourseform', function () {
     return {
         restrict: 'E',
-        templateUrl: wwwroot + '/report/moodleanalyst/html/createnewcourse.tpl.html',
+        templateUrl: wwwroot + '/report/moodleanalyst/php/createnewcourse.tpl.php',
         controller: [
             '$http', '$scope', function ($http, $scope) {
                 $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/course/new/options')

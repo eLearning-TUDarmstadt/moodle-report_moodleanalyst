@@ -27,6 +27,8 @@
 This page displays detailed Information about a user.
 -->
 
+<?php $wwwroot = $CFG->wwwroot; ?>
+
 <div id="userInfo">
     <div class="panel panel-primary">
         <!--
@@ -43,7 +45,7 @@ This page displays detailed Information about a user.
             <div class="panel-title row">
                 <div class="col-md-12">
                     <!-- 1) user's name -->
-                    <a href="/user/profile.php?id={{user.id.v}}" target="_blank" style="color: #000000">
+                    <a href="<?php $wwwroot ?>/user/profile.php?id={{user.id.v}}" target="_blank" style="color: #000000">
                         {{user.firstname.v}} {{user.lastname.v}}
                     </a>
                     
@@ -51,9 +53,9 @@ This page displays detailed Information about a user.
                     <div class="btn-group btn-group-xs pull-right" role="group">
                         
                         <!-- 2.1) "edit user" button -->
-                        <a href="/user/editadvanced.php?id={{user.id.v}}" target="_blank" title="{{vocabulary.edit}}">
+                        <a href="<?php $wwwroot ?>/user/editadvanced.php?id={{user.id.v}}" target="_blank" title="{{vocabulary.edit}}">
                             <button type="button" class="btn btn-default" aria-label="Edit User">
-                                <span><img src="/pix/t/editstring.svg"></span>
+                                <span><img src="<?php $wwwroot ?>/pix/t/editstring.svg"></span>
                             </button>
                         </a>
                     
@@ -69,7 +71,7 @@ This page displays detailed Information about a user.
                         <!-- 2.3) close button -->
                         <a title="{{vocabulary.hidesection}}">
                             <button type="button" class="btn btn-default" aria-label="Close" ng-click="userid = false;">
-                                <span><img src="/pix/t/switch_minus.svg"></span>
+                                <span><img src="<?php $wwwroot ?>/pix/t/switch_minus.svg"></span>
                             </button>
                         </a>
                     </div> <!-- btn-group -->
@@ -93,7 +95,7 @@ This page displays detailed Information about a user.
                 <div class="row panel-body">
                     <div class="col-md-4">
                         <button ng-click="addUserToCourse(user.id.v, course.data.id.v, selectedRole);" type="button" class="btn btn-default" aria-label="">
-                            <span><img src="/pix/t/left.svg"></span> {{vocabulary.enrol}}
+                            <span><img src="<?php $wwwroot ?>/pix/t/left.svg"></span> {{vocabulary.enrol}}
                         </button>
                     </div>
                     <div class="col-md-8">
@@ -116,7 +118,7 @@ This page displays detailed Information about a user.
                         <!-- refresh button -->
                         <div class="col-md-3">
                             <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataUserInfo()" title="{{vocabulary.refresh}}">
-                                <span><img src="/pix/i/reload.svg"></span>
+                                <span><img src="<?php $wwwroot ?>/pix/i/reload.svg"></span>
                             </button>
                         </div>
                     </div> <!-- row -->
@@ -189,7 +191,7 @@ This page displays detailed Information about a user.
                             <!-- refresh button -->
                             <div class="col-md-3">
                                 <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataUserInfo()" title="{{vocabulary.refresh}}">
-                                    <span><img src="/pix/i/reload.svg"></span>
+                                    <span><img src="<?php $wwwroot ?>/pix/i/reload.svg"></span>
                                 </button>
                             </div>
                         </div> <!-- row -->

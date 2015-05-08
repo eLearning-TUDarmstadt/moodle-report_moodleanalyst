@@ -98,9 +98,17 @@ echo '<html>
                                         <span><img src="' . $wwwroot . '/pix/i/scales.svg"></span> {{vocabulary.statistics}}<b class="caret"></b>
                                     </a>
                                     <ul class="dropdown-menu" role="menu">
+                                        
+                                        <!-- NOT YET IMPLEMENTED
                                         <li role="presentation"><a id="tablink_newusers" href="#tabs-3" role="tab" data-toggle="tab">{{vocabulary.newusers}}</a></li>
+                                        -->
+                                        
                                         <li role="presentation"><a id="tablink_inactiveusers" href="#tabs-4" role="tab" data-toggle="tab">{{vocabulary.users}} ({{vocabulary.inactive}})</a></li>
+                                        
+                                        <!-- CURRENTLY NOT USED DUE TO LONG LOADING TIME FOR LARGE MOODLE INSTANCES
                                         <li role="presentation"><a id="tablink_emptycourses" href="#tabs-5" role="tab" data-toggle="tab">Empty courses</a></li>
+                                        -->
+
                                         <li role="presentation"><a id="tablink_files" href="#tabs-6" role="tab" data-toggle="tab" ng-controller="FilesController" ng-click="getAllFiles();">{{vocabulary.allfiles}}</a></li>
                                         <li role="presentation"><a id="tablink_courseswithactivities" href="#tabs-7" role="tab" data-toggle="tab" ng-controller="CoursesWithActivitiesController" ng-click="getData();">Courses with Activities</a></li>
                                     </ul>
@@ -123,20 +131,28 @@ echo '<html>
                     <div role="tabpanel" class="tab-pane fade" id="tabs-2">
                         <newcourseform></newcourseform>
                     </div>
+                    
+                    <!-- NOT YET IMPLEMENTED
                     <div role="tabpanel" class="tab-pane fade" id="tabs-3">
-                        <div ng-include="\'' . $wwwroot . '/report/moodleanalyst/html/newusers.tpl.html\'"></div>
+                        <div ng-include="\'' . $wwwroot . '/report/moodleanalyst/php/newusers.tpl.php\'"></div>
                     </div>
+                    -->
+                    
                     <div role="tabpanel" class="tab-pane fade" id="tabs-4">
-                        <div ng-include="\'' . $wwwroot . '/report/moodleanalyst/html/inactiveusers.tpl.html\'"></div>
+                        <div ng-include="\'' . $wwwroot . '/report/moodleanalyst/php/inactiveusers.tpl.php\'"></div>
                     </div>
+                    
+                    <!-- CURRENTLY NOT USED DUE TO LONG LOADING TIME FOR LARGE MOODLE INSTANCES
                     <div role="tabpanel" class="tab-pane fade" id="tabs-5">
-                        <div ng-include="\'' . $wwwroot . '/report/moodleanalyst/html/emptycourses.tpl.html\'"></div>
+                        <div ng-include="\'' . $wwwroot . '/report/moodleanalyst/php/emptycourses.tpl.php\'"></div>
                     </div>
+                    -->
+
                     <div role="tabpanel" class="tab-pane fade" id="tabs-6">
-                        <div ng-include="\'' . $wwwroot . '/report/moodleanalyst/html/files.tpl.html\'"></div>
+                        <div ng-include="\'' . $wwwroot . '/report/moodleanalyst/php/files.tpl.php\'"></div>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="tabs-7">
-                        <div ng-include="\'' . $wwwroot . '/report/moodleanalyst/html/courseswithactivities.tpl.html\'"></div>
+                        <div ng-include="\'' . $wwwroot . '/report/moodleanalyst/php/courseswithactivities.tpl.php\'"></div>
                     </div>
                 </div> <!-- tab-content -->
                 

@@ -28,6 +28,8 @@ This page lists all users with the option of filtering by inactivity.
 Detailed information is shown on the right hand side of the screen after clicking on a user.
 -->
 
+<?php $wwwroot = $CFG->wwwroot; ?>
+
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3>{{vocabulary.users}} ({{vocabulary.inactive}})</h3>
@@ -49,7 +51,7 @@ Detailed information is shown on the right hand side of the screen after clickin
                                 <div class="col-md-3">
                                     <!-- refresh button -->
                                     <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataCourseSearch()" title="{{vocabulary.refresh}}">
-                                        <span><img src="/pix/i/reload.svg"></span>
+                                        <span><img src="<?php $wwwroot ?>/pix/i/reload.svg"></span>
                                     </button>
                                 </div>
                             </div> <!-- row -->

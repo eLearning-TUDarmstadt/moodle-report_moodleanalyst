@@ -24,28 +24,34 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-This page lists all users with an option to search by string.
-Selecting a user will load the userinfo page.
+This page lists all courses along with a search box and the option to filter by parent and/or grandparent category.
+Selecting a course will load the courseinfo page.
 -->
 
-<div id="dashboardUserSearch">
+<?php $wwwroot = $CFG->wwwroot; ?>
+
+<div id="dashboardCourseSearch">
     <div class="panel panel-info">
         <div class="panel-heading">
             <div class="row">
                 <div class="col-md-9">
-                    <div id="user_name_filter_div"></div>
+                    <div id="courses_name_filter">
+                        <div id="courses_name_filter_div"></div>
+                    </div>
+                    <div id="courses_grandparentcategory_filter_div"></div>
+                    <div id="courses_parentcategory_filter_div"></div>
                 </div>
                 <div class="col-md-3">
                     <!-- refresh button -->
-                    <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataUserSearch()" title="{{vocabulary.refresh}}">
-                        <span><img src="/pix/i/reload.svg"></span>
+                    <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataCourseSearch()" title="{{vocabulary.refresh}}">
+                        <span><img src="<?php $wwwroot ?>/pix/i/reload.svg"></span>
                     </button>
                 </div>
             </div> <!-- row -->
         </div> <!-- panel-heading -->
-        
-        <div class="panel-body" id="user_table_div">
-            <loader ng-hide="gotAllUsers"></loader>
+
+        <div class="panel-body" id="courses_table_div">
+            <loader ng-hide="gotAllCourses"></loader>
         </div>
     </div> <!-- panel panel-info -->
 </div>

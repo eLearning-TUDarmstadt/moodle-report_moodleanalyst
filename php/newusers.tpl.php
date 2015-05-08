@@ -24,26 +24,26 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-This page lists all users with the option of filtering by inactivity.
+This page lists all new users with the option of filtering by inactivity.
 Detailed information is shown on the right hand side of the screen after clicking on a user.
 -->
 
-<div class="panel panel-default" ng-controller="FilesController" id="dashboardFiles">
+<?php $wwwroot = $CFG->wwwroot; ?>
+
+<div class="panel panel-default">
     <div class="panel-heading">
-        <h3>{{vocabulary.allfiles}}</h3>
+        <h3>{{vocabulary.newusers}}</h3>
     </div>
     
     <div class="panel-body">
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <div id="files_name_filter_div"></div>
-                <div id="files_filename_filter_div"></div>
-                <div id="files_filesize_filter_div"></div>
-                <div id="files_mimetype_filter_div"></div>
-            </div> <!-- panel-heading -->
-            <div class="panel-body" id="files_table_div">
-                <loader ng-hide="gotAllFiles"></loader>
+        <div class="row">
+            <div class="col-md-6">
+                <div>TODO write content</div>
             </div>
-        </div> <!-- panel panel-info -->
+            
+            <div class="col-md-6">
+                <userinfo ng-show="userid"></userinfo>
+            </div>
+        </div> <!-- row -->
     </div> <!-- panel-body -->
 </div> <!-- panel panel-default -->

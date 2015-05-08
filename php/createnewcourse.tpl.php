@@ -27,6 +27,8 @@
 This page contains a form to create a new course.
 -->
 
+<?php $wwwroot = $CFG->wwwroot; ?>
+
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3>{{vocabulary.newcourse}}</h3>
@@ -83,14 +85,12 @@ This page contains a form to create a new course.
             <p></p>
     
             <button type="button" class="btn btn-default" aria-label="newcourse.vocabulary.createnewcourse" ng-click="createNewCourse()">
-                <span><img src="/pix/t/add.svg"></span> {{vocabulary.createnewcourse}}
+                <span><img src="<?php $wwwroot ?>/pix/t/add.svg"></span> {{vocabulary.createnewcourse}}
             </button>
             
             <button type="button" class="btn btn-default" aria-label="newcourse.vocabulary.reset" ng-click="reset()">
-                <span><img src="/pix/i/return.svg"></span> {{vocabulary.reset}}
+                <span><img src="<?php $wwwroot ?>/pix/i/return.svg"></span> {{vocabulary.reset}}
             </button>
         </form>
     </div> <!-- panel-body -->
 </div> <!-- panel panel-default -->
-
-
