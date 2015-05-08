@@ -102,9 +102,9 @@ app.directive('overview', function () {
     };
 });
 
-/*********************************************
- ** Directive: COURSE DETAIL TAB CONTROLLER **
- *********************************************
+/**********************************************
+ ** Controller: COURSE DETAIL TAB CONTROLLER **
+ **********************************************
  * - used to control the tab panel on the detailed course info page
  */
 app.controller('CourseDetailTabController', ['$scope', function ($scope) {
@@ -145,7 +145,11 @@ app.controller('CourseDetailTabController', ['$scope', function ($scope) {
         };
     }]);
 
-
+/**************************************
+ ** Controller: FILES TAB CONTROLLER **
+ **************************************
+ * 
+ */
 app.controller('FilesController', ['$scope', '$http', function ($scope, $http) {
         $scope.gotAllFiles = false;
 
@@ -159,6 +163,11 @@ app.controller('FilesController', ['$scope', '$http', function ($scope, $http) {
         };
     }]);
 
+/********************************************************
+ ** Controller: COURSES WITH ACTIVITIES TAB CONTROLLER **
+ ********************************************************
+ * 
+ */
 app.controller('CoursesWithActivitiesController', ['$scope', '$http', function ($scope, $http) {
         $scope.gotAllCoursesWithAcitivities = false;
 
@@ -1104,16 +1113,16 @@ var coursesOfUserDashboard = function (result, $scope) {
     google.visualization.events.addListener(table, 'select', selectHandler);
 };
 
-/********************************
- ** Dashboard: Files **
- ********************************/
+/**********************
+ ** Dashboard: FILES **
+ **********************/
 var filesDashboard = function (result, $scope) {
     var data = new google.visualization.DataTable(result);
 
     // Create a dashboard
-    var dashboard = new google.visualization.Dashboard(document.getElementById('Files'));
+    var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardfiles_div'));
 
-    // Create a search box to search for a course name.
+    // Create a search box to search for a file by name.
     var nameFilter = new google.visualization.ControlWrapper({
         controlType: 'StringFilter',
         containerId: 'files_name_filter_div',
@@ -1126,7 +1135,7 @@ var filesDashboard = function (result, $scope) {
         }
     });
 
-    // Create a search box to search for a course name.
+    // Create a search box to search for a file by file title.
     var filenameFilter = new google.visualization.ControlWrapper({
         controlType: 'StringFilter',
         containerId: 'files_filename_filter_div',
@@ -1138,7 +1147,8 @@ var filesDashboard = function (result, $scope) {
             }
         }
     });
-
+    
+    // Create a range filter to filter by filesize.
     var fileSizeFilter = new google.visualization.ControlWrapper({
         controlType: 'NumberRangeFilter',
         containerId: 'files_filesize_filter_div',
@@ -1147,7 +1157,7 @@ var filesDashboard = function (result, $scope) {
         }
     });
 
-    // Create a category picker to filter by parent category.
+    // Create a category picker to filter by mime type.
     var mimeTypePicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
         'containerId': 'files_mimetype_filter_div',
@@ -1176,12 +1186,11 @@ var filesDashboard = function (result, $scope) {
             //sortAscending: true
         },
         view: {
-            // 0: id
-            // 1: grandparent category
-            // 2: parent category
-            // 3: course name
-            // 4: user's role in course
-            // 5: visibility
+            // 0: course id
+            // 1: file title
+            // 2: filename
+            // 3: filesize
+            // 4: mime type
             //columns: [0, 1, 2, 3, 4, 5]
         }
     });
@@ -1210,11 +1219,14 @@ var filesDashboard = function (result, $scope) {
     google.visualization.events.addListener(table, 'select', selectHandler);
 };
 
+/****************************************
+ ** Dashboard: COURSES WITH ACTIVITIES **
+ ****************************************/
 var coursesWithActivitiesDashboard = function (result, $scope, url) {
     var data = new google.visualization.DataTable(result);
 
     // Create a dashboard
-    var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardcourseswithactivities'));
+    var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardcourseswithactivities_div'));
 
     // Create a category picker to filter by parent category.
     var grandparentFilter = new google.visualization.ControlWrapper({
@@ -1275,11 +1287,11 @@ var coursesWithActivitiesDashboard = function (result, $scope, url) {
             sortAscending: false
         },
         view: {
-            // 0: id
+            // 0: activity id
             // 1: grandparent category
             // 2: parent category
             // 3: course name
-            // 4: user's role in course
+            // 4: number of activities
             // 5: visibility
             //columns: [0, 1, 2, 3, 4, 5]
         }
@@ -1293,12 +1305,12 @@ var coursesWithActivitiesDashboard = function (result, $scope, url) {
 
     // Define what to do when selecting a table row.
     function selectHandler() {
-        var selection = table.getChart().getSelection();
         $scope.loadingCourse = true;
         $scope.course = null;
+        var selection = table.getChart().getSelection();
         $scope.courseid = table.getDataTable().getFormattedValue(selection[0].row, 0);
         $scope.didSelectACourse($scope.courseid);
-        $('#myTabList a:first').tab('show');
+        //$('#myTabList a:first').tab('show');
         $("html, body").animate({scrollTop: 0}, 800);
     }
     ;
