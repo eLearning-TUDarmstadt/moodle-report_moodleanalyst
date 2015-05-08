@@ -258,6 +258,7 @@ function moodleanalyst_getVocabulary() {
     $result['fullnameuser'] = get_string('fullnameuser');
     $result['allfiles'] = get_string('allfiles');
     $result['files'] = get_string('files');
+    $result['home'] = get_string('home');
 
     //echo "<pre>" . print_r($result, true) . "</pre>";
     echo json_encode($result);

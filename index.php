@@ -71,15 +71,20 @@ echo '<html>
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </button>
-                            <a href="' . $wwwroot . '/report/moodleanalyst/index.php" class="navbar-brand"> 
+                            <a href="' . $wwwroot . '/report/moodleanalyst/index.php" class="navbar-brand">
                                 <span><img alt="Brand" src="' . $wwwroot . '/report/moodleanalyst/pix/favicon.ico">&nbsp;Moodle Analyst Support Tool</span>
                             </a>
                         </div>
                         <div id="navbar_sc" class="collapse navbar-collapse" role="tabpanel">
                             <ul class="nav navbar-nav" role="tablist" id="myTabList">
+                                <li>
+                                    <a id="tablink_backtomoodle" href="'  .$wwwroot.  '" target="_blank">
+                                        <span><img src="' . $wwwroot . '/pix/i/moodle_host.png"></span> {{vocabulary.sitehome}}
+                                    </a>
+                                </li>
                                 <li role="presentation" class="active">
                                     <a id="tablink_home" href="#tabs-1" role="tab" data-toggle="tab">
-                                        <span class="glyphicon glyphicon-home"></span> {{vocabulary.sitehome}}
+                                        <span class="glyphicon glyphicon-home"></span> {{vocabulary.home}}
                                     </a>
                                 </li>
                                 <li role="presentation">
@@ -174,17 +179,19 @@ echo '<html>
         <!-- Custom JS -->
         <script type="text/javascript">
             $(document).ready(function() {
+                /*
                 $(".navbar-nav a").click(function (e) {
                     e.preventDefault();
                 });
+                */
                 
                 $(".navbar-brand").click(function (e) {
-                    e.preventDefault();
+                    //e.preventDefault();
                     $("#myTabList a[href=\"#tabs-1\"]").tab("show");
                 });
                 
                 $("#backtotop").click(function (e) {
-                    e.preventDefault();
+                    //e.preventDefault();
                     $("html, body").animate({scrollTop: 0}, 800);
                 });
             });
