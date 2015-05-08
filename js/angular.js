@@ -585,6 +585,10 @@ var activitiesInCourseDashboard = function (result, $scope) {
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
+    
+    google.visualization.events.addListener(nameFilter, 'ready', function () {
+        $('.google-visualization-controls-stringfilter input').prop('placeholder', $scope.vocabulary.search + '...');
+    });
 };
 
 /********************************
@@ -673,6 +677,10 @@ var usersInCourseDashboard = function (result, $scope) {
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
+    
+    google.visualization.events.addListener(nameFilter, 'ready', function () {
+        $('.google-visualization-controls-stringfilter input').prop('placeholder', $scope.vocabulary.search + '...');
+    });
 };
 
 /******************************
@@ -766,6 +774,10 @@ var courseSearchDashboard = function (result, $scope) {
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
+    
+    google.visualization.events.addListener(nameFilter, 'ready', function () {
+        $('.google-visualization-controls-stringfilter input').prop('placeholder', $scope.vocabulary.search + '...');
+    });
 };
 
 /******************************
@@ -851,6 +863,10 @@ var emptyCoursesDashboard = function (result, $scope) {
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
+    
+    google.visualization.events.addListener(nameFilter, 'ready', function () {
+        $('.google-visualization-controls-stringfilter input').prop('placeholder', $scope.vocabulary.search + '...');
+    });
 };
 
 /****************************
@@ -914,6 +930,10 @@ var userSearchDashboard = function (result, $scope) {
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
+    
+    google.visualization.events.addListener(userNameFilter, 'ready', function () {
+        $('.google-visualization-controls-stringfilter input').prop('placeholder', $scope.vocabulary.search + '...');
+    });
 };
 
 /*******************************
@@ -1111,6 +1131,10 @@ var coursesOfUserDashboard = function (result, $scope) {
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
+    
+    google.visualization.events.addListener(nameFilter, 'ready', function () {
+        $('.google-visualization-controls-stringfilter input').prop('placeholder', $scope.vocabulary.search + '...');
+    });
 };
 
 /**********************
@@ -1217,6 +1241,14 @@ var filesDashboard = function (result, $scope) {
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
+    
+    google.visualization.events.addListener(nameFilter, 'ready', function () {
+        $('.google-visualization-controls-stringfilter input').prop('placeholder', $scope.vocabulary.search + '...');
+    });
+    
+    google.visualization.events.addListener(filenameFilter, 'ready', function () {
+        $('.google-visualization-controls-stringfilter input').prop('placeholder', $scope.vocabulary.search + '...');
+    });
 };
 
 /****************************************
@@ -1317,6 +1349,10 @@ var coursesWithActivitiesDashboard = function (result, $scope, url) {
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
+    
+    google.visualization.events.addListener(nameFilter, 'ready', function () {
+        $('.google-visualization-controls-stringfilter input').prop('placeholder', $scope.vocabulary.search + '...');
+    });
 };
 
 /**

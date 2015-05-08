@@ -259,6 +259,7 @@ function moodleanalyst_getVocabulary() {
     $result['allfiles'] = get_string('allfiles');
     $result['files'] = get_string('files');
     $result['home'] = get_string('home');
+    $result['search'] = get_string('search');
 
     //echo "<pre>" . print_r($result, true) . "</pre>";
     echo json_encode($result);
