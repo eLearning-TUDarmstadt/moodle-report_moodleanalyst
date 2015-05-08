@@ -84,18 +84,18 @@ echo '<html>
                                 </li>
                                 <li role="presentation" class="active">
                                     <a id="tablink_home" href="#tabs-1" role="tab" data-toggle="tab">
-                                        <span class="glyphicon glyphicon-home"></span> {{vocabulary.home}}
+                                        <span><img src="' . $wwwroot . '/pix/i/publish.svg"></span> {{vocabulary.home}}
                                     </a>
                                 </li>
                                 <li role="presentation">
                                     <a id="tablink_createnewcourse" href="#tabs-2" role="tab" data-toggle="tab">
-                                        <span class="glyphicon glyphicon-plus"></span> {{vocabulary.newcourse}}
+                                        <span><img src="' . $wwwroot . '/pix/t/add.svg"></span> {{vocabulary.newcourse}}
                                     </a>
                                 </li>
                                 
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
-                                        <span class="glyphicon glyphicon-stats"></span> {{vocabulary.statistics}}<b class="caret"></b>
+                                        <span><img src="' . $wwwroot . '/pix/i/scales.svg"></span> {{vocabulary.statistics}}<b class="caret"></b>
                                     </a>
                                     <ul class="dropdown-menu" role="menu">
                                         <li role="presentation"><a id="tablink_newusers" href="#tabs-3" role="tab" data-toggle="tab">{{vocabulary.newusers}}</a></li>
