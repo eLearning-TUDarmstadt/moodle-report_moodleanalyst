@@ -47,7 +47,7 @@ This page displays detailed Information about a course
             <div class="panel-title row">
                 <div class="col-md-12">
                     <!-- 1) course's short name (dimmed if not visible to students -->
-                    <a href= "<?php $wwwroot ?>/course/view.php?id={{course.data.id.v}}" target="_blank" style="color: #000000">
+                    <a href="<?php $wwwroot ?>/course/view.php?id={{course.data.id.v}}" target="_blank" style="color: #000000">
                         <h ng-class="{'dimmed': course.data.visible.v == 0}">{{course.data.shortname.v}}</h>
                     </a>
 

@@ -34,19 +34,17 @@ Selecting a course will load the courseinfo page.
     <div class="panel panel-info">
         <div class="panel-heading">
             <div class="row">
-                <div class="col-md-9">
-                    <div id="courses_name_filter">
-                        <div id="courses_name_filter_div"></div>
-                    </div>
-                    <div id="courses_grandparentcategory_filter_div"></div>
-                    <div id="courses_parentcategory_filter_div"></div>
-                </div>
-                <div class="col-md-3">
+                <div class="col-md-10" id="courses_name_filter_div"></div>
+                <div class="col-md-2">
                     <!-- refresh button -->
                     <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataCourseSearch()" title="{{vocabulary.refresh}}">
                         <span><img src="<?php $wwwroot ?>/pix/i/reload.png"></span>
                     </button>
                 </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3" id="courses_grandparentcategory_filter_div"></div>
+                <div class="col-md-3" id="courses_parentcategory_filter_div"></div>
             </div> <!-- row -->
         </div> <!-- panel-heading -->
 

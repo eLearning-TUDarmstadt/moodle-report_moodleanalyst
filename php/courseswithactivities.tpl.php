@@ -41,16 +41,13 @@ Detailed information is shown on the right hand side of the screen after clickin
                 <div class="panel panel-info">
                     <div class="panel-heading">
                         <div class="row">
-                            <div class="col-md-6" id="courseswithactivities_name_filter_div"></div>
-                            <div class="col-md-6" id="courseswithactivities_visibility_filter_div"></div>
+                            <div class="col-md-5" id="courseswithactivities_name_filter_div"></div>
+                            <div class="col-md-7" id="courseswithactivities_number_filter_div"></div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6" id="courseswithactivities_grandparent_filter_div"></div>
-                            <div class="col-md-6" id="courseswithactivities_number_filter_div"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6" id="courseswithactivities_parent_filter_div"></div>
-                            <div class="col-md-6" id="courseswithactivities_toolbar_div"></div>
+                            <div class="col-md-4" id="courseswithactivities_grandparent_filter_div"></div>
+                            <div class="col-md-4" id="courseswithactivities_parent_filter_div"></div>
+                            <div class="col-md-4" id="courseswithactivities_visibility_filter_div"></div>
                         </div>
                     </div> <!-- panel-heading -->
             

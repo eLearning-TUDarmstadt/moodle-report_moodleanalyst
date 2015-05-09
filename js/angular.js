@@ -1187,13 +1187,11 @@ var filesDashboard = function (result, $scope) {
         'containerId': 'files_mimetype_filter_div',
         options: {
             filterColumnIndex: 4,
-            /*
-             ui: {
-             caption: $scope.vocabulary.parentcategory,
-             label: '',
-             allowTyping: false
-             }
-             */
+            ui: {
+                caption: $scope.vocabulary.choosedots,
+                label: 'mimetype',
+                allowTyping: false
+            }
         }
     });
 
@@ -1266,6 +1264,11 @@ var coursesWithActivitiesDashboard = function (result, $scope, url) {
         'containerId': 'courseswithactivities_grandparent_filter_div',
         options: {
             filterColumnIndex: 1,
+            ui: {
+                caption: $scope.vocabulary.grandparentcategory,
+                label: '',
+                allowTyping: false
+            }
         }
     });
 
@@ -1274,6 +1277,11 @@ var coursesWithActivitiesDashboard = function (result, $scope, url) {
         'containerId': 'courseswithactivities_parent_filter_div',
         options: {
             filterColumnIndex: 2,
+            ui: {
+                caption: $scope.vocabulary.parentcategory,
+                label: '',
+                allowTyping: false
+            }
         }
     });
 
@@ -1294,7 +1302,10 @@ var coursesWithActivitiesDashboard = function (result, $scope, url) {
         controlType: 'NumberRangeFilter',
         containerId: 'courseswithactivities_number_filter_div',
         options: {
-            filterColumnIndex: 4
+            filterColumnIndex: 4,
+            ui: {
+                labelStacking: "horizontal",
+            }
         }
     });
 
@@ -1302,7 +1313,12 @@ var coursesWithActivitiesDashboard = function (result, $scope, url) {
         controlType: 'CategoryFilter',
         containerId: 'courseswithactivities_visibility_filter_div',
         options: {
-            filterColumnIndex: 5
+            filterColumnIndex: 5,
+            ui: {
+                caption: $scope.vocabulary.visible,
+                label: '',
+                allowTyping: false
+            }
         }
     });
 

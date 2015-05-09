@@ -42,13 +42,13 @@ Detailed information is shown on the right hand side of the screen after clickin
                     <div class="panel panel-info">
                         <div class="panel-heading">
                             <div class="row">
-                                <div class="col-md-9">
+                                <div class="col-md-10">
                                     {{numberOfRowsShown}}
                                     <div id="inactiveUsers_dateOfLastAccessFilter_div"></div>
                                     <div id="inactiveUsers_timeSinceLastAccessFilter_div"></div>
                                 </div>
                                 
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <!-- refresh button -->
                                     <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataCourseSearch()" title="{{vocabulary.refresh}}">
                                         <span><img src="<?php $wwwroot ?>/pix/i/reload.png"></span>

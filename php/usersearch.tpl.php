@@ -34,10 +34,8 @@ Selecting a user will load the userinfo page.
     <div class="panel panel-info">
         <div class="panel-heading">
             <div class="row">
-                <div class="col-md-9">
-                    <div id="user_name_filter_div"></div>
-                </div>
-                <div class="col-md-3">
+                <div class="col-md-10" id="user_name_filter_div"></div>
+                <div class="col-md-2">
                     <!-- refresh button -->
                     <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataUserSearch()" title="{{vocabulary.refresh}}">
                         <span><img src="<?php $wwwroot ?>/pix/i/reload.png"></span>
