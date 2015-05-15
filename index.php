@@ -89,7 +89,7 @@ echo '<html>
                                 </li>
                                 <li role="presentation">
                                     <a id="tablink_createnewcourse" href="#tabs-2" role="tab" data-toggle="tab">
-                                        <span><img src="' . $wwwroot . '/pix/t/add.png"></span> {{vocabulary.newcourse}}
+                                        <span><img src="' . $wwwroot . '/pix/t/add.png"></span> {{vocabulary.addnewcourse}}
                                     </a>
                                 </li>
                                 
@@ -110,7 +110,7 @@ echo '<html>
                                         -->
 
                                         <li role="presentation"><a id="tablink_files" href="#tabs-6" role="tab" data-toggle="tab" ng-controller="FilesController" ng-click="getAllFiles();">{{vocabulary.allfiles}}</a></li>
-                                        <li role="presentation"><a id="tablink_courseswithactivities" href="#tabs-7" role="tab" data-toggle="tab" ng-controller="CoursesWithActivitiesController" ng-click="getData();">Courses with Activities</a></li>
+                                        <li role="presentation"><a id="tablink_courseswithactivities" href="#tabs-7" role="tab" data-toggle="tab" ng-controller="CoursesWithActivitiesController" ng-click="getData();">{{vocabulary.activitymodules}}</a></li>
                                     </ul>
                                 </li>
                                 <!--

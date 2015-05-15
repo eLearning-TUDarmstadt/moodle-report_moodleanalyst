@@ -262,6 +262,9 @@ function moodleanalyst_getVocabulary() {
     $result['search'] = get_string('search');
     $result['hidesection'] = get_string('hidesection', 'moodle', '');
     $result['choosedots'] = get_string('choosedots');
+    $result['addnewcourse'] = get_string('addnewcourse');
+    $result['coursehidden'] = get_string('coursehidden');
+    $result['activitymodules'] = get_string('activitymodules');
 
     //echo "<pre>" . print_r($result, true) . "</pre>";
     echo json_encode($result);

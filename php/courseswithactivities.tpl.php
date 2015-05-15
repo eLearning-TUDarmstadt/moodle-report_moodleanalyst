@@ -30,7 +30,7 @@ Detailed information is shown on the right hand side of the screen after clickin
 
 <div class="panel panel-default" ng-controller="CoursesWithActivitiesController" id="dashboardcourseswithactivities_div">
     <div class="panel-heading">
-        <h3>Courses with number of activities</h3>
+        <h3>{{vocabulary.activitymodules}}</h3>
     </div>
     
     <div class="panel-body">
