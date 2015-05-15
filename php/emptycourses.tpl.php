@@ -29,8 +29,6 @@ course by clicking on it. The Details will appear on the right half of the scree
 appears on the left half.
 -->
 
-<?php $wwwroot = $CFG->wwwroot; ?>
-
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3>empty courses</h3>

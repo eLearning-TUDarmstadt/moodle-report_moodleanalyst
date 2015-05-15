@@ -27,8 +27,6 @@
 This page displays detailed Information about a user.
 -->
 
-<?php $wwwroot = $CFG->wwwroot; ?>
-
 <div id="userInfo">
     <div class="panel panel-primary">
         <!--

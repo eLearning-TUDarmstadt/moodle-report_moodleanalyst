@@ -27,8 +27,6 @@
 This page displays detailed Information about a course
 -->
 
-<?php $wwwroot = $CFG->wwwroot; ?>
-
 <div id="courseInfo">
     <div class="panel panel-primary">
         <!--

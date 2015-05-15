@@ -28,8 +28,6 @@ This page lists all users with an option to search by string.
 Selecting a user will load the userinfo page.
 -->
 
-<?php $wwwroot = $CFG->wwwroot; ?>
-
 <div id="dashboardUserSearch">
     <div class="panel panel-info">
         <div class="panel-heading">

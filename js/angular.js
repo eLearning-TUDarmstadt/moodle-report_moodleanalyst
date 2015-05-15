@@ -444,7 +444,7 @@ app.directive('newcourseform', function () {
                                     $scope.course = null;
                                     $scope.courseid = data.course;
                                     $scope.didSelectACourse($scope.courseid);
-                                    $('#myTabList a:first').tab('show');
+                                    $("#myTabList a[href=\"#tabs-1\"]").tab("show");
                                 }
                             })
                             .error(function () {

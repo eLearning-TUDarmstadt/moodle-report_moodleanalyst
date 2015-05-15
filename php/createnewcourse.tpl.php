@@ -27,8 +27,6 @@
 This page contains a form to create a new course.
 -->
 
-<?php $wwwroot = $CFG->wwwroot; ?>
-
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3>{{vocabulary.newcourse}}</h3>

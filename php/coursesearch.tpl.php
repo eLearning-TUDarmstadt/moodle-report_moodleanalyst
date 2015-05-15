@@ -28,8 +28,6 @@ This page lists all courses along with a search box and the option to filter by 
 Selecting a course will load the courseinfo page.
 -->
 
-<?php $wwwroot = $CFG->wwwroot; ?>
-
 <div id="dashboardCourseSearch">
     <div class="panel panel-info">
         <div class="panel-heading">
