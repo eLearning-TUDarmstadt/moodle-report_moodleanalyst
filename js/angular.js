@@ -362,13 +362,14 @@ app.directive('userinfo', function () {
                 $scope.addUserToCourse = function (userid, courseid, roleid) {
                     $scope.loadingCourse = true;
                     $scope.loadingUser = true;
-                    $scope.user = null;
-                    $scope.course = null;
+                    //$scope.user = null;
+                    //$scope.course = null;
                     $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/addUser/' + userid + '/ToCourse/' + courseid + '/withRole/' + roleid)
                             .success(function () {
                                 //reload data
                                 $scope.loadDataCourseInfo();
                                 $scope.loadDataUserInfo();
+                                $scope.userAddedToCourse = $scope.user.firstname.v + " " + $scope.user.lastname.v;
                             });
                 };
             }],
@@ -610,6 +611,10 @@ var usersInCourseDashboard = function (result, $scope) {
             ui: {
                 label: $scope.vocabulary.fullnameuser
             }
+        },
+        state: {
+            // if user was directly enrolled, set filter to that user
+            value: $scope.userAddedToCourse
         }
     });
 
