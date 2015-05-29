@@ -265,6 +265,7 @@ function moodleanalyst_getVocabulary() {
     $result['addnewcourse'] = get_string('addnewcourse');
     $result['coursehidden'] = get_string('coursehidden');
     $result['activitymodules'] = get_string('activitymodules');
+    $result['total'] = get_string('total');
 
     //echo "<pre>" . print_r($result, true) . "</pre>";
     echo json_encode($result);

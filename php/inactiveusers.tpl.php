@@ -31,6 +31,7 @@ Detailed information is shown on the right hand side of the screen after clickin
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3>{{vocabulary.users}} ({{vocabulary.inactive}})</h3>
+        <h4>{{vocabulary.total}}: {{numberOfRowsShown}}</h4>
     </div>
     
     <div class="panel-body">
@@ -41,7 +42,6 @@ Detailed information is shown on the right hand side of the screen after clickin
                         <div class="panel-heading">
                             <div class="row">
                                 <div class="col-md-10">
-                                    {{numberOfRowsShown}}
                                     <div id="inactiveUsers_dateOfLastAccessFilter_div"></div>
                                     <div id="inactiveUsers_timeSinceLastAccessFilter_div"></div>
                                 </div>

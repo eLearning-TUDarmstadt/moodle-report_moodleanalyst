@@ -1010,15 +1010,15 @@ var inactiveUsersDashboard = function (result, $scope) {
         var selection = table.getChart().getSelection();
         $scope.userid = table.getDataTable().getFormattedValue(selection[0].row, 0);
         $scope.didSelectAUser($scope.userid);
-        $scope.numberOfRowsShown = table.getDataTable().getNumberOfRows();
         $("html, body").animate({scrollTop: 0}, 800);
     }
     ;
-
+    
+    $scope.numberOfRowsShown = data.getNumberOfRows();
     // Define what to do when changing the state on one of the slider range filters.
     function stateChangeHandler() {
         $scope.numberOfRowsShown = table.getDataTable().getNumberOfRows();
-        console.log(table.getDataTable().getNumberOfRows());
+        $scope.loadDataCourseSearch();
     }
     ;
 
