@@ -47,9 +47,9 @@ This page displays detailed Information about a course
                     <!-- 1) course's short name (dimmed if not visible to students -->
                     <a href="<?php $wwwroot ?>/course/view.php?id={{course.data.id.v}}" target="_blank" style="color: #000000">
                         <h ng-class="{'dimmed': course.data.visible.v == 0}">{{course.data.shortname.v}}</h>
-                        <br />
-                        <i ng-show="course.data.visible.v == 0">{{vocabulary.coursehidden}}</i>
                     </a>
+                    <br />
+                    <i ng-show="course.data.visible.v == 0" style="color: #000000">{{vocabulary.coursehidden}}</i>
 
                     <!-- 2) button group -->
                     <div class="btn-group btn-group-xs pull-right" role="group" ng-show="course.data">
