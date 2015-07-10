@@ -164,7 +164,7 @@ echo '<html>
                             </a>
                         </p>
                         <p style="color:#A4A4A4;">
-                            <span class="glyphicon glyphicon-copyright-mark"></span> All Rights reserved.
+                            &copy; All Rights reserved.
                         </p>
                     </div>
                 </footer>
