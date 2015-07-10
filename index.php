@@ -158,7 +158,7 @@ echo '<html>
                         
                         <div class="col-md-4">
                             <center>
-                                <a href="https://github.com/SteffenPegenau/moodle-analyst/issues" target="_blank" style="color:#A4A4A4;" align="center">
+                                <a href="https://github.com/SteffenPegenau/moodle-analyst/issues" target="_blank" style="color:#A4A4A4;">
                                     <img src="' . $wwwroot . '/pix/docs.png"> Submit Issue
                                 </a>
                             </center>
