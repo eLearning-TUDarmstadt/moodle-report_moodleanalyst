@@ -113,12 +113,6 @@ echo '<html>
                                         <li role="presentation"><a id="tablink_courseswithactivities" href="#tabs-7" role="tab" data-toggle="tab" ng-controller="CoursesWithActivitiesController" ng-click="getData();">{{vocabulary.activitymodules}}</a></li>
                                     </ul>
                                 </li>
-                                <!--
-                                <li role="presentation"><a id="tablink_dummy" href="#tabs-8" role="tab" data-toggle="tab">
-                                        <span class="glyphicon glyphicon-wrench"></span> dummy
-                                    </a>
-                                </li>
-                                -->
                             </ul>
                         </div>
                     </div> <!-- container-fluid -->
@@ -157,15 +151,24 @@ echo '<html>
                 </div> <!-- tab-content -->
                 
                 <footer class="navbar-inverse navbar-fixed-bottom">
-                    <div class="container-fluid">
-                        <p class="pull-right" id="backtotop">
-                            <a href="" target="_self" style="color:#A4A4A4;">
+                    <div class="row" style="color:#A4A4A4;">
+                        <div class="col-md-4">
+                            &copy; All Rights reserved.
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <center>
+                                <a href="https://github.com/SteffenPegenau/moodle-analyst/issues" target="_blank" style="color:#A4A4A4;" align="center">
+                                    <img src="' . $wwwroot . '/pix/docs.png"> Submit Issue
+                                </a>
+                            </center>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <a href="" target="_self" style="color:#A4A4A4;" class="pull-right" id="backtotop">
                                 {{vocabulary.backtotop}}
                             </a>
-                        </p>
-                        <p style="color:#A4A4A4;">
-                            &copy; All Rights reserved.
-                        </p>
+                        </div>
                     </div>
                 </footer>
         </div> <!-- wrapper -->
@@ -198,6 +201,11 @@ echo '<html>
                     e.preventDefault();
                 });
                 */
+                
+                $("a[data-toggle=\'tab\']").on("shown.bs.tab", function(e){
+                    $scope.currentTab = $(e.target).text;
+                    console.log($scope.currentTab);
+                });
                 
                 $(".navbar-brand").click(function (e) {
                     //e.preventDefault();
