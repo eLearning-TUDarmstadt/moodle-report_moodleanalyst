@@ -1,5 +1,3 @@
-/* global google */
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -94,7 +92,7 @@ app.directive('overview', function () {
                 
                 $scope.didSelectAUser = function() {
                     $scope.$broadcast('selectedUserIdChanged', $scope.userid);
-                }
+                };
                 
                 $scope.showModal = false;
                 $scope.toggleModal = function () {
