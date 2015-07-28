@@ -1,3 +1,5 @@
+/* global google */
+
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -25,6 +27,7 @@
 
 var wwwroot = document.getElementById("angularJSloader").getAttribute("wwwroot");
 var app = angular.module('overview', []);
+
 
 /**********************
  ** Directive: MODAL **
@@ -70,6 +73,7 @@ app.directive('modal', function () {
     };
 });
 
+
 /*************************
  ** Directive: OVERVIEW **
  *************************
@@ -83,6 +87,15 @@ app.directive('overview', function () {
         templateUrl: wwwroot + '/report/moodleanalyst/php/overview.tpl.php',
         controller: [
             '$http', '$scope', function ($http, $scope) {
+                
+                $scope.loadDataUserInfo = function() {
+                    $scope.$broadcast('loadDataUserInfo', true);
+                };
+                
+                $scope.didSelectAUser = function() {
+                    $scope.$broadcast('selectedUserIdChanged', $scope.userid);
+                }
+                
                 $scope.showModal = false;
                 $scope.toggleModal = function () {
                     $scope.showModal = !$scope.showModal;
@@ -98,9 +111,10 @@ app.directive('overview', function () {
                         .success(function (result) {
                             $scope.vocabulary = result;
                         });
-            }],
+            }]
     };
 });
+
 
 /**********************************************
  ** Controller: COURSE DETAIL TAB CONTROLLER **
@@ -145,6 +159,7 @@ app.controller('CourseDetailTabController', ['$scope', function ($scope) {
         };
     }]);
 
+
 /**************************************
  ** Controller: FILES TAB CONTROLLER **
  **************************************
@@ -162,6 +177,7 @@ app.controller('FilesController', ['$scope', '$http', function ($scope, $http) {
                     });
         };
     }]);
+
 
 /********************************************************
  ** Controller: COURSES WITH ACTIVITIES TAB CONTROLLER **
@@ -182,6 +198,7 @@ app.controller('CoursesWithActivitiesController', ['$scope', '$http', function (
         };
     }]);
 
+
 /***********************
  ** Directive: LOADER **
  ***********************
@@ -192,6 +209,7 @@ app.directive('loader', function () {
         template: '<img style="display: block; margin-left: auto; margin-right: auto;" src="' + wwwroot + '/report/moodleanalyst/pix/ajax-loader.gif">'
     };
 });
+
 
 /******************************
  ** Directive: COURSE SEARCH **
@@ -233,8 +251,9 @@ app.directive('coursesearch', function () {
                 $scope.loadDataCourseSearch();
             }],
         controllerAs: 'courseSearchCtrl'
-    }
+    };
 });
+
 
 /****************************
  ** Directive: USER SEARCH **
@@ -266,8 +285,9 @@ app.directive('usersearch', function () {
                 $scope.loadDataUserSearch();
             }],
         controllerAs: 'userSearchCtrl'
-    }
+    };
 });
+
 
 /****************************
  ** Directive: COURSE INFO **
@@ -326,8 +346,9 @@ app.directive('courseinfo', function () {
                 };
             }],
         controllerAs: 'courseInfoCtrl'
-    }
+    };
 });
+
 
 /**************************
  ** Directive: USER INFO **
@@ -341,22 +362,35 @@ app.directive('userinfo', function () {
         restrict: 'E',
         templateUrl: wwwroot + '/report/moodleanalyst/php/userinfo.tpl.php',
         controller: [
-            '$http', '$scope', function ($http, $scope) {
-                $scope.didSelectAUser = function (userid) {
-                    $scope.loadDataUserInfo = function () {
-                        $scope.selectedUser = null;
+            '$http', '$scope', '$element', '$attrs', function ($http, $scope, $element, $attrs) {
+                
+                $scope.activeUsers = $attrs.activeusers;
+                var loadDataUserInfo; 
+
+                var didSelectAUser = function (userid) {
+                    loadDataUserInfo = function () {
                         // load user info from database
                         $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/user/' + userid)
                                 .success(function (data) {
                                     $scope.loadingUser = false;
                                     $scope.user = data;
                                     // initialize courses of user dashboard
-                                    coursesOfUserDashboard(data.courses, $scope);
+                                    coursesOfUserDashboard(data.courses, $scope, $element);
                                 });
                     };
                     // initial load
-                    $scope.loadDataUserInfo();
+                    loadDataUserInfo();
                 };
+                
+                $scope.$on('selectedUserIdChanged', function(event, userid) {
+                    didSelectAUser(userid);
+                });
+                
+                $scope.$on('loadDataUserInfo', function(event) {
+                    if(typeof loadDataUserInfo === 'function') {
+                        loadDataUserInfo();
+                    }
+                });
 
                 // function to add user to a course
                 $scope.addUserToCourse = function (userid, courseid, roleid) {
@@ -374,9 +408,8 @@ app.directive('userinfo', function () {
                 };
             }],
         controllerAs: 'userInfoCtrl'
-    }
+    };
 });
-
 
 
 /*********************
@@ -421,11 +454,11 @@ app.directive('newcourseform', function () {
                     var password = "";
 
                     if ($scope.password == "randompassword") {
-                        console.log("RANDOM!");
+                        //console.log("RANDOM!");
                         password = generatePassword();
                     }
                     if ($scope.password == "userpassword") {
-                        console.log("userpassword");
+                        //console.log("userpassword");
                         password = $scope.userpassword;
                     }
 
@@ -481,7 +514,7 @@ app.directive('newcourseform', function () {
                 };
             }],
         controllerAs: 'newCourseCtrl'
-    }
+    };
 });
 
 /*************************************
@@ -545,7 +578,7 @@ var activitiesInCourseDashboard = function (result, $scope) {
             width: '100%',
             page: 'enable',
             pageSize: 25,
-            allowHtml: true,
+            allowHtml: true
             //sortColumn: 0,
             //sortAscending: false
         },
@@ -903,7 +936,7 @@ var userSearchDashboard = function (result, $scope) {
         options: {
             showRowNumber: false,
             page: 'enable',
-            pageSize: 25,
+            pageSize: 25
         },
         view: {
             // 0: id
@@ -929,6 +962,7 @@ var userSearchDashboard = function (result, $scope) {
         var selection = table.getChart().getSelection();
         $scope.userid = table.getDataTable().getFormattedValue(selection[0].row, 0);
         $scope.didSelectAUser($scope.userid);
+        //$scope.$broadcast('selectedUserIdChanged', $scope.userid);
         $("html, body").animate({scrollTop: 0}, 800);
     }
     ;
@@ -1010,6 +1044,7 @@ var inactiveUsersDashboard = function (result, $scope) {
         var selection = table.getChart().getSelection();
         $scope.userid = table.getDataTable().getFormattedValue(selection[0].row, 0);
         $scope.didSelectAUser($scope.userid);
+        //$scope.$broadcast('selectedUserIdChanged', $scope.userid);
         $("html, body").animate({scrollTop: 0}, 800);
     }
     ;
@@ -1033,16 +1068,16 @@ var inactiveUsersDashboard = function (result, $scope) {
 /********************************
  ** Dashboard: COURSES OF USER **
  ********************************/
-var coursesOfUserDashboard = function (result, $scope) {
+var coursesOfUserDashboard = function (result, $scope, element) {
     var data = new google.visualization.DataTable(result);
-
+    
     // Create a dashboard
-    var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardCoursesOfUser'));
-
+    //var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardCoursesOfUser'));
+    var dashboard = new google.visualization.Dashboard($(element).find(".dashboardCoursesOfUser").first());
     // Create a search box to search for a course name.
     var nameFilter = new google.visualization.ControlWrapper({
         controlType: 'StringFilter',
-        containerId: 'coursesOfUser_name_filter_div',
+        containerId: 'coursesOfUser_name_filter_div_'  + $scope.activeUsers,
         options: {
             filterColumnIndex: 3,
             matchType: 'any',
@@ -1055,7 +1090,7 @@ var coursesOfUserDashboard = function (result, $scope) {
     // Create a category picker to filter by grandparent category.
     var grandparentCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
-        'containerId': 'coursesOfUser_grandparentcategory_filter_div',
+        'containerId': 'coursesOfUser_grandparentcategory_filter_div_' + $scope.activeUsers,
         options: {
             filterColumnIndex: 1,
             ui: {
@@ -1069,7 +1104,7 @@ var coursesOfUserDashboard = function (result, $scope) {
     // Create a category picker to filter parent category.
     var parentCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
-        'containerId': 'coursesOfUser_parentcategory_filter_div',
+        'containerId': 'coursesOfUser_parentcategory_filter_div_'  + $scope.activeUsers,
         options: {
             filterColumnIndex: 2,
             ui: {
@@ -1083,7 +1118,7 @@ var coursesOfUserDashboard = function (result, $scope) {
     // Create a category picker to filter by role.
     var roleCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
-        'containerId': 'coursesOfUser_role_filter_div',
+        'containerId': 'coursesOfUser_role_filter_div_'  + $scope.activeUsers,
         options: {
             filterColumnIndex: 4,
             ui: {
@@ -1097,7 +1132,7 @@ var coursesOfUserDashboard = function (result, $scope) {
     // Create the table to display.
     var table = new google.visualization.ChartWrapper({
         chartType: 'Table',
-        containerId: 'coursesOfUser_table_div',
+        containerId: 'coursesOfUser_table_div_'  + $scope.activeUsers,
         options: {
             showRowNumber: false,
             page: 'enable',
@@ -1208,7 +1243,7 @@ var filesDashboard = function (result, $scope) {
             showRowNumber: false,
             page: 'enable',
             pageSize: 100,
-            allowHtml: true,
+            allowHtml: true
             //sortColumn: 2,
             //sortAscending: true
         },
@@ -1309,7 +1344,7 @@ var coursesWithActivitiesDashboard = function (result, $scope, url) {
         options: {
             filterColumnIndex: 4,
             ui: {
-                labelStacking: "horizontal",
+                labelStacking: "horizontal"
             }
         }
     });

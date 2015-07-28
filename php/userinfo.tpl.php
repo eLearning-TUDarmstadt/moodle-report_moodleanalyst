@@ -27,7 +27,7 @@
 This page displays detailed Information about a user.
 -->
 
-<div id="userInfo">
+<div>
     <div class="panel panel-primary">
         <!--
         ======================================================
@@ -89,7 +89,7 @@ This page displays detailed Information about a user.
             <loader ng-show="loadingUser"></loader>
             
             <!-- 1) directly enrol user in selected course (only visible when a course is selected) -->
-            <div class="panel panel-default" ng-show="courseid">
+            <div class="panel panel-default" ng-show="activeUsers==1 && courseid">
                 <div class="row panel-body">
                     <div class="col-md-4">
                         <button ng-click="addUserToCourse(user.id.v, course.data.id.v, selectedRole);" type="button" class="btn btn-default" aria-label="">
@@ -178,7 +178,7 @@ This page displays detailed Information about a user.
             <p></p>
             
             <!-- 3) interactive list of courses the user is enrolled in -->
-            <div id="dashboardCoursesOfUser">
+            <div class="dashboardCoursesOfUser">
                 <div class="panel panel-default">
                     <div class="panel-heading panel-title">
                         <div class="row">
@@ -198,16 +198,16 @@ This page displays detailed Information about a user.
                     <div class="panel-body">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <div id="coursesOfUser_name_filter_div"></div>
+                                <div ng-attr-id="{{'coursesOfUser_name_filter_div_' + activeUsers}}"></div>
                                 <div class="row">
-                                    <div class="col-md-4" id="coursesOfUser_grandparentcategory_filter_div"></div>
-                                    <div class="col-md-4" id="coursesOfUser_parentcategory_filter_div"></div>
-                                    <div class="col-md-4" id="coursesOfUser_role_filter_div"></div>
+                                    <div class="col-md-4" ng-attr-id="{{'coursesOfUser_grandparentcategory_filter_div_' + activeUsers}}"></div>
+                                    <div class="col-md-4" ng-attr-id="{{'coursesOfUser_parentcategory_filter_div_' + activeUsers}}"></div>
+                                    <div class="col-md-4" ng-attr-id="{{'coursesOfUser_role_filter_div_' + activeUsers}}"></div>
                                 </div>
                             </div>
              
                             <div class="panel-body">
-                                <div id="coursesOfUser_table_div"></div>
+                                <div ng-attr-id="{{'coursesOfUser_table_div_' + activeUsers}}"></div>
                             </div>
                         </div>
                     </div> <!-- panel-body -->

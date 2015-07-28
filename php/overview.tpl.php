@@ -63,7 +63,7 @@ It will also show an error message if the user is not logged into moodle with th
                 </div>
             </div>
             <div class="panel-body">
-                <userinfo ng-show="userid"></userinfo>
+                <userinfo ng-show="userid" activeUsers="1"></userinfo>
                 <usersearch></usersearch>
             </div>
         </div>

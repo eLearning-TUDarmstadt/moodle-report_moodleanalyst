@@ -202,11 +202,6 @@ echo '<html>
                 });
                 */
                 
-                $("a[data-toggle=\'tab\']").on("shown.bs.tab", function(e){
-                    $scope.currentTab = $(e.target).text;
-                    console.log($scope.currentTab);
-                });
-                
                 $(".navbar-brand").click(function (e) {
                     //e.preventDefault();
                     $("#myTabList a[href=\"#tabs-1\"]").tab("show");

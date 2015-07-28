@@ -63,7 +63,7 @@ Detailed information is shown on the right hand side of the screen after clickin
             </div> <!-- col-md-6 -->
             
             <div class="col-md-6">
-                <userinfo ng-show="userid"></userinfo>
+                <userinfo ng-show="userid" activeUsers="0"></userinfo>
             </div>
         </div> <!-- row -->
     </div> <!-- panel-body -->
