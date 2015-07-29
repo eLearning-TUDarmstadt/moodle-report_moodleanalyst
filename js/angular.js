@@ -340,6 +340,7 @@ app.directive('courseinfo', function () {
                             .success(function () {
                                 // reload course info
                                 $scope.loadDataCourseInfo();
+                                $scope.loadDataUserInfo()
                             });
                 };
             }],
@@ -400,7 +401,7 @@ app.directive('userinfo', function () {
                             .success(function () {
                                 //reload data
                                 $scope.loadDataCourseInfo();
-                                $scope.loadDataUserInfo();
+                                loadDataUserInfo();
                                 $scope.userAddedToCourse = $scope.user.firstname.v + " " + $scope.user.lastname.v;
                             });
                 };
