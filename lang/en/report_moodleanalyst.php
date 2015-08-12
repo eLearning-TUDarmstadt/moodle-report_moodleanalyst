@@ -23,7 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 $string['pluginname'] = 'Moodle AnalyST';
-$string['moodleanalyst'] = $string['pluginname'];
+$string['moodleanalyst'] = 'Moodle AnalyST';
 $string['reportmoodleanalyst'] = 'reportmoodleanalyst';
 
 $string['parentcategory'] = 'Department';

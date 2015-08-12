@@ -24,7 +24,7 @@
  */
 
 $string['pluginname'] = 'Moodle AnalyST';
-$string['moodleanalyst'] = $string['pluginname'];
+$string['moodleanalyst'] = 'Moodle AnalyST';
 $string['reportmoodleanalyst'] = 'reportmoodleanalyst';
 
 $string['parentcategory'] = 'Fachbereich';
