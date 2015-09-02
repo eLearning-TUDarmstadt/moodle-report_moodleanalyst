@@ -85,15 +85,15 @@ app.directive('overview', function () {
         templateUrl: wwwroot + '/report/moodleanalyst/php/overview.tpl.php',
         controller: [
             '$http', '$scope', function ($http, $scope) {
-                
-                $scope.loadDataUserInfo = function() {
+
+                $scope.loadDataUserInfo = function () {
                     $scope.$broadcast('loadDataUserInfo', true);
                 };
-                
-                $scope.didSelectAUser = function() {
+
+                $scope.didSelectAUser = function () {
                     $scope.$broadcast('selectedUserIdChanged', $scope.userid);
                 };
-                
+
                 $scope.showModal = false;
                 $scope.toggleModal = function () {
                     $scope.showModal = !$scope.showModal;
@@ -290,13 +290,17 @@ app.directive('usersearch', function () {
                     $scope.courseid = false;
                     $scope.gotAllUsers = false;
                     // load all users from database
-                    $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/allUsers')
+                    $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/user')
                             .success(function (result) {
                                 $scope.gotAllUsers = true;
                                 // initialize user search dashboard
                                 userSearchDashboard(result, $scope);
-                                // initialize inactive users dashboard
-                                inactiveUsersDashboard(result, $scope);
+                                $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/allUsers')
+                                        .success(function (result) {
+                                            $scope.gotAllUsers = true;
+                                            // initialize inactive users dashboard
+                                            inactiveUsersDashboard(result, $scope);
+                                        });
                             });
                 };
                 // initial load
@@ -383,9 +387,9 @@ app.directive('userinfo', function () {
         templateUrl: wwwroot + '/report/moodleanalyst/php/userinfo.tpl.php',
         controller: [
             '$http', '$scope', '$element', '$attrs', function ($http, $scope, $element, $attrs) {
-                
+
                 $scope.activeUsers = $attrs.activeusers;
-                var loadDataUserInfo; 
+                var loadDataUserInfo;
 
                 var didSelectAUser = function (userid) {
                     loadDataUserInfo = function () {
@@ -401,13 +405,13 @@ app.directive('userinfo', function () {
                     // initial load
                     loadDataUserInfo();
                 };
-                
-                $scope.$on('selectedUserIdChanged', function(event, userid) {
+
+                $scope.$on('selectedUserIdChanged', function (event, userid) {
                     didSelectAUser(userid);
                 });
-                
-                $scope.$on('loadDataUserInfo', function(event) {
-                    if(typeof loadDataUserInfo === 'function') {
+
+                $scope.$on('loadDataUserInfo', function (event) {
+                    if (typeof loadDataUserInfo === 'function') {
                         loadDataUserInfo();
                     }
                 });
@@ -599,8 +603,8 @@ var activitiesInCourseDashboard = function (result, $scope) {
             page: 'enable',
             pageSize: 25,
             allowHtml: true
-            //sortColumn: 0,
-            //sortAscending: false
+                    //sortColumn: 0,
+                    //sortAscending: false
         },
         view: {
             // 0: instance
@@ -639,7 +643,7 @@ var activitiesInCourseDashboard = function (result, $scope) {
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
-    
+
     google.visualization.events.addListener(nameFilter, 'ready', function () {
         $('.google-visualization-controls-stringfilter input').prop('placeholder', $scope.vocabulary.search + '...');
     });
@@ -735,7 +739,7 @@ var usersInCourseDashboard = function (result, $scope) {
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
-    
+
     google.visualization.events.addListener(nameFilter, 'ready', function () {
         $('.google-visualization-controls-stringfilter input').prop('placeholder', $scope.vocabulary.search + '...');
     });
@@ -832,7 +836,7 @@ var courseSearchDashboard = function (result, $scope) {
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
-    
+
     google.visualization.events.addListener(nameFilter, 'ready', function () {
         $('.google-visualization-controls-stringfilter input').prop('placeholder', $scope.vocabulary.search + '...');
     });
@@ -921,7 +925,7 @@ var emptyCoursesDashboard = function (result, $scope) {
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
-    
+
     google.visualization.events.addListener(nameFilter, 'ready', function () {
         $('.google-visualization-controls-stringfilter input').prop('placeholder', $scope.vocabulary.search + '...');
     });
@@ -989,7 +993,7 @@ var userSearchDashboard = function (result, $scope) {
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
-    
+
     google.visualization.events.addListener(userNameFilter, 'ready', function () {
         $('.google-visualization-controls-stringfilter input').prop('placeholder', $scope.vocabulary.search + '...');
     });
@@ -1068,7 +1072,7 @@ var inactiveUsersDashboard = function (result, $scope) {
         $("html, body").animate({scrollTop: 0}, 800);
     }
     ;
-    
+
     $scope.numberOfRowsShown = data.getNumberOfRows();
     // Define what to do when changing the state on one of the slider range filters.
     function stateChangeHandler() {
@@ -1090,14 +1094,14 @@ var inactiveUsersDashboard = function (result, $scope) {
  ********************************/
 var coursesOfUserDashboard = function (result, $scope, element) {
     var data = new google.visualization.DataTable(result);
-    
+
     // Create a dashboard
     //var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardCoursesOfUser'));
     var dashboard = new google.visualization.Dashboard($(element).find(".dashboardCoursesOfUser").first());
     // Create a search box to search for a course name.
     var nameFilter = new google.visualization.ControlWrapper({
         controlType: 'StringFilter',
-        containerId: 'coursesOfUser_name_filter_div_'  + $scope.activeUsers,
+        containerId: 'coursesOfUser_name_filter_div_' + $scope.activeUsers,
         options: {
             filterColumnIndex: 3,
             matchType: 'any',
@@ -1124,7 +1128,7 @@ var coursesOfUserDashboard = function (result, $scope, element) {
     // Create a category picker to filter parent category.
     var parentCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
-        'containerId': 'coursesOfUser_parentcategory_filter_div_'  + $scope.activeUsers,
+        'containerId': 'coursesOfUser_parentcategory_filter_div_' + $scope.activeUsers,
         options: {
             filterColumnIndex: 2,
             ui: {
@@ -1138,7 +1142,7 @@ var coursesOfUserDashboard = function (result, $scope, element) {
     // Create a category picker to filter by role.
     var roleCategoryPicker = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
-        'containerId': 'coursesOfUser_role_filter_div_'  + $scope.activeUsers,
+        'containerId': 'coursesOfUser_role_filter_div_' + $scope.activeUsers,
         options: {
             filterColumnIndex: 4,
             ui: {
@@ -1152,7 +1156,7 @@ var coursesOfUserDashboard = function (result, $scope, element) {
     // Create the table to display.
     var table = new google.visualization.ChartWrapper({
         chartType: 'Table',
-        containerId: 'coursesOfUser_table_div_'  + $scope.activeUsers,
+        containerId: 'coursesOfUser_table_div_' + $scope.activeUsers,
         options: {
             showRowNumber: false,
             page: 'enable',
@@ -1191,7 +1195,7 @@ var coursesOfUserDashboard = function (result, $scope, element) {
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
-    
+
     google.visualization.events.addListener(nameFilter, 'ready', function () {
         $('.google-visualization-controls-stringfilter input').prop('placeholder', $scope.vocabulary.search + '...');
     });
@@ -1231,7 +1235,7 @@ var filesDashboard = function (result, $scope) {
             }
         }
     });
-    
+
     // Create a range filter to filter by filesize.
     var fileSizeFilter = new google.visualization.ControlWrapper({
         controlType: 'NumberRangeFilter',
@@ -1264,8 +1268,8 @@ var filesDashboard = function (result, $scope) {
             page: 'enable',
             pageSize: 100,
             allowHtml: true
-            //sortColumn: 2,
-            //sortAscending: true
+                    //sortColumn: 2,
+                    //sortAscending: true
         },
         view: {
             // 0: course id
@@ -1299,11 +1303,11 @@ var filesDashboard = function (result, $scope) {
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
-    
+
     google.visualization.events.addListener(nameFilter, 'ready', function () {
         $('.google-visualization-controls-stringfilter input').prop('placeholder', $scope.vocabulary.search + '...');
     });
-    
+
     google.visualization.events.addListener(filenameFilter, 'ready', function () {
         $('.google-visualization-controls-stringfilter input').prop('placeholder', $scope.vocabulary.search + '...');
     });
@@ -1425,7 +1429,7 @@ var coursesWithActivitiesDashboard = function (result, $scope, url) {
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
-    
+
     google.visualization.events.addListener(nameFilter, 'ready', function () {
         $('.google-visualization-controls-stringfilter input').prop('placeholder', $scope.vocabulary.search + '...');
     });
@@ -1455,7 +1459,7 @@ var allURLsDashboard = function (result, $scope, url) {
     // Create a dashboard
     var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardURLs'));
 
-    
+
     // Create a category picker to filter by parent category.
     var grandparentFilter = new google.visualization.ControlWrapper({
         'controlType': 'CategoryFilter',
@@ -1495,7 +1499,7 @@ var allURLsDashboard = function (result, $scope, url) {
             }
         }
     });
-    
+
     // Create a search box to search for a course name.
     var courseShortnameFilter = new google.visualization.ControlWrapper({
         controlType: 'StringFilter',
@@ -1550,7 +1554,7 @@ var allURLsDashboard = function (result, $scope, url) {
 
     // Draw the dashboard.
     dashboard.draw(data);
-    
+
     // Define what to do when selecting a table row.
     function selectHandler() {
         $scope.loadingCourse = true;
@@ -1566,9 +1570,9 @@ var allURLsDashboard = function (result, $scope, url) {
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
-    
+
     google.visualization.events.addListener(nameFilter, 'ready', function () {
         $('.google-visualization-controls-stringfilter input').prop('placeholder', $scope.vocabulary.search + '...');
     });
-    
+
 };

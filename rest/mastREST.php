@@ -63,6 +63,7 @@ $app->map('/vocabulary', 'moodleanalyst_getVocabulary')->via('GET');
 $app->map('/addUser/:userid/ToCourse/:courseid/withRole/:roleid', 'moodleanalyst_enrolUserToCourse')->via('GET');
 $app->map('/files', 'moodleanalyst_getFiles')->via('GET');
 $app->map('/url', 'moodleanalyst_getAllURLS')->via('GET');
+$app->map('/user', 'moodleanalyst_allUsers_light')->via('GET');
 
 $app->run();
 
@@ -675,6 +676,65 @@ function moodleanalyst_course($courseid) {
     }
     $result = array();
     $result['data'] = $data;
+    //printArray($result);
+    echo json_encode($result);
+}
+
+/**
+ * Returns a list of all users as JSON in Google Charts format
+ * 
+ * Load only data that is really necessary 
+ */
+function moodleanalyst_allUsers_light() {
+    /*
+     * @param bool $get If false then only a count of the records is returned
+     * @param string $search A simple string to search for
+     * @param bool $confirmed A switch to allow/disallow unconfirmed users
+     * @param array $exceptions A list of IDs to ignore, eg 2,4,5,8,9,10
+     * @param string $sort A SQL snippet for the sorting criteria to use
+     * @param string $firstinitial Users whose first name starts with $firstinitial
+     * @param string $lastinitial Users whose last name starts with $lastinitial
+     * @param string $page The page or records to return
+     * @param string $recordsperpage The number of records to return per page
+     * @param string $fields A comma separated list of fields to be returned from the chosen table.
+     * @return array|int|bool  {@link $USER} records unless get is false in which case the integer count of the records found is returned.
+     *                        False is returned if an error is encountered.
+     */
+    $get = true;
+    $search = '';
+    $confirmed = false;
+    $exceptions = null;
+    $sort = 'lastname ASC';
+    $firstinitial = '';
+    $lastinitial = '';
+    $page = '';
+    $recordsperpage = '100000000';
+    $fields = 'id, username, firstname, lastname, email';
+    $users = get_users($get, $search, $confirmed, $exceptions, $sort, $firstinitial, $lastinitial, $page, $recordsperpage, $fields);
+    // Preparing the return table
+    $result = array();
+    $result['cols'] = array();
+    $result['cols'][] = array('label' => 'ID', 'type' => 'number');
+    $result['cols'][] = array('label' => get_string('username'), 'type' => 'string');
+    $result['cols'][] = array('label' => get_string('firstname'), 'type' => 'string');
+    $result['cols'][] = array('label' => get_string('lastname'), 'type' => 'string');
+    $result['cols'][] = array('label' => get_string('email'), 'type' => 'string');
+    $result['cols'][] = array('label' => get_string('fullname'), 'type' => 'string');
+
+    $result['rows'] = array();
+
+    foreach ($users as $userid => $user) {
+        $result['rows'][] = [
+            'c' => array(
+                ['v' => $user->id],
+                array('v' => $user->username),
+                array('v' => $user->firstname),
+                array('v' => $user->lastname),
+                array('v' => $user->email),
+                array('v' => $user->firstname . ' ' . $user->lastname)
+            )
+        ];
+    }
     //printArray($result);
     echo json_encode($result);
 }
