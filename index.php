@@ -111,6 +111,7 @@ echo '<html>
 
                                         <li role="presentation"><a id="tablink_files" href="#tabs-6" role="tab" data-toggle="tab" ng-controller="FilesController" ng-click="getAllFiles();">{{vocabulary.allfiles}}</a></li>
                                         <li role="presentation"><a id="tablink_courseswithactivities" href="#tabs-7" role="tab" data-toggle="tab" ng-controller="CoursesWithActivitiesController" ng-click="getData();">{{vocabulary.activitymodules}}</a></li>
+                                        <li role="presentation"><a id="tablink_urls" href="#tabs-urls" role="tab" data-toggle="tab" ng-controller="URLsController" ng-click="getAllURLs();">{{vocabulary.url.modulenameplural}}</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -147,6 +148,9 @@ echo '<html>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="tabs-7">
                         <div ng-include="\'' . $wwwroot . '/report/moodleanalyst/php/courseswithactivities.tpl.php\'"></div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="tabs-urls">
+                        <div ng-include="\'' . $wwwroot . '/report/moodleanalyst/php/urls.tpl.php\'"></div>
                     </div>
                 </div> <!-- tab-content -->
                 

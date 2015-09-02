@@ -62,6 +62,7 @@ $app->map('/course/:id/setVisibility/:visibility', 'moodleanalyst_setCourseVisib
 $app->map('/vocabulary', 'moodleanalyst_getVocabulary')->via('GET');
 $app->map('/addUser/:userid/ToCourse/:courseid/withRole/:roleid', 'moodleanalyst_enrolUserToCourse')->via('GET');
 $app->map('/files', 'moodleanalyst_getFiles')->via('GET');
+$app->map('/url', 'moodleanalyst_getAllURLS')->via('GET');
 
 $app->run();
 
@@ -266,6 +267,7 @@ function moodleanalyst_getVocabulary() {
     $result['coursehidden'] = get_string('coursehidden');
     $result['activitymodules'] = get_string('activitymodules');
     $result['total'] = get_string('total');
+    $result['url']['modulenameplural'] = get_string('modulenameplural', 'mod_url');
 
     //echo "<pre>" . print_r($result, true) . "</pre>";
     echo json_encode($result);
@@ -984,7 +986,7 @@ function moodleanalyst_courseswithnoofactivities() {
     global $DB;
     $courses = get_courses("all", "c.sortorder DESC", 'c.id, c.fullname, c.shortname, c.category as parentcategory, c.visible');
     $categories = $DB->get_records('course_categories', null, null, 'id, name, parent, visible');
-    
+
     $activities = $DB->get_records_sql("SELECT course, COUNT(course) as countedactivities FROM {course_modules} GROUP BY course");
 
     // Preparing the return table
@@ -998,17 +1000,17 @@ function moodleanalyst_courseswithnoofactivities() {
     $result['cols'][] = array('label' => get_string('visible'), 'type' => 'boolean');
 
     $result['rows'] = array();
-    
+
     $yes = get_string('yes');
     $no = get_String('no');
 
     foreach ($courses as $courseid => $data) {
-        if(isset($activities[$courseid])) {
+        if (isset($activities[$courseid])) {
             $data->numberOfActivities = $activities[$courseid]->countedactivities;
         } else {
             $data->numberOfActivities = 0;
         }
-        
+
         if ($data->parentcategory != 0) {
             $data->parentcategoryname = $categories[$data->parentcategory]->name;
             $data->grandparentcategory = $categories[$data->parentcategory]->parent;
@@ -1026,11 +1028,74 @@ function moodleanalyst_courseswithnoofactivities() {
         // Filling the return table
         $data->visible = ($data->visible) ? true : false;
         $data->visibleReadable = ($data->visible) ? $yes : $no;
-        
+
         $number = (int) $data->numberOfActivities;
         $result['rows'][] = ['c' => array(['v' => $data->id], array('v' => $data->grandparentcategoryname), array('v' => $data->parentcategoryname), array('v' => $coursename), array('v' => $number), array('v' => $data->visible, 'f' => $data->visibleReadable))];
     }
     echo json_encode($result);
+}
+
+/**
+ * Returns a table of all urls
+ * as JSON for a google charts table
+ */
+function moodleanalyst_getAllURLS() {
+    global $DB;
+    $urls = $DB->get_records_sql("SELECT
+	{url}.id,
+	{url}.course,
+	{course}.shortname AS coursename,
+        {course}.category AS parentcategoryid,
+	{course_categories}.name AS parentcategory,
+        {course_categories}.parent AS grandparentcategoryid,
+	{url}.name,
+        {url}.externalurl
+FROM
+	{url},
+	{course},
+	{course_categories} 
+WHERE 
+	{course}.id = {url}.course AND
+	{course_categories}.id = {course}.category
+    ");
+    $categories = $DB->get_records('course_categories', null, null, 'id, name, parent');
+
+    // Preparing the return table
+    $result = array();
+    $result['cols'] = array();
+    $result['cols'][] = array('label' => 'ID', 'type' => 'number');
+    $result['cols'][] = array('label' => get_string("course"), 'type' => 'number');
+    $result['cols'][] = array('label' => get_string('grandparentcategory', 'report_moodleanalyst'), 'type' => 'string');
+    $result['cols'][] = array('label' => get_string('parentcategory', 'report_moodleanalyst'), 'type' => 'string');
+    $result['cols'][] = array('label' => get_string('shortnamecourse'), 'type' => 'string');
+    $result['cols'][] = array('label' => get_string('name'), 'type' => 'string');
+    $result['cols'][] = array('label' => get_string('externalurl', 'mod_url'), 'type' => 'string');
+
+    $result['rows'] = array();
+
+    foreach ($urls as $urlid => $url) {
+
+        if ($url->grandparentcategoryid != 0) {
+            $url->grandparentcategoryname = $categories[$url->grandparentcategoryid]->name;
+        } else {
+            $url->grandparentcategoryname = "";
+        }
+
+        //moodleanalyst_printArray($url);
+        $result['rows'][] = ['c' => array(
+                        ['v' => $url->id],
+                        array('v' => $url->course),
+                        array('v' => $url->grandparentcategoryname),
+                        array('v' => $url->parentcategory),
+                        array('v' => $url->coursename),
+                        array('v' => $url->name),
+                        array('v' => $url->externalurl)
+        )];
+    }
+    echo json_encode($result);
+
+
+    //moodleanalyst_printArray($result);
 }
 ?>
 
