@@ -276,6 +276,7 @@ function moodleanalyst_getVocabulary() {
     $result['coursehidden'] = get_string('coursehidden');
     $result['activitymodules'] = get_string('activitymodules');
     $result['total'] = get_string('total');
+    $result['loginas'] = get_string('loginas');
     $result['url']['modulenameplural'] = get_string('modulenameplural', 'mod_url');
 
     //echo "<pre>" . print_r($result, true) . "</pre>";
@@ -565,7 +566,14 @@ function moodleanalyst_user($userid) {
     $ret['lang']['string'] = get_string('language');
     $ret['lang']['v'] = $user->lang;
 
+    // Session key for login as...
+    global $USER;
+    $ret['sessionkey']['string'] = 'sessionkey';
+    $ret['sessionkey']['v'] = $USER->sesskey;
+    
     $ret['courses'] = $courses_enrolled;
+    
+    
     //printArray($ret);
     echo json_encode($ret);
 }

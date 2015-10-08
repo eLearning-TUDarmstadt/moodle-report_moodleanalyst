@@ -46,24 +46,33 @@ This page displays detailed Information about a user.
                     <a href="<?php $wwwroot ?>/user/profile.php?id={{user.id.v}}" target="_blank" style="color: #000000">
                         {{user.firstname.v}} {{user.lastname.v}}
                     </a>
-                
+                    &nbsp;&nbsp;&nbsp;
+                    <a href="<?php $wwwroot ?>/course/loginas.php?id=1&user={{user.id.v}}&sesskey={{user.sessionkey.v}}" target="_blank">
+                        <button type="button" class="btn btn-default btn-sm">
+                            <span><img src="<?php $wwwroot ?>/pix/t/right.png"></span> {{vocabulary.loginas}}
+                        </button>
+                    </a>
+
                     <!-- 2) button group -->
                     <div class="btn-group btn-group-xs pull-right" role="group">
-                        
+
                         <!-- 2.0) "search user" button -->
-                        <a href="https://www.google.com/search?q={{user.firstname.v}}+{{user.lastname.v}}+<?php $exploded = explode('.', $_SERVER['SERVER_NAME']); echo $exploded[count($exploded)-2]; ?>" target="_blank" title="{{vocabulary.search}}">
+                        <a href="https://www.google.com/search?q={{user.firstname.v}}+{{user.lastname.v}}+<?php
+                        $exploded = explode('.', $_SERVER['SERVER_NAME']);
+                        echo $exploded[count($exploded) - 2];
+                        ?>" target="_blank" title="{{vocabulary.search}}">
                             <button type="button" class="btn btn-default" aria-label="Search for user on Google">
                                 <span><img src="<?php $wwwroot ?>/pix/t/preview.png"></span>
                             </button>
                         </a>
-                        
+
                         <!-- 2.1) "edit user" button -->
                         <a href="<?php $wwwroot ?>/user/editadvanced.php?id={{user.id.v}}" target="_blank" title="{{vocabulary.edit}}">
                             <button type="button" class="btn btn-default" aria-label="Edit User">
                                 <span><img src="<?php $wwwroot ?>/pix/t/editstring.png"></span>
                             </button>
                         </a>
-                    
+
                         <!-- 2.2) refresh button -->
                         <!--
                         <a title="{{vocabulary.refresh}}">
@@ -72,7 +81,7 @@ This page displays detailed Information about a user.
                             </button>
                         </a>
                         -->
-                        
+
                         <!-- 2.3) close button -->
                         <a title="{{vocabulary.hidesection}}">
                             <button type="button" class="btn btn-default" aria-label="Close" ng-click="userid = false;">
@@ -94,9 +103,9 @@ This page displays detailed Information about a user.
         -->
         <div class="panel-body">
             <loader ng-show="loadingUser"></loader>
-            
+
             <!-- 1) directly enrol user in selected course (only visible when a course is selected) -->
-            <div class="panel panel-default" ng-show="activeUsers==1 && courseid">
+            <div class="panel panel-default" ng-show="activeUsers == 1 && courseid">
                 <div class="row panel-body">
                     <div class="col-md-4">
                         <button ng-click="addUserToCourse(user.id.v, course.data.id.v, selectedRole);" type="button" class="btn btn-default" aria-label="">
@@ -111,7 +120,7 @@ This page displays detailed Information about a user.
                     </div>
                 </div> <!-- row panel-body -->
             </div> <!-- panel panel-default -->
-            
+
             <!-- 2) detailed user information -->
             <div class="panel panel-default">
                 <div class="panel-heading panel-title">
@@ -119,7 +128,7 @@ This page displays detailed Information about a user.
                         <div class="col-md-9">
                             {{vocabulary.personal}}
                         </div>
-                        
+
                         <!-- refresh button -->
                         <div class="col-md-3">
                             <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataUserInfo()" title="{{vocabulary.refresh}}">
@@ -128,7 +137,7 @@ This page displays detailed Information about a user.
                         </div>
                     </div> <!-- row -->
                 </div> <!-- panel-heading panel-title -->
-                    
+
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-4">{{user.id.string}}</div>
@@ -138,9 +147,9 @@ This page displays detailed Information about a user.
                         <div class="col-md-4">{{user.username.string}}</div>
                         <div class="col-md-8">{{user.username.v}}</div>
                     </div>
-            
+
                     <p></p>
-                
+
                     <div class="row">
                         <div class="col-md-4">{{user.firstname.string}}</div>
                         <div class="col-md-8">{{user.firstname.v}}</div>
@@ -153,9 +162,9 @@ This page displays detailed Information about a user.
                         <div class="col-md-4">{{user.email.string}}</div>
                         <div class="col-md-8"><a href="mailto:{{user.email.v}}">{{user.email.v}}</a></div>
                     </div>
-                        
+
                     <p></p>
-             
+
                     <div class="row">
                         <div class="col-md-4">{{user.firstaccess.string}}</div>
                         <div class="col-md-8">{{user.firstaccess.v}}</div>
@@ -168,9 +177,9 @@ This page displays detailed Information about a user.
                         <div class="col-md-4">{{user.lastaccess.string}}</div>
                         <div class="col-md-8">{{user.lastaccess.v}}</div>
                     </div>
-                        
+
                     <p></p>
-                        
+
                     <div class="row">
                         <div class="col-md-4">{{user.auth.string}}</div>
                         <div class="col-md-8">{{user.auth.v}}</div>
@@ -179,14 +188,11 @@ This page displays detailed Information about a user.
                         <div class="col-md-4">{{user.lang.string}}</div>
                         <div class="col-md-8">{{user.lang.v}}</div>
                     </div>
-                    <div class="row">
-                        
-                    </div>
                 </div> <!-- panel-body -->
             </div> <!-- panel panel-default -->
-            
+
             <p></p>
-            
+
             <!-- 3) interactive list of courses the user is enrolled in -->
             <div class="dashboardCoursesOfUser">
                 <div class="panel panel-default">
@@ -195,7 +201,7 @@ This page displays detailed Information about a user.
                             <div class="col-md-9">
                                 {{vocabulary.searchcourses}}
                             </div>
-                            
+
                             <!-- refresh button -->
                             <div class="col-md-3">
                                 <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataUserInfo()" title="{{vocabulary.refresh}}">
@@ -204,7 +210,7 @@ This page displays detailed Information about a user.
                             </div>
                         </div> <!-- row -->
                     </div> <!-- panel-heading panel-title -->
-                    
+
                     <div class="panel-body">
                         <div class="panel panel-default">
                             <div class="panel-heading">
@@ -215,7 +221,7 @@ This page displays detailed Information about a user.
                                     <div class="col-md-4" ng-attr-id="{{'coursesOfUser_role_filter_div_' + activeUsers}}"></div>
                                 </div>
                             </div>
-             
+
                             <div class="panel-body">
                                 <div ng-attr-id="{{'coursesOfUser_table_div_' + activeUsers}}"></div>
                             </div>
