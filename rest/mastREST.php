@@ -32,21 +32,21 @@ GLOBAL $CFG;
 require_once $CFG->dirroot . '/course/lib.php';
 require_once $CFG->dirroot . '/report/moodleanalyst/rest/lib.php';
 
-
+/*
 $origin = $_SERVER['Origin'];
 
 header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
 header('Access-Control-Allow-Methods: POST,GET,DELETE,PUT,OPTIONS');
 header('Access-Control-Allow-Credentials: true');
 header('Content-type: application/json');
-
+*/
 // GZIP Compression for output
 if (!ob_start("ob_gzhandler")) {
     ob_start();
 }
 
 require_login();
-//require_capability('report/moodleanalyst:view', context_system::instance());
+require_capability('report/moodleanalyst:view', context_system::instance());
 
 \Slim\Slim::registerAutoloader();
 
@@ -727,7 +727,7 @@ function moodleanalyst_allUsers_light() {
     $result['cols'][] = array('label' => get_string('firstname'), 'type' => 'string');
     $result['cols'][] = array('label' => get_string('lastname'), 'type' => 'string');
     $result['cols'][] = array('label' => get_string('email'), 'type' => 'string');
-    $result['cols'][] = array('label' => get_string('fullname'), 'type' => 'string');
+    $result['cols'][] = array('label' => 'All', 'type' => 'string');
 
     $result['rows'] = array();
 
@@ -739,7 +739,7 @@ function moodleanalyst_allUsers_light() {
                 array('v' => $user->firstname),
                 array('v' => $user->lastname),
                 array('v' => $user->email),
-                array('v' => $user->firstname . ' ' . $user->lastname)
+                array('v' => $user->username . ' mdl '. $user->firstname . ' ' . $user->lastname . ' ' .$user->email)
             )
         ];
     }

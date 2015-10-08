@@ -948,7 +948,7 @@ var userSearchDashboard = function (result, $scope) {
             filterColumnIndex: 5,
             matchType: 'any',
             ui: {
-                label: $scope.vocabulary.fullnameuser
+                label: $scope.vocabulary.search
             }
         }
     });
