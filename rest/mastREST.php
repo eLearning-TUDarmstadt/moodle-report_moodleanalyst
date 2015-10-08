@@ -25,7 +25,6 @@
  */
 //ini_set('display_errors', 'On');
 //error_reporting(E_ALL | E_STRICT);
-
 require 'Slim/Slim.php';
 require_once '../../../config.php';
 
@@ -33,17 +32,26 @@ GLOBAL $CFG;
 require_once $CFG->dirroot . '/course/lib.php';
 require_once $CFG->dirroot . '/report/moodleanalyst/rest/lib.php';
 
+
+$origin = $_SERVER['Origin'];
+
+header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+header('Access-Control-Allow-Methods: POST,GET,DELETE,PUT,OPTIONS');
+header('Access-Control-Allow-Credentials: true');
+header('Content-type: application/json');
+
 // GZIP Compression for output
 if (!ob_start("ob_gzhandler")) {
     ob_start();
 }
 
-//require_login();
-require_capability('report/moodleanalyst:view', context_system::instance());
+require_login();
+//require_capability('report/moodleanalyst:view', context_system::instance());
 
 \Slim\Slim::registerAutoloader();
 
 $app = new \Slim\Slim ();
+$app->contentType("application/json");
 
 $app->map('/isUserLoggedIn', 'moodleanalyst_isUserLoggedIn')->via('GET');
 $app->map('/allCourses', 'moodleanalyst_allCourses')->via('GET');
