@@ -46,9 +46,16 @@ This page displays detailed Information about a user.
                     <a href="<?php $wwwroot ?>/user/profile.php?id={{user.id.v}}" target="_blank" style="color: #000000">
                         {{user.firstname.v}} {{user.lastname.v}}
                     </a>
-                    
+                
                     <!-- 2) button group -->
                     <div class="btn-group btn-group-xs pull-right" role="group">
+                        
+                        <!-- 2.0) "search user" button -->
+                        <a href="https://www.google.com/search?q={{user.firstname.v}}+{{user.lastname.v}}+<?php $exploded = explode('.', $_SERVER['SERVER_NAME']); echo $exploded[count($exploded)-2]; ?>" target="_blank" title="{{vocabulary.search}}">
+                            <button type="button" class="btn btn-default" aria-label="Search for user on Google">
+                                <span><img src="<?php $wwwroot ?>/pix/t/preview.png"></span>
+                            </button>
+                        </a>
                         
                         <!-- 2.1) "edit user" button -->
                         <a href="<?php $wwwroot ?>/user/editadvanced.php?id={{user.id.v}}" target="_blank" title="{{vocabulary.edit}}">
@@ -171,6 +178,9 @@ This page displays detailed Information about a user.
                     <div class="row">
                         <div class="col-md-4">{{user.lang.string}}</div>
                         <div class="col-md-8">{{user.lang.v}}</div>
+                    </div>
+                    <div class="row">
+                        
                     </div>
                 </div> <!-- panel-body -->
             </div> <!-- panel panel-default -->
