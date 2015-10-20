@@ -41,6 +41,9 @@ Selecting a course will load the courseinfo page.
                 </div>
             </div>
             <div class="row">
+                <div class="col-md-12" id="courses_id_filter_div"></div>
+            </div>
+            <div class="row">
                 <div class="col-md-3" id="courses_grandparentcategory_filter_div"></div>
                 <div class="col-md-3" id="courses_parentcategory_filter_div"></div>
             </div> <!-- row -->

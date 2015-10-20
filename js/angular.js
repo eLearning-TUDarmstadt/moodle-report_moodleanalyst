@@ -762,7 +762,19 @@ var courseSearchDashboard = function (result, $scope) {
             filterColumnIndex: 3,
             matchType: 'any',
             ui: {
-                label: $scope.vocabulary.course
+                
+            }
+        }
+    });
+    
+    var courseIdFilter = new google.visualization.ControlWrapper({
+        controlType: 'StringFilter',
+        containerId: 'courses_id_filter_div',
+        options: {
+            filterColumnIndex: 0,
+            matchType: 'any',
+            ui: {
+                
             }
         }
     });
@@ -818,7 +830,7 @@ var courseSearchDashboard = function (result, $scope) {
     });
 
     // Establish dependencies.
-    dashboard.bind([nameFilter, grandparentCategoryPicker, parentCategoryPicker], [table]);
+    dashboard.bind([nameFilter, courseIdFilter, grandparentCategoryPicker, parentCategoryPicker], [table]);
 
     // Draw the dashboard.
     dashboard.draw(data);
