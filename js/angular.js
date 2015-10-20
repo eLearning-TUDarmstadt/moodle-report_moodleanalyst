@@ -1461,9 +1461,9 @@ function generatePassword() {
 }
 
 
-/****************************************
+/*********************
  ** Dashboard: URLs **
- ****************************************/
+ *********************/
 var allURLsDashboard = function (result, $scope, url) {
     var data = new google.visualization.DataTable(result);
 
@@ -1550,13 +1550,14 @@ var allURLsDashboard = function (result, $scope, url) {
             sortAscending: false
         },
         view: {
-            // 0: activity id
-            // 1: grandparent category
-            // 2: parent category
-            // 3: course name
-            // 4: number of activities
-            // 5: visibility
-            //columns: [0, 1, 2, 3, 4, 5]
+            // 0: id
+            // 1: course id
+            // 2: grandparent category
+            // 3: parent category
+            // 4: course shortname
+            // 5: course fullname
+            // 6: url
+            columns: [0, 1, 2, 3, 4, 5, 6]
         }
     });
 
