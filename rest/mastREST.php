@@ -833,6 +833,7 @@ function moodleanalyst_allCourses() {
     $result['cols'][] = array('label' => get_string('parentcategory', 'report_moodleanalyst'), 'type' => 'string');
     $result['cols'][] = array('label' => get_string('course', 'report_moodleanalyst'), 'type' => 'string');
     $result['cols'][] = array('label' => get_string('visible'), 'type' => 'boolean');
+    $result['cols'][] = array('label' => 'ID' . ' ' . get_string('course', 'report_moodleanalyst'), 'type' => 'string');
 
     $result['rows'] = array();
 
@@ -853,7 +854,7 @@ function moodleanalyst_allCourses() {
         $coursename = $data->fullname;
         // Filling the return table
         $data->visible = ($data->visible) ? true : false;
-        $result['rows'][] = ['c' => array(['v' => $data->id], array('v' => $data->grandparentcategoryname), array('v' => $data->parentcategoryname), array('v' => $coursename), array('v' => $data->visible))];
+        $result['rows'][] = ['c' => array(['v' => $data->id], array('v' => $data->grandparentcategoryname), array('v' => $data->parentcategoryname), array('v' => $coursename), array('v' => $data->visible), array('v' => ($data->id . ' ' . $coursename)))];
     }
     echo json_encode($result);
     //printArray($result);

@@ -762,19 +762,20 @@ var courseSearchDashboard = function (result, $scope) {
             filterColumnIndex: 3,
             matchType: 'any',
             ui: {
-                
+                //label: $scope.vocabulary.course
             }
         }
     });
     
-    var courseIdFilter = new google.visualization.ControlWrapper({
+    // Create a search box to search for the course ID.
+    var idFilter = new google.visualization.ControlWrapper({
         controlType: 'StringFilter',
         containerId: 'courses_id_filter_div',
         options: {
             filterColumnIndex: 0,
             matchType: 'any',
             ui: {
-                
+                //label: ''
             }
         }
     });
@@ -825,12 +826,13 @@ var courseSearchDashboard = function (result, $scope) {
             // 2: parentcategory
             // 3: course name
             // 4: visibility
+            // 5: ID + course name
             columns: [0, 1, 2, 3, 4]
         }
     });
 
     // Establish dependencies.
-    dashboard.bind([nameFilter, courseIdFilter, grandparentCategoryPicker, parentCategoryPicker], [table]);
+    dashboard.bind([nameFilter, idFilter, grandparentCategoryPicker, parentCategoryPicker], [table]);
 
     // Draw the dashboard.
     dashboard.draw(data);
@@ -843,9 +845,8 @@ var courseSearchDashboard = function (result, $scope) {
         $scope.courseid = table.getDataTable().getFormattedValue(selection[0].row, 0);
         $scope.didSelectACourse($scope.courseid);
         $("html, body").animate({scrollTop: 0}, 800);
-    }
-    ;
-
+    };
+    
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
 
@@ -1082,16 +1083,14 @@ var inactiveUsersDashboard = function (result, $scope) {
         $scope.didSelectAUser($scope.userid);
         //$scope.$broadcast('selectedUserIdChanged', $scope.userid);
         $("html, body").animate({scrollTop: 0}, 800);
-    }
-    ;
+    };
 
-    $scope.numberOfRowsShown = data.getNumberOfRows();
+    $scope.numberOfRowsShownInactiveUsers = data.getNumberOfRows();
     // Define what to do when changing the state on one of the slider range filters.
     function stateChangeHandler() {
-        $scope.numberOfRowsShown = table.getDataTable().getNumberOfRows();
+        $scope.numberOfRowsShownInactiveUsers = table.getDataTable().getNumberOfRows();
         $scope.loadDataCourseSearch();
-    }
-    ;
+    };
 
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
