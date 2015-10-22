@@ -855,12 +855,22 @@ var courseSearchDashboard = function (result, $scope) {
         $("html, body").animate({scrollTop: 0}, 800);
     };
     
+    function stateChangeHandler() {
+        $scope.csv_out = dataTableToCSV(table.getDataTable());
+    };
+    
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
 
     google.visualization.events.addListener(nameFilter, 'ready', function () {
         $('.google-visualization-controls-stringfilter input').prop('placeholder', $scope.vocabulary.search + '...');
     });
+
+    // Setup listeners for statechange in the slider range filters.
+    google.visualization.events.addListener(grandparentCategoryPicker, 'statechange', stateChangeHandler);
+    google.visualization.events.addListener(parentCategoryPicker, 'statechange', stateChangeHandler);
+    google.visualization.events.addListener(nameFilter, 'statechange', stateChangeHandler);
+    google.visualization.events.addListener(idFilter, 'statechange', stateChangeHandler);
 };
 
 /******************************

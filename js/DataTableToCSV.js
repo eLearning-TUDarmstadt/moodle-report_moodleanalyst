@@ -31,7 +31,7 @@ function dataTableToCSV(dataTable_arg) {
     }
 
     return csv_out;
-}
+};
 
 function downloadCSV (csv_out) {
             var blob = new Blob([csv_out], {type: 'text/csv;charset=utf-8'});
@@ -42,5 +42,5 @@ function downloadCSV (csv_out) {
 
             var event = document.createEvent("MouseEvents");
             event.initEvent("click", true, false);
-            link.dispatchEvent(event); 
-}
+            link.dispatchEvent(event);
+};
