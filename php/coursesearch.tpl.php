@@ -34,13 +34,15 @@ Selecting a course will load the courseinfo page.
             <div class="row">
                 <div class="col-md-10" id="courses_name_filter_div"></div>
                 <div class="col-md-2">
-                    <button type="button" class="btn btn-default" aria-label="Download CSV" ng-click="downloadDataTableAsCSV()" title="Export Table as CSV">
-                        <span><img src="<?php $wwwroot ?>/pix/i/export.png"></span>
-                    </button>
-                    <!-- refresh button -->
-                    <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataCourseSearch()" title="{{vocabulary.refresh}}">
-                        <span><img src="<?php $wwwroot ?>/pix/i/reload.png"></span>
-                    </button>
+                        <!-- Export Table as CSV button -->
+                        <button type="button" class="btn btn-default" aria-label="Export CSV" ng-click="downloadDataTableAsCSV()" title="Export Table as CSV">
+                            <span><img src="<?php $wwwroot ?>/pix/i/export.png"></span>
+                        </button>
+                        
+                        <!-- refresh button -->
+                        <button type="button" class="btn btn-default" aria-label="Refresh" ng-click="loadDataCourseSearch()" title="{{vocabulary.refresh}}">
+                            <span><img src="<?php $wwwroot ?>/pix/i/reload.png"></span>
+                        </button>
                 </div>
             </div>
             <div class="row">
