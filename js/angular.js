@@ -265,8 +265,14 @@ app.directive('coursesearch', function () {
                                  */
                             });
                 };
+                
                 //initial load
                 $scope.loadDataCourseSearch();
+                
+                
+                $scope.downloadDataTableAsCSV = function () {
+                    downloadCSV($scope.csv_out);
+                };
             }],
         controllerAs: 'courseSearchCtrl'
     };
@@ -750,6 +756,8 @@ var usersInCourseDashboard = function (result, $scope) {
  ******************************/
 var courseSearchDashboard = function (result, $scope) {
     var data = new google.visualization.DataTable(result);
+    
+    $scope.csv_out = dataTableToCSV(data);
 
     // Create a dashboard
     var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardCourseSearch'));
@@ -836,7 +844,7 @@ var courseSearchDashboard = function (result, $scope) {
 
     // Draw the dashboard.
     dashboard.draw(data);
-
+    
     // Define what to do when selecting a table row.
     function selectHandler() {
         var selection = table.getChart().getSelection();
