@@ -27,6 +27,12 @@
 This page displays detailed Information about a user.
 -->
 
+<?php
+    require(dirname(__FILE__) . '/../../../config.php');
+    require_capability('report/moodleanalyst:view', \context::instance_by_id(10));
+    $wwwroot = $CFG->wwwroot;
+?>
+
 <div>
     <div class="panel panel-primary">
         <!--
@@ -43,13 +49,13 @@ This page displays detailed Information about a user.
             <div class="panel-title row">
                 <div class="col-md-12">
                     <!-- 1) user's name -->
-                    <a href="<?php $wwwroot ?>/user/profile.php?id={{user.id.v}}" target="_blank" style="color: #000000">
+                    <a href="<?php echo $wwwroot ?>/user/profile.php?id={{user.id.v}}" target="_blank" style="color: #000000">
                         {{user.firstname.v}} {{user.lastname.v}}
                     </a>
                     &nbsp;&nbsp;&nbsp;
-                    <a href="<?php $wwwroot ?>/course/loginas.php?id=1&user={{user.id.v}}&sesskey={{user.sessionkey.v}}" target="_blank">
+                    <a href="<?php echo $wwwroot ?>/course/loginas.php?id=1&user={{user.id.v}}&sesskey={{user.sessionkey.v}}" target="_blank">
                         <button type="button" class="btn btn-default btn-sm">
-                            <span><img src="<?php $wwwroot ?>/pix/t/right.png"></span> {{vocabulary.loginas}}
+                            <span><img src="<?php echo $wwwroot ?>/pix/t/right.png"></span> {{vocabulary.loginas}}
                         </button>
                     </a>
 
@@ -62,14 +68,14 @@ This page displays detailed Information about a user.
                         echo $exploded[count($exploded) - 2];
                         ?>" target="_blank" title="{{vocabulary.search}}">
                             <button type="button" class="btn btn-default" aria-label="Search for user on Google">
-                                <span><img src="<?php $wwwroot ?>/pix/t/preview.png"></span>
+                                <span><img src="<?php echo $wwwroot ?>/pix/t/preview.png"></span>
                             </button>
                         </a>
 
                         <!-- 2.1) "edit user" button -->
-                        <a href="<?php $wwwroot ?>/user/editadvanced.php?id={{user.id.v}}" target="_blank" title="{{vocabulary.edit}}">
+                        <a href="<?php echo $wwwroot ?>/user/editadvanced.php?id={{user.id.v}}" target="_blank" title="{{vocabulary.edit}}">
                             <button type="button" class="btn btn-default" aria-label="Edit User">
-                                <span><img src="<?php $wwwroot ?>/pix/t/editstring.png"></span>
+                                <span><img src="<?php echo $wwwroot ?>/pix/t/editstring.png"></span>
                             </button>
                         </a>
 
@@ -85,7 +91,7 @@ This page displays detailed Information about a user.
                         <!-- 2.3) close button -->
                         <a title="{{vocabulary.hidesection}}">
                             <button type="button" class="btn btn-default" aria-label="Close" ng-click="userid = false;">
-                                <span><img src="<?php $wwwroot ?>/pix/t/switch_minus.png"></span>
+                                <span><img src="<?php echo $wwwroot ?>/pix/t/switch_minus.png"></span>
                             </button>
                         </a>
                     </div> <!-- btn-group -->
@@ -109,7 +115,7 @@ This page displays detailed Information about a user.
                 <div class="row panel-body">
                     <div class="col-md-4">
                         <button ng-click="addUserToCourse(user.id.v, course.data.id.v, selectedRole);" type="button" class="btn btn-default" aria-label="">
-                            <span><img src="<?php $wwwroot ?>/pix/t/left.png"></span> {{vocabulary.enrol}}
+                            <span><img src="<?php echo $wwwroot ?>/pix/t/left.png"></span> {{vocabulary.enrol}}
                         </button>
                     </div>
                     <div class="col-md-8">
@@ -132,7 +138,7 @@ This page displays detailed Information about a user.
                         <!-- refresh button -->
                         <div class="col-md-3">
                             <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataUserInfo()" title="{{vocabulary.refresh}}">
-                                <span><img src="<?php $wwwroot ?>/pix/i/reload.png"></span>
+                                <span><img src="<?php echo $wwwroot ?>/pix/i/reload.png"></span>
                             </button>
                         </div>
                     </div> <!-- row -->
@@ -205,7 +211,7 @@ This page displays detailed Information about a user.
                             <!-- refresh button -->
                             <div class="col-md-3">
                                 <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataUserInfo()" title="{{vocabulary.refresh}}">
-                                    <span><img src="<?php $wwwroot ?>/pix/i/reload.png"></span>
+                                    <span><img src="<?php echo $wwwroot ?>/pix/i/reload.png"></span>
                                 </button>
                             </div>
                         </div> <!-- row -->

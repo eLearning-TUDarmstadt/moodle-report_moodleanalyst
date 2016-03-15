@@ -27,6 +27,12 @@
 This page contains a form to create a new course.
 -->
 
+<?php
+    require(dirname(__FILE__) . '/../../../config.php');
+    require_capability('report/moodleanalyst:view', \context::instance_by_id(10));
+    $wwwroot = $CFG->wwwroot;
+?>
+
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3>{{vocabulary.newcourse}}</h3>
@@ -83,11 +89,11 @@ This page contains a form to create a new course.
             <p></p>
     
             <button type="button" class="btn btn-default" aria-label="newcourse.vocabulary.createnewcourse" ng-click="createNewCourse()">
-                <span><img src="<?php $wwwroot ?>/pix/t/add.png"></span> {{vocabulary.createnewcourse}}
+                <span><img src="<?php echo $wwwroot ?>/pix/t/add.png"></span> {{vocabulary.createnewcourse}}
             </button>
             
             <button type="button" class="btn btn-default" aria-label="newcourse.vocabulary.reset" ng-click="reset()">
-                <span><img src="<?php $wwwroot ?>/pix/i/return.png"></span> {{vocabulary.reset}}
+                <span><img src="<?php echo $wwwroot ?>/pix/i/return.png"></span> {{vocabulary.reset}}
             </button>
         </form>
     </div> <!-- panel-body -->
