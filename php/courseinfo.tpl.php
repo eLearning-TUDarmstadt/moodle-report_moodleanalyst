@@ -27,6 +27,12 @@
 This page displays detailed Information about a course
 -->
 
+<?php
+    require(dirname(__FILE__) . '/../../../config.php');
+    require_capability('report/moodleanalyst:view', \context::instance_by_id(10));
+    $wwwroot = $CFG->wwwroot;
+?>
+
 <div id="courseInfo">
     <div class="panel panel-primary">
         <!--
@@ -45,7 +51,7 @@ This page displays detailed Information about a course
             <div class="panel-title row">
                 <div class="col-md-12">
                     <!-- 1) course's short name (dimmed if not visible to students -->
-                    <a href="<?php $wwwroot ?>/course/view.php?id={{course.data.id.v}}" target="_blank" style="color: #000000">
+                    <a href="<?php echo $wwwroot ?>/course/view.php?id={{course.data.id.v}}" target="_blank" style="color: #000000">
                         <h ng-class="{'dimmed': course.data.visible.v == 0}">{{course.data.shortname.v}}</h>
                     </a>
                     <br />
@@ -55,28 +61,28 @@ This page displays detailed Information about a course
                     <div class="btn-group btn-group-xs pull-right" role="group" ng-show="course.data">
                         
                         <!-- 2.1) edit course settings button -->
-                        <a href="<?php $wwwroot ?>/course/edit.php?id={{course.data.id.v}}" target="_blank" title="{{vocabulary.editsettings}}">
+                        <a href="<?php echo $wwwroot ?>/course/edit.php?id={{course.data.id.v}}" target="_blank" title="{{vocabulary.editsettings}}">
                             <button type="button" class="btn btn-default" aria-label="Edit Course">
-                                <span><img src="<?php $wwwroot ?>/pix/t/edit.png"></span>
+                                <span><img src="<?php echo $wwwroot ?>/pix/t/edit.png"></span>
                             </button>
                         </a>
                         
                         <!-- 2.2) hide/show course to users button -->
                         <a title="{{vocabulary.hide}}">
                             <button type="button" class="btn btn-default" aria-label="Hide Course from Students" ng-show="course.data.visible.v == 1" ng-click="changeVisibility(course.data.id.v, 0);">
-                                <span><img src="<?php $wwwroot ?>/pix/t/hide.png"></span>
+                                <span><img src="<?php echo $wwwroot ?>/pix/t/hide.png"></span>
                             </button>
                         </a>
                         <a title="{{vocabulary.show}}">
                             <button type="button" class="btn btn-default" aria-label="Make Course visible to Students" ng-show="course.data.visible.v == 0" ng-click="changeVisibility(course.data.id.v, 1);">
-                                <span><img src="<?php $wwwroot ?>/pix/t/show.png"></span>
+                                <span><img src="<?php echo $wwwroot ?>/pix/t/show.png"></span>
                             </button>
                         </a>
                         
                         <!-- 2.3) delete course button -->
-                        <a href="<?php $wwwroot ?>/course/delete.php?id={{course.data.id.v}}" target="_blank" title="{{vocabulary.delete}}">
+                        <a href="<?php echo $wwwroot ?>/course/delete.php?id={{course.data.id.v}}" target="_blank" title="{{vocabulary.delete}}">
                             <button type="button" class="btn btn-default" aria-label="Delete Course">
-                                <span><img src="<?php $wwwroot ?>/pix/t/delete.png"></span>
+                                <span><img src="<?php echo $wwwroot ?>/pix/t/delete.png"></span>
                             </button>
                         </a>
                         
@@ -92,7 +98,7 @@ This page displays detailed Information about a course
                         <!-- 2.5) close button -->
                         <a title="{{vocabulary.hidesection}}">
                             <button type="button" class="btn btn-default" aria-label="Close" ng-click="courseid = false;">
-                                <span><img src="<?php $wwwroot ?>/pix/t/switch_minus.png"></span>
+                                <span><img src="<?php echo $wwwroot ?>/pix/t/switch_minus.png"></span>
                             </button>
                         </a>
                     </div> <!-- btn-group -->
@@ -125,7 +131,7 @@ This page displays detailed Information about a course
                         <!-- refresh button -->
                         <div class="col-md-3">
                             <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataCourseInfo()" title="{{vocabulary.refresh}}">
-                                <span><img src="<?php $wwwroot ?>/pix/i/reload.png"></span>
+                                <span><img src="<?php echo $wwwroot ?>/pix/i/reload.png"></span>
                             </button>
                         </div>
                     </div> <!-- row -->
@@ -166,13 +172,13 @@ This page displays detailed Information about a course
                 <div class="panel-heading panel-title">
                     <div class="row">
                         <div class="col-md-9">
-                            <a href="<?php $wwwroot ?>/enrol/users.php?id={{course.data.id.v}}" target="_blank">{{vocabulary.enrolledusers}}: {{course.data.personsInCourse}}</a>
+                            <a href="<?php echo $wwwroot ?>/enrol/users.php?id={{course.data.id.v}}" target="_blank">{{vocabulary.enrolledusers}}: {{course.data.personsInCourse}}</a>
                         </div>
                         
                         <!-- refresh button -->
                         <div class="col-md-3">
                             <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataCourseInfo()" title="{{vocabulary.refresh}}">
-                                <span><img src="<?php $wwwroot ?>/pix/i/reload.png"></span>
+                                <span><img src="<?php echo $wwwroot ?>/pix/i/reload.png"></span>
                             </button>
                         </div>
                     </div> <!-- row -->
@@ -203,7 +209,7 @@ This page displays detailed Information about a course
                     
                     <!-- refresh button -->
                     <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataCourseInfo()" title="{{vocabulary.refresh}}">
-                        <span><img src="<?php $wwwroot ?>/pix/i/reload.png"></span>
+                        <span><img src="<?php echo $wwwroot ?>/pix/i/reload.png"></span>
                     </button>
                 </ul>
                 
@@ -240,19 +246,19 @@ This page displays detailed Information about a course
                         
                         <div class="panel-body">
                             <div class="btn-group" role="group" aria-label="..." ng-show="activity.id">
-                                <a href="<?php $wwwroot ?>/mod/{{activity.mod}}/view.php?id={{activity.cm}}" target="_blank">
+                                <a href="<?php echo $wwwroot ?>/mod/{{activity.mod}}/view.php?id={{activity.cm}}" target="_blank">
                                     <button type="button" class="btn btn-default" ng-hide="activity.resourceyesorno">
-                                        <span><img src="<?php $wwwroot ?>/pix/t/switch_plus.png"></span> {{vocabulary.view}}
+                                        <span><img src="<?php echo $wwwroot ?>/pix/t/switch_plus.png"></span> {{vocabulary.view}}
                                     </button>
                                     
                                     <button type="button" class="btn btn-default" ng-show="activity.resourceyesorno">
-                                        <span><img src="<?php $wwwroot ?>/pix/t/restore.png"></span> {{vocabulary.downloadfile}}
+                                        <span><img src="<?php echo $wwwroot ?>/pix/t/restore.png"></span> {{vocabulary.downloadfile}}
                                     </button>
                                 </a>
                                 
-                                <a href="<?php $wwwroot ?>/course/mod.php?update={{activity.cm}}" target="_blank">
+                                <a href="<?php echo $wwwroot ?>/course/mod.php?update={{activity.cm}}" target="_blank">
                                     <button type="button" class="btn btn-default">
-                                        <span><img src="<?php $wwwroot ?>/pix/t/edit.png"></span> {{vocabulary.editsettings}}
+                                        <span><img src="<?php echo $wwwroot ?>/pix/t/edit.png"></span> {{vocabulary.editsettings}}
                                     </button>
                                 </a>
                                 <!-- <a href="/course/mod.php?hide={{activity.cm}}" target="_blank" ng-show="activity.visible == 1"><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> {{vocabulary.show}}</button></a>-->
@@ -267,17 +273,17 @@ This page displays detailed Information about a course
                     <div ng-show="CourseDetailTab.isSet(3)" id="dashboardEnrolmentMethods">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <div class="panel-title"><a target="_blank" href="<?php $wwwroot ?>/enrol/instances.php?id={{course.data.id.v}}">{{vocabulary.enrolmentmethods}}</a></div>
+                                <div class="panel-title"><a target="_blank" href="<?php echo $wwwroot ?>/enrol/instances.php?id={{course.data.id.v}}">{{vocabulary.enrolmentmethods}}</a></div>
                             </div>
 
                             <div class="panel-body">
                                 <div ng-repeat="enrol in course.data.enrolmentmethods">
                                     <div class="row"  ng-class="{'dimmed': enrol.visible == 0}">
                                         <div class="col-md-6" ng-hide="enrol.enrol == 'guest'">
-                                            <a href="<?php $wwwroot ?>/enrol/{{enrol.enrol}}/edit.php?courseid={{course.data.id.v}}&id={{enrol.id}}" target="_blank">{{enrol.name}}</a>
+                                            <a href="<?php echo $wwwroot ?>/enrol/{{enrol.enrol}}/edit.php?courseid={{course.data.id.v}}&id={{enrol.id}}" target="_blank">{{enrol.name}}</a>
                                         </div>
                                         <div class="col-md-6" ng-show="enrol.enrol == 'guest'">
-                                            <a href="<?php $wwwroot ?>/course/edit.php?id={{course.data.id.v}}" target="_blank">{{enrol.name}}</a>
+                                            <a href="<?php echo $wwwroot ?>/course/edit.php?id={{course.data.id.v}}" target="_blank">{{enrol.name}}</a>
                                         </div>
                                         <div class="col-md-3">
                                             {{vocabulary.user}}: {{enrol.number}}

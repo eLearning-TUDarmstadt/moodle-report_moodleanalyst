@@ -28,6 +28,12 @@ This page lists all courses along with a search box and the option to filter by 
 Selecting a course will load the courseinfo page.
 -->
 
+<?php
+    require(dirname(__FILE__) . '/../../../config.php');
+    require_capability('report/moodleanalyst:view', \context::instance_by_id(10));
+    $wwwroot = $CFG->wwwroot;
+?>
+
 <div id="dashboardCourseSearch">
     <div class="panel panel-info">
         <div class="panel-heading">
@@ -36,12 +42,12 @@ Selecting a course will load the courseinfo page.
                 <div class="col-md-2">
                         <!-- Export Table as CSV button -->
                         <button type="button" class="btn btn-default" aria-label="Export CSV" ng-click="downloadDataTableAsCSV()" title="Export Table as CSV">
-                            <span><img src="<?php $wwwroot ?>/pix/i/export.png"></span>
+                            <span><img src="<?php echo $wwwroot ?>/pix/i/export.png"></span>
                         </button>
                         
                         <!-- refresh button -->
                         <button type="button" class="btn btn-default" aria-label="Refresh" ng-click="loadDataCourseSearch()" title="{{vocabulary.refresh}}">
-                            <span><img src="<?php $wwwroot ?>/pix/i/reload.png"></span>
+                            <span><img src="<?php echo $wwwroot ?>/pix/i/reload.png"></span>
                         </button>
                 </div>
             </div>

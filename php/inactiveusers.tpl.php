@@ -28,6 +28,12 @@ This page lists all users with the option of filtering by inactivity.
 Detailed information is shown on the right hand side of the screen after clicking on a user.
 -->
 
+<?php
+    require(dirname(__FILE__) . '/../../../config.php');
+    require_capability('report/moodleanalyst:view', \context::instance_by_id(10));
+    $wwwroot = $CFG->wwwroot;
+?>
+
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3>{{vocabulary.users}} ({{vocabulary.inactive}})</h3>
@@ -49,7 +55,7 @@ Detailed information is shown on the right hand side of the screen after clickin
                                 <div class="col-md-2">
                                     <!-- refresh button -->
                                     <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataCourseSearch()" title="{{vocabulary.refresh}}">
-                                        <span><img src="<?php $wwwroot ?>/pix/i/reload.png"></span>
+                                        <span><img src="<?php echo $wwwroot ?>/pix/i/reload.png"></span>
                                     </button>
                                 </div>
                             </div> <!-- row -->

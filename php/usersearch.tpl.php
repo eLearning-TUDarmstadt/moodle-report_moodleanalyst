@@ -28,6 +28,12 @@ This page lists all users with an option to search by string.
 Selecting a user will load the userinfo page.
 -->
 
+<?php
+    require(dirname(__FILE__) . '/../../../config.php');
+    require_capability('report/moodleanalyst:view', \context::instance_by_id(10));
+    $wwwroot = $CFG->wwwroot;
+?>
+
 <div id="dashboardUserSearch">
     <div class="panel panel-info">
         <div class="panel-heading">
@@ -36,7 +42,7 @@ Selecting a user will load the userinfo page.
                 <div class="col-md-2">
                     <!-- refresh button -->
                     <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataUserSearch()" title="{{vocabulary.refresh}}">
-                        <span><img src="<?php $wwwroot ?>/pix/i/reload.png"></span>
+                        <span><img src="<?php echo $wwwroot ?>/pix/i/reload.png"></span>
                     </button>
                 </div>
             </div> <!-- row -->

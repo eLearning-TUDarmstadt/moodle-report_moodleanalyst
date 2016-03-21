@@ -29,6 +29,12 @@ course by clicking on it. The Details will appear on the right half of the scree
 appears on the left half.
 -->
 
+<?php
+    require(dirname(__FILE__) . '/../../../config.php');
+    require_capability('report/moodleanalyst:view', \context::instance_by_id(10));
+    $wwwroot = $CFG->wwwroot;
+?>
+
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3>empty courses</h3>
@@ -49,7 +55,7 @@ appears on the left half.
                                 <div class="col-md-3">
                                     <!-- refresh button -->
                                     <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataCourseSearch()" title="{{vocabulary.refresh}}">
-                                        <span><img src="<?php $wwwroot ?>/pix/i/reload.png"></span>
+                                        <span><img src="<?php echo $wwwroot ?>/pix/i/reload.png"></span>
                                     </button>
                                 </div>
                             </div> <!-- row -->
