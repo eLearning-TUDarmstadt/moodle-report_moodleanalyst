@@ -399,10 +399,10 @@ app.directive('userinfo', function () {
 
                 var didSelectAUser = function (userid) {
                     loadDataUserInfo = function () {
-                        // load user info from database
-                        console.log(userid);
-                        // Delete dot as decimal mark
+                        // Delete dot as decimal mark (13.345 => 13345)
                         userid = userid.replace('.', '');
+
+                        // load user info from database
                         $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/user/' + userid)
                                 .success(function (data) {
                                     $scope.loadingUser = false;
@@ -760,7 +760,7 @@ var usersInCourseDashboard = function (result, $scope) {
 var courseSearchDashboard = function (result, $scope) {
     var data = new google.visualization.DataTable(result);
 
-    $scope.csv_out = dataTableToCSV(data);
+    //$scope.csv_out = dataTableToCSV(data);
 
     // Create a dashboard
     var dashboard = new google.visualization.Dashboard(document.getElementById('dashboardCourseSearch'));
