@@ -161,7 +161,7 @@ app.controller('CourseDetailTabController', ['$scope', function ($scope) {
 /**************************************
  ** Controller: FILES TAB CONTROLLER **
  **************************************
- * 
+ *
  */
 app.controller('FilesController', ['$scope', '$http', function ($scope, $http) {
         $scope.gotAllFiles = false;
@@ -180,7 +180,7 @@ app.controller('FilesController', ['$scope', '$http', function ($scope, $http) {
 /********************************************************
  ** Controller: ALL URLs TAB CONTROLLER **
  ********************************************************
- * 
+ *
  */
 app.controller('URLsController', ['$scope', '$http', function ($scope, $http) {
         $scope.gotAllURLs = false;
@@ -200,7 +200,7 @@ app.controller('URLsController', ['$scope', '$http', function ($scope, $http) {
 /********************************************************
  ** Controller: COURSES WITH ACTIVITIES TAB CONTROLLER **
  ********************************************************
- * 
+ *
  */
 app.controller('CoursesWithActivitiesController', ['$scope', '$http', function ($scope, $http) {
         $scope.gotAllCoursesWithAcitivities = false;
@@ -265,11 +265,11 @@ app.directive('coursesearch', function () {
                                  */
                             });
                 };
-                
+
                 //initial load
                 $scope.loadDataCourseSearch();
-                
-                
+
+
                 $scope.downloadDataTableAsCSV = function () {
                     downloadCSV($scope.csv_out);
                 };
@@ -400,6 +400,9 @@ app.directive('userinfo', function () {
                 var didSelectAUser = function (userid) {
                     loadDataUserInfo = function () {
                         // load user info from database
+                        console.log(userid);
+                        // Delete dot as decimal mark
+                        userid = userid.replace('.', '');
                         $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/user/' + userid)
                                 .success(function (data) {
                                     $scope.loadingUser = false;
@@ -444,7 +447,7 @@ app.directive('userinfo', function () {
 
 /*********************
  ** Filter: toArray **
- ********************* 
+ *********************
  * - puts the contents of an object into an array so it can be sorted using angularJS functions in the html code.
  */
 app.filter('toArray', function () {
@@ -521,7 +524,7 @@ app.directive('newcourseform', function () {
                      console.log(status);
                      console.log(headers);
                      console.log(config);
-                     
+
                      console.log("POST-DATA: " + data);
                      if (data.error) {
                      alert(data.error);
@@ -532,7 +535,7 @@ app.directive('newcourseform', function () {
                      $scope.didSelectACourse($scope.courseid);
                      }
                      };
-                     
+
                      .error = function (data, status) {
                      alert("Error: " + status);
                      };
@@ -756,7 +759,7 @@ var usersInCourseDashboard = function (result, $scope) {
  ******************************/
 var courseSearchDashboard = function (result, $scope) {
     var data = new google.visualization.DataTable(result);
-    
+
     $scope.csv_out = dataTableToCSV(data);
 
     // Create a dashboard
@@ -774,7 +777,7 @@ var courseSearchDashboard = function (result, $scope) {
             }
         }
     });
-    
+
     // Create a search box to search for the course ID.
     var idFilter = new google.visualization.ControlWrapper({
         controlType: 'StringFilter',
@@ -844,7 +847,7 @@ var courseSearchDashboard = function (result, $scope) {
 
     // Draw the dashboard.
     dashboard.draw(data);
-    
+
     // Define what to do when selecting a table row.
     function selectHandler() {
         var selection = table.getChart().getSelection();
@@ -854,11 +857,11 @@ var courseSearchDashboard = function (result, $scope) {
         $scope.didSelectACourse($scope.courseid);
         $("html, body").animate({scrollTop: 0}, 800);
     };
-    
+
     function stateChangeHandler() {
         $scope.csv_out = dataTableToCSV(table.getDataTable());
     };
-    
+
     // Setup listener to listen for clicks on table rows and process the selectHandler.
     google.visualization.events.addListener(table, 'select', selectHandler);
 
