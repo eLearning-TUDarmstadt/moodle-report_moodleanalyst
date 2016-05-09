@@ -341,6 +341,7 @@ app.directive('courseinfo', function () {
                     console.log("Selected Course: " + courseid);
                     $scope.loadDataCourseInfo = function () {
                         // load course info from database
+                        courseid = courseid.replace('.', '');
                         $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/course/' + courseid)
                                 .success(function (data) {
                                     $scope.loadingCourse = false;
