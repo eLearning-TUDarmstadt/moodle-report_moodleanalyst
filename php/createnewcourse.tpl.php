@@ -1,3 +1,8 @@
+<?php
+require(dirname(__FILE__) . '/../../../config.php');
+require_capability('report/moodleanalyst:view', \context::instance_by_id(10));
+$wwwroot = $CFG->wwwroot;
+?>
 <!--
 // This file is part of Moodle - http://moodle.org/
 //
@@ -26,12 +31,6 @@
 
 This page contains a form to create a new course.
 -->
-
-<?php
-    require(dirname(__FILE__) . '/../../../config.php');
-    require_capability('report/moodleanalyst:view', \context::instance_by_id(10));
-    $wwwroot = $CFG->wwwroot;
-?>
 
 <div class="panel panel-default">
     <div class="panel-heading">

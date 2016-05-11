@@ -1,3 +1,9 @@
+<?php
+require(dirname(__FILE__) . '/../../../config.php');
+require_capability('report/moodleanalyst:view', \context::instance_by_id(10));
+$wwwroot = $CFG->wwwroot;
+?>
+
 <!--
 // This file is part of Moodle - http://moodle.org/
 //
@@ -28,12 +34,6 @@ This page lists all empty courses with the option to show detailed information a
 course by clicking on it. The Details will appear on the right half of the screen while the list
 appears on the left half.
 -->
-
-<?php
-    require(dirname(__FILE__) . '/../../../config.php');
-    require_capability('report/moodleanalyst:view', \context::instance_by_id(10));
-    $wwwroot = $CFG->wwwroot;
-?>
 
 <div class="panel panel-default">
     <div class="panel-heading">

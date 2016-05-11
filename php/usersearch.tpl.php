@@ -1,3 +1,9 @@
+<?php
+require(dirname(__FILE__) . '/../../../config.php');
+require_capability('report/moodleanalyst:view', \context::instance_by_id(10));
+$wwwroot = $CFG->wwwroot;
+?>
+
 <!--
 // This file is part of Moodle - http://moodle.org/
 //
@@ -27,12 +33,6 @@
 This page lists all users with an option to search by string.
 Selecting a user will load the userinfo page.
 -->
-
-<?php
-    require(dirname(__FILE__) . '/../../../config.php');
-    require_capability('report/moodleanalyst:view', \context::instance_by_id(10));
-    $wwwroot = $CFG->wwwroot;
-?>
 
 <div id="dashboardUserSearch">
     <div class="panel panel-info">

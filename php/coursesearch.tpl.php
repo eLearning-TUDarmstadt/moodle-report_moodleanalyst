@@ -1,3 +1,9 @@
+<?php
+require(dirname(__FILE__) . '/../../../config.php');
+require_capability('report/moodleanalyst:view', \context::instance_by_id(10));
+$wwwroot = $CFG->wwwroot;
+?>
+
 <!--
 // This file is part of Moodle - http://moodle.org/
 //
@@ -27,12 +33,6 @@
 This page lists all courses along with a search box and the option to filter by parent and/or grandparent category.
 Selecting a course will load the courseinfo page.
 -->
-
-<?php
-    require(dirname(__FILE__) . '/../../../config.php');
-    require_capability('report/moodleanalyst:view', \context::instance_by_id(10));
-    $wwwroot = $CFG->wwwroot;
-?>
 
 <div id="dashboardCourseSearch">
     <div class="panel panel-info">
