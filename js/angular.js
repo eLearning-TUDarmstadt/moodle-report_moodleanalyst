@@ -342,6 +342,7 @@ app.directive('courseinfo', function () {
                     $scope.loadDataCourseInfo = function () {
                         // load course info from database
                         courseid = courseid.replace('.', '');
+                        courseid = courseid.replace(',', ''); // Fixes en_* locale
                         $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/course/' + courseid)
                                 .success(function (data) {
                                     $scope.loadingCourse = false;
@@ -402,6 +403,7 @@ app.directive('userinfo', function () {
                     loadDataUserInfo = function () {
                         // Delete dot as decimal mark (13.345 => 13345)
                         userid = userid.replace('.', '');
+                        userid = userid.replace(',', ''); // Fixes en_* locale
 
                         // load user info from database
                         $http.get(wwwroot + '/report/moodleanalyst/rest/mastREST.php/user/' + userid)
