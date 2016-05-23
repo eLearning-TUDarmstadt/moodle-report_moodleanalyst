@@ -1,3 +1,8 @@
+<?php
+require(dirname(__FILE__) . '/../../../config.php');
+require_capability('report/moodleanalyst:view', \context::instance_by_id(10));
+?>
+
 <!--
 // This file is part of Moodle - http://moodle.org/
 //
@@ -27,11 +32,6 @@
 This page lists all users with the option of filtering by inactivity.
 Detailed information is shown on the right hand side of the screen after clicking on a user.
 -->
-
-<?php
-    require(dirname(__FILE__) . '/../../../config.php');
-    require_capability('report/moodleanalyst:view', \context::instance_by_id(10));
-?>
 
 <div class="panel panel-default" ng-controller="FilesController" id="dashboardFiles">
     <div class="panel-heading">

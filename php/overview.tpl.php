@@ -1,3 +1,8 @@
+<?php
+require(dirname(__FILE__) . '/../../../config.php');
+require_capability('report/moodleanalyst:view', \context::instance_by_id(10));
+?>
+
 <!--
 // This file is part of Moodle - http://moodle.org/
 //
@@ -33,11 +38,6 @@ on one page.
 
 It will also show an error message if the user is not logged into moodle with the proper rights (at least course creator).
 -->
-
-<?php
-    require(dirname(__FILE__) . '/../../../config.php');
-    require_capability('report/moodleanalyst:view', \context::instance_by_id(10));
-?>
 
 <modal title="Error" visible="showModal">
     <form role="form">

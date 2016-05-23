@@ -1,3 +1,8 @@
+<?php
+require(dirname(__FILE__) . '/../../../config.php');
+require_capability('report/moodleanalyst:view', \context::instance_by_id(10));
+?>
+
 <!--
 // This file is part of Moodle - http://moodle.org/
 //
@@ -27,11 +32,6 @@
 This page lists all urls with the option of filtering.
 Detailed information is shown on the right hand side of the screen after clicking on a url.
 -->
-
-<?php
-    require(dirname(__FILE__) . '/../../../config.php');
-    require_capability('report/moodleanalyst:view', \context::instance_by_id(10));
-?>
 
 <div class="panel panel-default" ng-controller="URLsController" id="dashboardURLs">
 

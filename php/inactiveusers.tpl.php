@@ -1,3 +1,9 @@
+<?php
+require(dirname(__FILE__) . '/../../../config.php');
+require_capability('report/moodleanalyst:view', \context::instance_by_id(10));
+$wwwroot = $CFG->wwwroot;
+?>
+
 <!--
 // This file is part of Moodle - http://moodle.org/
 //
@@ -27,12 +33,6 @@
 This page lists all users with the option of filtering by inactivity.
 Detailed information is shown on the right hand side of the screen after clicking on a user.
 -->
-
-<?php
-    require(dirname(__FILE__) . '/../../../config.php');
-    require_capability('report/moodleanalyst:view', \context::instance_by_id(10));
-    $wwwroot = $CFG->wwwroot;
-?>
 
 <div class="panel panel-default">
     <div class="panel-heading">
