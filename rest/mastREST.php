@@ -806,7 +806,7 @@ function moodleanalyst_allUsers() {
                 array('v' => $user->firstname),
                 array('v' => $user->lastname),
                 array('v' => $user->email),
-                array('v' => $user->firstname . ' ' . $user->lastname),
+                array('v' => ''),//$user->firstname . ' ' . $user->lastname),
                 array('v' => createDateForJavaScript($user->lastaccess)),
                 // Days since last access 
                 array('v' => round((time() - $user->lastaccess) / (60 * 60 * 24), 0))
