@@ -157,7 +157,6 @@ echo '<html>
                 <footer class="navbar-inverse navbar-fixed-bottom">
                     <div class="row" style="color:#A4A4A4;">
                         <div class="col-md-4">
-                            &copy; All Rights reserved.
                         </div>
                         
                         <div class="col-md-4">
