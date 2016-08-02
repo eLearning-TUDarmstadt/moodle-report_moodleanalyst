@@ -1174,5 +1174,3 @@ WHERE
 
     //moodleanalyst_printArray($result);
 }
-?>
-
