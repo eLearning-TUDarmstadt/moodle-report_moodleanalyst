@@ -36,5 +36,3 @@ function createDateForJavaScript($timestamp) {
     $formatSuffix = ",d,H,i,s";
     return "Date(" . date($formatPrefix, $timestamp) . $month . date($formatSuffix, $timestamp) . ")";
 }
-
-?>

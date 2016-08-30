@@ -1170,7 +1170,5 @@ WHERE
         )];
     }
     echo json_encode($result);
-
-
     //moodleanalyst_printArray($result);
 }
