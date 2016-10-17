@@ -22,11 +22,16 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *         
  */
-require_once '/../../config.php';
+ 
+ echo "Hello";
+ 
+ 
+require_once '../../config.php';
+
 global $CFG, $DB;
 require_once $CFG->libdir . '/adminlib.php';
 
-defined ( 'MOODLE_INTERNAL' ) || die ();
+//defined ( 'MOODLE_INTERNAL' ) || die ();
 
 $context = context_system::instance ();
 require_capability ( 'report/moodleanalyst:view', $context );
@@ -69,16 +74,16 @@ $entries = [];
 foreach ($results as $id => $e) {
 	$values = array();
 	$values[] = intval($e->id);
-	$values[] = "'" . $e->semester . "'";
-	$values[] = "'" . $e->fb . "'";
+	$values[] = "'" . addslashes($e->semester) . "'";
+	$values[] = "'" . addslashes($e->fb) . "'";
 	$values[] = intval($e->courseid);
-	$values[] = "'" . $e->shortname . "'";
+	$values[] = "'" . addslashes($e->shortname) . "'";
 	$values[] = intval($e->userid);
-	$values[] = "'" . $e->firstname . "'";
-	$values[] = "'" . $e->lastname . "'";
+	$values[] = "'" . addslashes($e->firstname) . "'";
+	$values[] = "'" . addslashes($e->lastname) . "'";
 	$values[] = intval($e->modifierid);
-	$values[] = "'" . $e->modifier_firstname . "'";
-	$values[] = "'" . $e->modifier_lastname . "'";
+	$values[] = "'" . addslashes($e->modifier_firstname) . "'";
+	$values[] = "'" . addslashes($e->modifier_lastname) . "'";
 	$values[] = "'" . date($DATE_FORMAT, $e->timecreated) . "'";
 	$entries[] = "[" . join(',', $values) . "]\n";
 }
@@ -161,4 +166,3 @@ echo '
 		    </div>
 		</body>
 		</html>';
-
