@@ -59,14 +59,14 @@ This page displays detailed Information about a course
 
                     <!-- 2) button group -->
                     <div class="btn-group btn-group-xs pull-right" role="group" ng-show="course.data">
-                        
+
                         <!-- 2.1) edit course settings button -->
                         <a href="<?php echo $wwwroot ?>/course/edit.php?id={{course.data.id.v}}" target="_blank" title="{{vocabulary.editsettings}}">
                             <button type="button" class="btn btn-default" aria-label="Edit Course">
                                 <span><img src="<?php echo $wwwroot ?>/pix/t/edit.png"></span>
                             </button>
                         </a>
-                        
+
                         <!-- 2.2) hide/show course to users button -->
                         <a title="{{vocabulary.hide}}">
                             <button type="button" class="btn btn-default" aria-label="Hide Course from Students" ng-show="course.data.visible.v == 1" ng-click="changeVisibility(course.data.id.v, 0);">
@@ -78,14 +78,14 @@ This page displays detailed Information about a course
                                 <span><img src="<?php echo $wwwroot ?>/pix/t/show.png"></span>
                             </button>
                         </a>
-                        
+
                         <!-- 2.3) delete course button -->
                         <a href="<?php echo $wwwroot ?>/course/delete.php?id={{course.data.id.v}}" target="_blank" title="{{vocabulary.delete}}">
                             <button type="button" class="btn btn-default" aria-label="Delete Course">
                                 <span><img src="<?php echo $wwwroot ?>/pix/t/delete.png"></span>
                             </button>
                         </a>
-                        
+
                         <!-- 2.4) refresh button -->
                         <!--
                         <a title="{{vocabulary.refresh}}">
@@ -94,7 +94,7 @@ This page displays detailed Information about a course
                             </button>
                         </a>
                         -->
-                        
+
                         <!-- 2.5) close button -->
                         <a title="{{vocabulary.hidesection}}">
                             <button type="button" class="btn btn-default" aria-label="Close" ng-click="courseid = false;">
@@ -119,7 +119,7 @@ This page displays detailed Information about a course
         -->
         <div class="panel-body">
             <loader ng-show="loadingCourse"></loader>
-            
+
             <!-- 1) panel "general information about the course" -->
             <div class="panel panel-default" ng-hide="loadingCourse">
                 <div class="panel-heading panel-title">
@@ -127,7 +127,7 @@ This page displays detailed Information about a course
                         <div class="col-md-9">
                             {{vocabulary.courseinfo}}
                         </div>
-                        
+
                         <!-- refresh button -->
                         <div class="col-md-3">
                             <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataCourseInfo()" title="{{vocabulary.refresh}}">
@@ -136,7 +136,7 @@ This page displays detailed Information about a course
                         </div>
                     </div> <!-- row -->
                 </div> <!-- panel-heading panel-title -->
-                
+
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-4">{{course.data.id.string}}</div>
@@ -164,17 +164,17 @@ This page displays detailed Information about a course
                     </div>
                 </div> <!-- panel-body -->
             </div> <!-- panel panel-default -->
-                
+
             <p></p>
-            
+
             <!-- 2) panel "enrolled users overview" -->
             <div class="panel panel-default" ng-hide="loadingCourse">
                 <div class="panel-heading panel-title">
                     <div class="row">
                         <div class="col-md-9">
-                            <a href="<?php echo $wwwroot ?>/enrol/users.php?id={{course.data.id.v}}" target="_blank">{{vocabulary.enrolledusers}}: {{course.data.personsInCourse}}</a>
+                            <a href="<?php echo $wwwroot ?>/user/index.php?id={{course.data.id.v}}" target="_blank">{{vocabulary.enrolledusers}}: {{course.data.personsInCourse}}</a>
                         </div>
-                        
+
                         <!-- refresh button -->
                         <div class="col-md-3">
                             <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataCourseInfo()" title="{{vocabulary.refresh}}">
@@ -183,7 +183,7 @@ This page displays detailed Information about a course
                         </div>
                     </div> <!-- row -->
                 </div> <!-- panel-heading panel-title -->
-                
+
                 <div class="panel-body">
                     <div class="row" ng-repeat="role in course.data.rolesInCourse| orderBy:role.sortorder">
                         <div class="col-md-4"><a ng-click="setRoleFilterForUsersInCourseDashboard(role.name);">{{role.name}}</a></div>
@@ -195,7 +195,7 @@ This page displays detailed Information about a course
             <!-- 3) panel "tab-panel" -->
             <div class="tab panel panel-default" ng-controller="CourseDetailTabController
                         as CourseDetailTab" ng-hide="loadingCourse" id="tabController">
-                
+
                 <ul class="nav nav-pills panel-heading">
                     <li ng-class="{ active: CourseDetailTab.isSet(1) }">
                         <a href ng-click="CourseDetailTab.setTab(1)">{{vocabulary.enrolledusers}}</a>
@@ -206,13 +206,13 @@ This page displays detailed Information about a course
                     <li ng-class="{ active: CourseDetailTab.isSet(3) }">
                         <a href ng-click="CourseDetailTab.setTab(3)">{{vocabulary.enrolmentmethods}}</a>
                     </li>
-                    
+
                     <!-- refresh button -->
                     <button type="button" class="btn btn-default pull-right" aria-label="Refresh" ng-click="loadDataCourseInfo()" title="{{vocabulary.refresh}}">
                         <span><img src="<?php echo $wwwroot ?>/pix/i/reload.png"></span>
                     </button>
                 </ul>
-                
+
                 <div class="panel-body">
                     <!-- 3.1) TAB 1 - enrolled users, detailed -->
                     <div ng-show="CourseDetailTab.isSet(1)" id="dashboardUsersInCourse">
@@ -225,7 +225,7 @@ This page displays detailed Information about a course
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="panel-body" id="usersInCourse_table_div"></div>
                         </div> <!-- panel panel-default panel-heading row -->
                     </div>
@@ -243,19 +243,19 @@ This page displays detailed Information about a course
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="panel-body">
                             <div class="btn-group" role="group" aria-label="..." ng-show="activity.id">
                                 <a href="<?php echo $wwwroot ?>/mod/{{activity.mod}}/view.php?id={{activity.cm}}" target="_blank">
                                     <button type="button" class="btn btn-default" ng-hide="activity.resourceyesorno">
                                         <span><img src="<?php echo $wwwroot ?>/pix/t/switch_plus.png"></span> {{vocabulary.view}}
                                     </button>
-                                    
+
                                     <button type="button" class="btn btn-default" ng-show="activity.resourceyesorno">
                                         <span><img src="<?php echo $wwwroot ?>/pix/t/restore.png"></span> {{vocabulary.downloadfile}}
                                     </button>
                                 </a>
-                                
+
                                 <a href="<?php echo $wwwroot ?>/course/mod.php?update={{activity.cm}}" target="_blank">
                                     <button type="button" class="btn btn-default">
                                         <span><img src="<?php echo $wwwroot ?>/pix/t/edit.png"></span> {{vocabulary.editsettings}}
@@ -268,7 +268,7 @@ This page displays detailed Information about a course
                             <div id="activitiesInCourse_table_div"></div>
                         </div> <!-- panel-body -->
                     </div>
-                    
+
                     <!-- 3.3) TAB 3 - enrolment methods -->
                     <div ng-show="CourseDetailTab.isSet(3)" id="dashboardEnrolmentMethods">
                         <div class="panel panel-default">
@@ -297,7 +297,7 @@ This page displays detailed Information about a course
                             </div>  <!-- panel-body -->
                         </div> <!-- panel panel-default -->
                     </div>
-                    
+
                 </div> <!-- panel-body -->
             </div>  <!-- tab panel panel-default -->
         </div>  <!-- panel-body -->
