@@ -23,7 +23,7 @@
  *         
  */
  
- echo "Hello";
+ echo "Einschreibungen mittels TUCaN-Schnittstelle";
  
  
 require_once '../../config.php';
@@ -61,7 +61,7 @@ FROM
 WHERE 
 	u.id = ue.userid AND
 	ue.enrolid = e.id AND
-	e.enrol = 'manual' AND
+	e.enrol = 'tucanschnittstelle' AND
 	e.courseid = c.id AND
 	c.category = ccat.id
 ORDER BY
